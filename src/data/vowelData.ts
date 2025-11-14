@@ -10,7 +10,7 @@ export const worksheetData: WorksheetData[] = [
         title: "몸으로 'ㅏ'를 표현해 보세요.",
         instruction: '그림을 보고 따라 해보세요!',
         data: {
-          image: '/images/sani_ah.png',
+          image: './images/sani_ah.png',
         },
       },
       {
@@ -74,7 +74,7 @@ export const worksheetData: WorksheetData[] = [
         title: "몸으로 'ㅑ'를 표현해 보세요.",
         instruction: '그림을 보고 따라 해보세요!',
         data: {
-          image: '/images/sani_ya.png',
+          image: './images/sani_ya.png',
         },
       },
       { type: 'stroke-order', title: 'ㅑ 쓰는 순서 배우기', instruction: '조각을 옮겨서 글자를 완성해보세요.', data: {} },
@@ -85,10 +85,10 @@ export const worksheetData: WorksheetData[] = [
         instruction: '알맞은 낱말과 그림을 선으로 이어보세요.',
         data: {
           pairs: [
-            { id: 1, word: '야구', image: '/images/yagu.png' },
-            { id: 2, word: '고양이', image: '/images/cat.png' },
-            { id: 3, word: '야자수', image: '/images/yajasu.png' },
-            { id: 4, word: '야채', image: '/images/yachae.png' },
+            { id: 1, word: '야구', image: './images/yagu.png' },
+            { id: 2, word: '고양이', image: './images/cat.png' },
+            { id: 3, word: '야자수', image: './images/yajasu.png' },
+            { id: 4, word: '야채', image: './images/yachae.png' },
           ],
         },
       },
@@ -125,7 +125,7 @@ export const worksheetData: WorksheetData[] = [
         title: "몸으로 'ㅓ'를 표현해 보세요.",
         instruction: '그림을 보고 따라 해보세요!',
         data: {
-          image: '/images/sani_eo.png',
+          image: './images/sani_eo.png',
         },
       },
        { type: 'stroke-order', title: 'ㅓ 쓰는 순서 배우기', instruction: '조각을 옮겨서 글자를 완성해보세요.', data: {} },
@@ -178,7 +178,7 @@ export const worksheetData: WorksheetData[] = [
         title: "몸으로 'ㅕ'를 표현해 보세요.",
         instruction: '그림을 보고 따라 해보세요!',
         data: {
-          image: '/images/sani_yeo.png',
+          image: './images/sani_yeo.png',
         },
       },
        { type: 'stroke-order', title: 'ㅕ 쓰는 순서 배우기', instruction: '조각을 옮겨서 글자를 완성해보세요.', data: {} },
@@ -243,7 +243,7 @@ export const worksheetData: WorksheetData[] = [
         title: "몸으로 'ㅗ'를 표현해 보세요.",
         instruction: '그림을 보고 따라 해보세요!',
         data: {
-          image: '/images/sani_o.png',
+          image: './images/sani_o.png',
         },
       },
        { type: 'drawing', title: 'ㅗ 따라 쓰기', instruction: '네모 칸에 맞춰 글자를 예쁘게 써보세요.', data: {} },
@@ -293,7 +293,7 @@ export const worksheetData: WorksheetData[] = [
         title: "몸으로 'ㅛ'를 표현해 보세요.",
         instruction: '그림을 보고 따라 해보세요!',
         data: {
-          image: '/images/sani_yo.png',
+          image: './images/sani_yo.png',
         },
       },
        { type: 'stroke-order', title: 'ㅛ 쓰는 순서 배우기', instruction: '조각을 옮겨서 글자를 완성해보세요.', data: {} },
@@ -332,7 +332,7 @@ export const worksheetData: WorksheetData[] = [
         title: "몸으로 'ㅜ'를 표현해 보세요.",
         instruction: '그림을 보고 따라 해보세요!',
         data: {
-          image: '/images/sani_u.png',
+          image: './images/sani_u.png',
         },
       },
       { type: 'stroke-order', title: 'ㅜ 쓰는 순서 배우기', instruction: '조각을 옮겨서 글자를 완성해보세요.', data: {} },
@@ -385,7 +385,7 @@ export const worksheetData: WorksheetData[] = [
         title: "몸으로 'ㅠ'를 표현해 보세요.",
         instruction: '그림을 보고 따라 해보세요!',
         data: {
-          image: '/images/sani_yu.png',
+          image: './images/sani_yu.png',
         },
       },
 /*
@@ -453,7 +453,7 @@ export const worksheetData: WorksheetData[] = [
         title: "몸으로 'ㅡ'를 표현해 보세요.",
         instruction: '그림을 보고 따라 해보세요!',
         data: {
-          image: '/images/sani_eu.png',
+          image: './images/sani_eu.png',
         },
       },
        {
@@ -507,7 +507,7 @@ export const worksheetData: WorksheetData[] = [
         title: "몸으로 'ㅣ'를 표현해 보세요.",
         instruction: '그림을 보고 따라 해보세요!',
         data: {
-          image: '/images/sani_i.png',
+          image: './images/sani_i.png',
         },
       },
        { type: 'stroke-order', title: 'ㅣ 쓰는 순서 배우기', instruction: '조각을 옮겨서 글자를 완성해보세요.', data: {} },

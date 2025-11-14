@@ -167,12 +167,12 @@ export const workbookActivities: Activity[] = [
     type: ActivityType.ConnectPairs,
     question: '낱말과 어울리는 그림을 찾아 연결해보세요.',
   pairs: [
-    { word: '집게', image: '/images/b_jipgae.png', id: 1 },
-    { word: '춥다', image: '/images/b_chupda.png', id: 2 },
-    { word: '잡다', image: '/images/b_japda.png', id: 3 },
-    { word: '자다', image: '/images/b_jada.png', id: 4 },
-    { word: '추다', image: '/images/b_chuda.png', id: 5 },
-    { word: '지게', image: '/images/b_jigae.png', id: 6 },
+    { word: '집게', image: './images/b_jipgae.png', id: 1 },
+    { word: '춥다', image: './images/b_chupda.png', id: 2 },
+    { word: '잡다', image: './images/b_japda.png', id: 3 },
+    { word: '자다', image: './images/b_jada.png', id: 4 },
+    { word: '추다', image: './images/b_chuda.png', id: 5 },
+    { word: '지게', image: './images/b_jigae.png', id: 6 },
   ],
   },
   {
@@ -225,10 +225,10 @@ export const workbookActivities: Activity[] = [
     question: '받침이 있고 없고, 뜻이 달라져요. 그림에 맞는 낱말을 찾아 써보세요.',
     example: '차 창 코 콩 토 통 혀 형',
   items: [
-    { wordWithout: '토', wordWith: '통', imageWithout: '/images/o_to.png', imageWith: '/images/o_tong.png' },
-    { wordWithout: '혀', wordWith: '형', imageWithout: '/images/o_hyo.png', imageWith: '/images/o_hyong.png' },
-    { wordWithout: '차', wordWith: '창', imageWithout: '/images/o_char.png', imageWith: '/images/o_chang.png' },
-    { wordWithout: '코', wordWith: '콩', imageWithout: '/images/o_ko.png', imageWith: '/images/o_kong.png' },
+    { wordWithout: '토', wordWith: '통', imageWithout: './images/o_to.png', imageWith: './images/o_tong.png' },
+    { wordWithout: '혀', wordWith: '형', imageWithout: './images/o_hyo.png', imageWith: './images/o_hyong.png' },
+    { wordWithout: '차', wordWith: '창', imageWithout: './images/o_char.png', imageWith: './images/o_chang.png' },
+    { wordWithout: '코', wordWith: '콩', imageWithout: './images/o_ko.png', imageWith: './images/o_kong.png' },
   ]
   },
   {
@@ -283,12 +283,12 @@ export const workbookActivities: Activity[] = [
     activityNumber: 2,
     type: ActivityType.PathSelector,
     question: '글자에 맞는 그림을 선택해보세요.',
-  background: '/images/k_background.png',
+  background: './images/k_background.png',
   steps: [
-    { prompt: '색', choices: [{ image: '/images/k_saek.png', isCorrect: true }, { image: '/images/k_sae.png', isCorrect: false }] },
-    { prompt: '벼', choices: [{ image: '/images/k_byok.png', isCorrect: false }, { image: '/images/k_byo.png', isCorrect: true } ] },
-    { prompt: '약국', choices: [{ image: '/images/k_yagoo.png', isCorrect: false },{ image: '/images/k_yakguk.png', isCorrect: true } ] },
-    { prompt: '악기', choices: [{ image: '/images/k_akki.png', isCorrect: true }, { image: '/images/k_aki.png', isCorrect: false }] },
+    { prompt: '색', choices: [{ image: './images/k_saek.png', isCorrect: true }, { image: './images/k_sae.png', isCorrect: false }] },
+    { prompt: '벼', choices: [{ image: './images/k_byok.png', isCorrect: false }, { image: './images/k_byo.png', isCorrect: true } ] },
+    { prompt: '약국', choices: [{ image: './images/k_yagoo.png', isCorrect: false },{ image: './images/k_yakguk.png', isCorrect: true } ] },
+    { prompt: '악기', choices: [{ image: './images/k_akki.png', isCorrect: true }, { image: './images/k_aki.png', isCorrect: false }] },
   ]
   },
   {
@@ -346,10 +346,10 @@ export const workbookActivities: Activity[] = [
     question: '받침이 있고 없고, 뜻이 달라져요. 낱말과 어울리는 그림은 무엇일까요?',
     example: '거물 건물 기부 기분 나리 난리 이사 인사',
   items: [
-    { wordWithout: '인사', wordWith: '이사', imageWithout: '/images/n_insa.png', imageWith: '/images/n_isa.png' },
-    { wordWithout: '기부', wordWith: '기분', imageWithout: '/images/n_gibu.png', imageWith: '/images/n_gibun.png' },
-    { wordWithout: '나리', wordWith: '난리', imageWithout: '/images/n_nari.png', imageWith: '/images/n_nanri.png' },
-    { wordWithout: '건물', wordWith: '거물', imageWithout: '/images/n_geonmul.png', imageWith: '/images/n_geomul.png' },
+    { wordWithout: '인사', wordWith: '이사', imageWithout: './images/n_insa.png', imageWith: './images/n_isa.png' },
+    { wordWithout: '기부', wordWith: '기분', imageWithout: './images/n_gibu.png', imageWith: './images/n_gibun.png' },
+    { wordWithout: '나리', wordWith: '난리', imageWithout: './images/n_nari.png', imageWith: './images/n_nanri.png' },
+    { wordWithout: '건물', wordWith: '거물', imageWithout: './images/n_geonmul.png', imageWith: './images/n_geomul.png' },
   ]
   },
   {
@@ -420,10 +420,10 @@ export const workbookActivities: Activity[] = [
       question: '받침이 있고 없고, 뜻이 달라져요. 낱말과 어울리는 그림은 무엇일까요?',
       example: '도 돌 다리기 달리기 따기 딸기 벼 별',
     items: [
-      { wordWithout: '따기', wordWith: '딸기', imageWithout: '/images/r_ddagi.png', imageWith: '/images/r_ddalgi.png' },
-      { wordWithout: '벼', wordWith: '별', imageWithout: '/images/r_byo.png', imageWith: '/images/r_byol.png' },
-      { wordWithout: '도', wordWith: '돌', imageWithout: '/images/r_do.png', imageWith: '/images/r_dol.png' },
-      { wordWithout: '다리기', wordWith: '달리기', imageWithout: '/images/r_darigi.png', imageWith: '/images/r_daligi.png' },
+      { wordWithout: '따기', wordWith: '딸기', imageWithout: './images/r_ddagi.png', imageWith: './images/r_ddalgi.png' },
+      { wordWithout: '벼', wordWith: '별', imageWithout: './images/r_byo.png', imageWith: './images/r_byol.png' },
+      { wordWithout: '도', wordWith: '돌', imageWithout: './images/r_do.png', imageWith: './images/r_dol.png' },
+      { wordWithout: '다리기', wordWith: '달리기', imageWithout: './images/r_darigi.png', imageWith: './images/r_daligi.png' },
     ]
   },
   {
@@ -493,10 +493,10 @@ export const workbookActivities: Activity[] = [
     type: ActivityType.ConnectPairs,
     question: '낱말과 어울리는 그림을 찾아 연결해보세요.',
   pairs: [
-    { word: '시다', image: '/images/d_sida.png', id: 1 },
-    { word: '싣다', image: '/images/d_sitda.png', id: 2 },
-    { word: '뜨다', image: '/images/d_ttuda.png', id: 3 },
-    { word: '뜯다', image: '/images/d_ttutda.png', id: 4 },
+    { word: '시다', image: './images/d_sida.png', id: 1 },
+    { word: '싣다', image: './images/d_sitda.png', id: 2 },
+    { word: '뜨다', image: './images/d_ttuda.png', id: 3 },
+    { word: '뜯다', image: './images/d_ttutda.png', id: 4 },
   ],
   },
   {
@@ -554,22 +554,22 @@ export const workbookActivities: Activity[] = [
     question: '낱말과 어울리는 그림을 찾아 연결해보세요.',
     groups: [
       [
-        { word: '이', image: '/images/bf_yi.png', id: 1 },
-        { word: '입', image: '/images/bf_lip.png', id: 2 },
-        { word: '잎', image: '/images/bf_leap.png', id: 3 },
+        { word: '이', image: './images/bf_yi.png', id: 1 },
+        { word: '입', image: './images/bf_lip.png', id: 2 },
+        { word: '잎', image: './images/bf_leap.png', id: 3 },
       ],
       [
-        { word: '지다', image: '/images/bf_jida.png', id: 4 },
-        { word: '집다', image: '/images/bf_jifda.png', id: 5 },
-        { word: '짚다', image: '/images/bf_jipda.png', id: 6 },
+        { word: '지다', image: './images/bf_jida.png', id: 4 },
+        { word: '집다', image: './images/bf_jifda.png', id: 5 },
+        { word: '짚다', image: './images/bf_jipda.png', id: 6 },
       ],
       [
-        { word: '집', image: '/images/bf_jif.png', id: 7 },
-        { word: '짚', image: '/images/bf_gip.png', id: 8 },
+        { word: '집', image: './images/bf_jif.png', id: 7 },
+        { word: '짚', image: './images/bf_gip.png', id: 8 },
       ],
       [
-        { word: '덥다', image: '/images/bf_dupda.png', id: 9 },
-        { word: '덮다', image: '/images/bf_dufda.png', id: 10 },
+        { word: '덥다', image: './images/bf_dupda.png', id: 9 },
+        { word: '덮다', image: './images/bf_dufda.png', id: 10 },
       ]
     ],
   },
@@ -638,22 +638,22 @@ export const workbookActivities: Activity[] = [
       {
         id: 1,
         left: { image: './../../public/images/kf_hagyo.png', word: '하교' },
-        right: { image: '/images/kf_hakgyo.png', wordParts: ['하', '교'], correctAnswer: 'ㄱ' },
+        right: { image: './images/kf_hakgyo.png', wordParts: ['하', '교'], correctAnswer: 'ㄱ' },
       },
       {
         id: 2,
-        left: { image: '/images/kf_made.png', word: '마대' },
-        right: { image: '/images/kf_magde.png', wordParts: ['마', '대'], correctAnswer: 'ㄱ' },
+        left: { image: './images/kf_made.png', word: '마대' },
+        right: { image: './images/kf_magde.png', wordParts: ['마', '대'], correctAnswer: 'ㄱ' },
       },
       {
         id: 3,
-        left: { image: '/images/kf_boda.png', word: '보다' },
-        right: { image: '/images/kf_bogda.png', wordParts: ['보', '다'], correctAnswer: 'ㄲ' },
+        left: { image: './images/kf_boda.png', word: '보다' },
+        right: { image: './images/kf_bogda.png', wordParts: ['보', '다'], correctAnswer: 'ㄲ' },
       },
       {
         id: 4,
-        left: { image: '/images/kf_kkada.png', word: '까다' },
-        right: { image: '/images/kf_kkagda.png', wordParts: ['까', '다'], correctAnswer: 'ㄲ' },
+        left: { image: './images/kf_kkada.png', word: '까다' },
+        right: { image: './images/kf_kkagda.png', wordParts: ['까', '다'], correctAnswer: 'ㄲ' },
       },
     ],
   },
@@ -729,25 +729,25 @@ export const workbookActivities: Activity[] = [
     question: '그림에 어울리는 글자를 고르세요.',
     items: [
     { 
-      image: '/images/df_rain.png', 
+      image: './images/df_rain.png', 
             choices: ['빛소리', '빗소리'], 
             correctAnswer: ['빗소리'],
             rightText: '가 난다.'
         },
         { 
-      image: '/images/df_dog.png', 
+      image: './images/df_dog.png', 
             choices: ['짖는다', '짓는다'], 
             correctAnswer: ['짖는다'],
             leftText: '강아지가 큰 소리로'
         },
         { 
-      image: '/images/df_bitda.png', 
+      image: './images/df_bitda.png', 
             choices: ['빛다', '빗다'], 
             correctAnswer: ['빗다'],
             leftText: '머리카락을'
         },
         { 
-      image: '/images/df_biti.png', 
+      image: './images/df_biti.png', 
             choices: ['빚이', '빛이'], 
             correctAnswer: ['빛이'],
             rightText: '나는 것 같다.'
