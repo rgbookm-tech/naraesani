@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/naraesani/static/css/main.5f67e18a.css",
+    "main.js": "/naraesani/static/js/main.f1a89195.js",
+    "index.html": "/naraesani/index.html",
+    "main.5f67e18a.css.map": "/naraesani/static/css/main.5f67e18a.css.map",
+    "main.f1a89195.js.map": "/naraesani/static/js/main.f1a89195.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5f67e18a.css",
+    "static/js/main.f1a89195.js"
+  ]
+}
