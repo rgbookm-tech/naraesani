@@ -167,12 +167,12 @@ export const workbookActivities: Activity[] = [
     type: ActivityType.ConnectPairs,
     question: '낱말과 어울리는 그림을 찾아 연결해보세요.',
   pairs: [
-    { word: '집게', image: './images/b_jipgae.png', id: 1 },
-    { word: '춥다', image: './images/b_chupda.png', id: 2 },
-    { word: '잡다', image: './images/b_japda.png', id: 3 },
-    { word: '자다', image: './images/b_jada.png', id: 4 },
-    { word: '추다', image: './images/b_chuda.png', id: 5 },
-    { word: '지게', image: './images/b_jigae.png', id: 6 },
+    { word: '집게', image: '/images/b_jipgae.png', id: 1 },
+    { word: '춥다', image: '/images/b_chupda.png', id: 2 },
+    { word: '잡다', image: '/images/b_japda.png', id: 3 },
+    { word: '자다', image: '/images/b_jada.png', id: 4 },
+    { word: '추다', image: '/images/b_chuda.png', id: 5 },
+    { word: '지게', image: '/images/b_jigae.png', id: 6 },
   ],
   },
   {
@@ -285,10 +285,10 @@ export const workbookActivities: Activity[] = [
     question: '글자에 맞는 그림을 선택해보세요.',
   background: './images/k_background.png',
   steps: [
-    { prompt: '색', choices: [{ image: './images/k_saek.png', isCorrect: true }, { image: './images/k_sae.png', isCorrect: false }] },
-    { prompt: '벼', choices: [{ image: './images/k_byok.png', isCorrect: false }, { image: './images/k_byo.png', isCorrect: true } ] },
-    { prompt: '약국', choices: [{ image: './images/k_yagoo.png', isCorrect: false },{ image: './images/k_yakguk.png', isCorrect: true } ] },
-    { prompt: '악기', choices: [{ image: './images/k_akki.png', isCorrect: true }, { image: './images/k_aki.png', isCorrect: false }] },
+    { prompt: '색', choices: [{ image: '/images/k_saek.png', isCorrect: true }, { image: '/images/k_sae.png', isCorrect: false }] },
+    { prompt: '벼', choices: [{ image: '/images/k_byok.png', isCorrect: false }, { image: '/images/k_byo.png', isCorrect: true } ] },
+    { prompt: '약국', choices: [{ image: '/images/k_yagoo.png', isCorrect: false },{ image: '/images/k_yakguk.png', isCorrect: true } ] },
+    { prompt: '악기', choices: [{ image: '/images/k_akki.png', isCorrect: true }, { image: '/images/k_aki.png', isCorrect: false }] },
   ]
   },
   {
@@ -493,10 +493,10 @@ export const workbookActivities: Activity[] = [
     type: ActivityType.ConnectPairs,
     question: '낱말과 어울리는 그림을 찾아 연결해보세요.',
   pairs: [
-    { word: '시다', image: './images/d_sida.png', id: 1 },
-    { word: '싣다', image: './images/d_sitda.png', id: 2 },
-    { word: '뜨다', image: './images/d_ttuda.png', id: 3 },
-    { word: '뜯다', image: './images/d_ttutda.png', id: 4 },
+    { word: '시다', image: '/images/d_sida.png', id: 1 },
+    { word: '싣다', image: '/images/d_sitda.png', id: 2 },
+    { word: '뜨다', image: '/images/d_ttuda.png', id: 3 },
+    { word: '뜯다', image: '/images/d_ttutda.png', id: 4 },
   ],
   },
   {
@@ -554,22 +554,22 @@ export const workbookActivities: Activity[] = [
     question: '낱말과 어울리는 그림을 찾아 연결해보세요.',
     groups: [
       [
-        { word: '이', image: './images/bf_yi.png', id: 1 },
-        { word: '입', image: './images/bf_lip.png', id: 2 },
-        { word: '잎', image: './images/bf_leap.png', id: 3 },
+        { word: '이', image: '/images/bf_yi.png', id: 1 },
+        { word: '입', image: '/images/bf_lip.png', id: 2 },
+        { word: '잎', image: '/images/bf_leap.png', id: 3 },
       ],
       [
-        { word: '지다', image: './images/bf_jida.png', id: 4 },
-        { word: '집다', image: './images/bf_jifda.png', id: 5 },
-        { word: '짚다', image: './images/bf_jipda.png', id: 6 },
+        { word: '지다', image: '/images/bf_jida.png', id: 4 },
+        { word: '집다', image: '/images/bf_jifda.png', id: 5 },
+        { word: '짚다', image: '/images/bf_jipda.png', id: 6 },
       ],
       [
-        { word: '집', image: './images/bf_jif.png', id: 7 },
-        { word: '짚', image: './images/bf_gip.png', id: 8 },
+        { word: '집', image: '/images/bf_jif.png', id: 7 },
+        { word: '짚', image: '/images/bf_gip.png', id: 8 },
       ],
       [
-        { word: '덥다', image: './images/bf_dupda.png', id: 9 },
-        { word: '덮다', image: './images/bf_dufda.png', id: 10 },
+        { word: '덥다', image: '/images/bf_dupda.png', id: 9 },
+        { word: '덮다', image: '/images/bf_dufda.png', id: 10 },
       ]
     ],
   },
@@ -638,22 +638,22 @@ export const workbookActivities: Activity[] = [
       {
         id: 1,
         left: { image: './../../public/images/kf_hagyo.png', word: '하교' },
-        right: { image: './images/kf_hakgyo.png', wordParts: ['하', '교'], correctAnswer: 'ㄱ' },
+        right: { image: '/images/kf_hakgyo.png', wordParts: ['하', '교'], correctAnswer: 'ㄱ' },
       },
       {
         id: 2,
-        left: { image: './images/kf_made.png', word: '마대' },
-        right: { image: './images/kf_magde.png', wordParts: ['마', '대'], correctAnswer: 'ㄱ' },
+        left: { image: '/images/kf_made.png', word: '마대' },
+        right: { image: '/images/kf_magde.png', wordParts: ['마', '대'], correctAnswer: 'ㄱ' },
       },
       {
         id: 3,
-        left: { image: './images/kf_boda.png', word: '보다' },
-        right: { image: './images/kf_bogda.png', wordParts: ['보', '다'], correctAnswer: 'ㄲ' },
+        left: { image: '/images/kf_boda.png', word: '보다' },
+        right: { image: '/images/kf_bogda.png', wordParts: ['보', '다'], correctAnswer: 'ㄲ' },
       },
       {
         id: 4,
-        left: { image: './images/kf_kkada.png', word: '까다' },
-        right: { image: './images/kf_kkagda.png', wordParts: ['까', '다'], correctAnswer: 'ㄲ' },
+        left: { image: '/images/kf_kkada.png', word: '까다' },
+        right: { image: '/images/kf_kkagda.png', wordParts: ['까', '다'], correctAnswer: 'ㄲ' },
       },
     ],
   },
@@ -729,25 +729,25 @@ export const workbookActivities: Activity[] = [
     question: '그림에 어울리는 글자를 고르세요.',
     items: [
     { 
-      image: './images/df_rain.png', 
+      image: '/images/df_rain.png', 
             choices: ['빛소리', '빗소리'], 
             correctAnswer: ['빗소리'],
             rightText: '가 난다.'
         },
         { 
-      image: './images/df_dog.png', 
+      image: '/images/df_dog.png', 
             choices: ['짖는다', '짓는다'], 
             correctAnswer: ['짖는다'],
             leftText: '강아지가 큰 소리로'
         },
         { 
-      image: './images/df_bitda.png', 
+      image: '/images/df_bitda.png', 
             choices: ['빛다', '빗다'], 
             correctAnswer: ['빗다'],
             leftText: '머리카락을'
         },
         { 
-      image: './images/df_biti.png', 
+      image: '/images/df_biti.png', 
             choices: ['빚이', '빛이'], 
             correctAnswer: ['빛이'],
             rightText: '나는 것 같다.'

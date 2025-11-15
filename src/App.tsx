@@ -186,8 +186,8 @@ const App: React.FC = () => {
       <main className={`w-full ${appState === 'vowel_workbook' ? 'max-w-5xl' : 'max-w-4xl'} mx-auto`}>
         <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10 border-4 border-lime-200 relative">
           <div className="absolute top-4 right-4 flex space-x-2">
-             <img src="./images/bookcover.jpg" alt="book cover" className="w-12 h-20 border-2 border-orange-300"/>
-             <img src="./images/rglogo.png" alt="readersguide" className="w-12 h-20 border-2 border-green-300"/>
+             <img src="/images/bookcover.jpg" alt="book cover" className="w-12 h-20 border-2 border-orange-300"/>
+             <img src="/images/rglogo.png" alt="readersguide" className="w-12 h-20 border-2 border-green-300"/>
           </div>
           {renderContent()}
         </div>
