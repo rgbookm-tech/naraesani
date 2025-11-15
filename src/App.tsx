@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from 'react';
+ï»¿import React, { useState, useCallback } from 'react';
 
-// ¹ŞÄ§Æí °ü·Ã import
+// ë°›ì¹¨í¸ ê´€ë ¨ import
 import { workbookActivities as consonantWorkbookActivities } from './data/consonantData';
 import { WorkbookActivity as ConsonantActivity, InfoData } from './types/constantTypes';
 import ConsonantActivityHost from './components/consonant/ActivityHost';
 
-// ¸ğÀ½Æí °ü·Ã import
+// ëª¨ìŒí¸ ê´€ë ¨ import
 import VowelApp from './VowelApp';
 
 interface ConsonantAppProps {
@@ -20,27 +20,27 @@ const InfoScreen: React.FC<{ data: InfoData, onStart: () => void, onGoHome?: () 
             onClick={onStart} 
             className="bg-[#f99a4c] text-white font-bold text-xl px-10 py-4 rounded-full shadow-lg hover:bg-[#e69138] transition-transform transform hover:scale-105"
         >
-            {isLastPage ? '´Ù½ÃÇÏ±â' : '½ÃÀÛ'}
+            {isLastPage ? 'ë‹¤ì‹œí•˜ê¸°' : 'ì‹œì‘'}
         </button>
         {onGoHome && (
           <button
             onClick={onGoHome}
             className="absolute top-4 left-4 flex items-center px-3 py-1 bg-gray-200 text-gray-700 font-bold rounded-lg shadow-sm hover:bg-gray-300 transition-colors z-10"
           >
-            Ã³À½À¸·Î
+            ì²˜ìŒìœ¼ë¡œ
           </button>
         )}
     </div>
 );
 
 const consonantIntroData: InfoData = {
-  title: "³ª·¡¿Í »êÀÌÀÇ ±ÛÀÚ Ã£±â ¸ğÇè(¹ŞÄ§Æí)",
-  description: "³ª·¡¿Í »êÀÌ¿Í ÇÔ²² ¹ŞÄ§ ±ÛÀÚ¸¦ Ã£¾Æ ¸ğÇèÀ» ¶°³ªº¸¾Æ¿ä! '½ÃÀÛ' ¹öÆ°À» ´­·¯ ÇĞ½ÀÀ» ½ÃÀÛÇÏ¼¼¿ä."
+  title: "ë‚˜ë˜ì™€ ì‚°ì´ì˜ ê¸€ì ì°¾ê¸° ëª¨í—˜(ë°›ì¹¨í¸)",
+  description: "ë‚˜ë˜ì™€ ì‚°ì´ì™€ í•¨ê»˜ ë°›ì¹¨ ê¸€ìë¥¼ ì°¾ì•„ ëª¨í—˜ì„ ë– ë‚˜ë³´ì•„ìš”! 'ì‹œì‘' ë²„íŠ¼ì„ ëˆŒëŸ¬ í•™ìŠµì„ ì‹œì‘í•˜ì„¸ìš”."
 };
     
 const consonantCompletionData: InfoData = {
-  title: "Âü ÀßÇß¾î¿ä!",
-  description: "¸ğµç È°µ¿À» ¸¶ÃÆ¾î¿ä. ¹ŞÄ§ ¹Ú»ç°¡ µÇ¾ú³×¿ä! '´Ù½ÃÇÏ±â' ¹öÆ°À» ´­·¯ Ã³À½ºÎÅÍ ´Ù½Ã ÇĞ½ÀÇÒ ¼ö ÀÖ¾î¿ä."
+  title: "ì°¸ ì˜í–ˆì–´ìš”!",
+  description: "ëª¨ë“  í™œë™ì„ ë§ˆì³¤ì–´ìš”. ë°›ì¹¨ ë°•ì‚¬ê°€ ë˜ì—ˆë„¤ìš”! 'ë‹¤ì‹œí•˜ê¸°' ë²„íŠ¼ì„ ëˆŒëŸ¬ ì²˜ìŒë¶€í„° ë‹¤ì‹œ í•™ìŠµí•  ìˆ˜ ìˆì–´ìš”."
 };
     
 const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome }) => {
@@ -109,7 +109,7 @@ const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome }) => {
               onClick={onGoHome}
               className="absolute top-4 left-4 flex items-center px-3 py-1 bg-gray-200 text-gray-700 font-bold rounded-lg shadow-sm hover:bg-gray-300 transition-colors z-10"
             >
-              Ã³À½À¸·Î
+              ì²˜ìŒìœ¼ë¡œ
             </button>
             <ConsonantActivityHost
               activity={currentConsonantActivity}
@@ -131,33 +131,33 @@ const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome }) => {
   return <>{renderContent()}</>;
 };
 
-// ¸ŞÀÎ ¸Ş´º ÄÄÆ÷³ÍÆ®
+// ë©”ì¸ ë©”ë‰´ ì»´í¬ë„ŒíŠ¸
 const MenuScreen: React.FC<{ onSelectBook: (book: 'consonant' | 'vowel') => void }> = ({ onSelectBook }) => (
   <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-12 w-full max-w-3xl mx-auto text-center border-4 border-lime-200">
     <h1 className="text-4xl md:text-5xl font-bold text-lime-700 mb-6">
-      ³ª·¡¿Í »êÀÌÀÇ ÇÑ±Û ¸ğÇè
+      ë‚˜ë˜ì™€ ì‚°ì´ì˜ í•œê¸€ ëª¨í—˜
     </h1>
     <p className="text-lg md:text-xl text-gray-600 mb-10">
-      ¹è¿ì°í ½ÍÀº ³»¿ëÀ» ¼±ÅÃÇØÁÖ¼¼¿ä!
+      ë°°ìš°ê³  ì‹¶ì€ ë‚´ìš©ì„ ì„ íƒí•´ì£¼ì„¸ìš”!
     </p>
     <div className="flex flex-col md:flex-row gap-6 justify-center">
       <button
         onClick={() => onSelectBook('consonant')}
         className="bg-[#f99a4c] text-white font-bold text-2xl px-12 py-6 rounded-2xl shadow-lg hover:bg-[#e69138] transition-transform transform hover:scale-105"
       >
-        ¹ŞÄ§Æí
+        ë°›ì¹¨í¸
       </button>
       <button
         onClick={() => onSelectBook('vowel')}
         className="bg-lime-500 text-white font-bold text-2xl px-12 py-6 rounded-2xl shadow-lg hover:bg-lime-600 transition-transform transform hover:scale-105"
       >
-        ¸ğÀ½Æí
+        ëª¨ìŒí¸
       </button>
     </div>
   </div>
 );
 
-// ¸ŞÀÎ App ÄÄÆ÷³ÍÆ®
+// ë©”ì¸ App ì»´í¬ë„ŒíŠ¸
 const App: React.FC = () => {
   const [appState, setAppState] = useState<'menu' | 'consonant_workbook' | 'vowel_workbook'>('menu');
 
@@ -182,7 +182,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-lime-50 text-gray-800 flex items-center justify-center p-4">
-      {/* ¸ğÀ½ÆíÀº ´õ ³ĞÀº ·¹ÀÌ¾Æ¿ôÀ» »ç¿ëÇÏ¹Ç·Î max-w-5xl·Î È®ÀåÇÕ´Ï´Ù. */}
+      {/* ëª¨ìŒí¸ì€ ë” ë„“ì€ ë ˆì´ì•„ì›ƒì„ ì‚¬ìš©í•˜ë¯€ë¡œ max-w-5xlë¡œ í™•ì¥í•©ë‹ˆë‹¤. */}
       <main className={`w-full ${appState === 'vowel_workbook' ? 'max-w-5xl' : 'max-w-4xl'} mx-auto`}>
         <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10 border-4 border-lime-200 relative">
           <div className="absolute top-4 right-4 flex space-x-2">
@@ -192,7 +192,7 @@ const App: React.FC = () => {
           {renderContent()}
         </div>
         <footer className="text-center mt-4 text-lime-600 font-semibold">
-           ³ª·¡¿Í »êÀÌÀÇ ÇÑ±Û ¸ğÇè
+           ë‚˜ë˜ì™€ ì‚°ì´ì˜ í•œê¸€ ëª¨í—˜
         </footer>
       </main>
     </div>
@@ -200,4 +200,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
