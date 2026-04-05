@@ -84,13 +84,19 @@ const WordHighlightQuiz: React.FC<WordHighlightQuizProps> = ({ words, vowel, typ
   };
 
   const handleWordClick = (word: string) => {
-    if (!isCorrect(word) && selectedWords.includes(word)) {
+    const correct = isCorrect(word);
+    const selected = selectedWords.includes(word);
+
+    // 정답이면서 이미 선택되어 있으면 아무 동작도 하지 않음 (토글 불가)
+    if (correct && selected) {
         return;
     }
     
-    if (selectedWords.includes(word)) {
+    if (selected) {
+      // 오답인데 선택된 상태이면 토글로 원상복구 (제거)
       setSelectedWords(current => current.filter(w => w !== word));
     } else {
+      // 선택 안 된 상태면 선택
       setSelectedWords(current => [...current, word]);
     }
   };

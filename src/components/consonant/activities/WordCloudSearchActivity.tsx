@@ -11,11 +11,26 @@ const WordCloudSearchActivityComponent: React.FC<WordCloudSearchActivityProps> =
 
     const handleWordClick = (word: { text: string; isTarget: boolean }) => {
         playSound(SoundType.CLICK);
+        const isSelected = selectedWords.has(word.text);
+
         if (word.isTarget) {
-            playSound(SoundType.CORRECT);
-            setSelectedWords(prev => new Set(prev).add(word.text));
+            // 정답인 경우 (선택 안 되어있을 때만 추가, 이미 선택되었으면 토글 불가)
+            if (!isSelected) {
+                playSound(SoundType.CORRECT);
+                setSelectedWords(prev => new Set(prev).add(word.text));
+            }
         } else {
-            playSound(SoundType.INCORRECT);
+            // 오답인 경우
+            if (isSelected) {
+                // 이미 선택되어 있다면 토글(원상복귀)
+                const newSet = new Set(selectedWords);
+                newSet.delete(word.text);
+                setSelectedWords(newSet);
+            } else {
+                // 처음 누른 경우 오답 선택 추가
+                playSound(SoundType.INCORRECT);
+                setSelectedWords(prev => new Set(prev).add(word.text));
+            }
         }
     };
     
@@ -48,7 +63,9 @@ const WordCloudSearchActivityComponent: React.FC<WordCloudSearchActivityProps> =
                             onClick={() => handleWordClick(word)}
                             style={styles[index % styles.length]}
                             className={`absolute font-bold transition-all duration-300 cursor-pointer p-2 rounded-md ${
-                                isSelected ? 'bg-green-400 text-white scale-110' : 'bg-transparent text-gray-600 hover:text-orange-500'
+                                isSelected 
+                                  ? (word.isTarget ? 'bg-green-400 text-white scale-110' : 'bg-red-400 text-white animate-shake scale-90') 
+                                  : 'bg-transparent text-gray-600 hover:text-orange-500'
                             }`}
                         >
                             {word.text}
