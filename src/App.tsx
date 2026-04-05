@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 // 받침편 관련 import
 import { workbookActivities as consonantWorkbookActivities } from './data/consonantData';
@@ -13,6 +13,7 @@ import { getImagePath } from './utils/imagePath';
 
 interface ConsonantAppProps {
   onGoHome: () => void;
+  initialPage?: number;
 }
 
 const InfoScreen: React.FC<{ data: InfoData, onStart: () => void, onGoHome?: () => void, isLastPage: boolean }> = ({ data, onStart, onGoHome, isLastPage }) => (
@@ -46,9 +47,21 @@ const consonantCompletionData: InfoData = {
   description: "모든 활동을 마쳤어요. 받침 박사가 되었네요! '다시하기' 버튼을 눌러 처음부터 다시 학습할 수 있어요."
 };
     
-const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome }) => {
-  const [currentPageIndex, setCurrentPageIndex] = useState<number | null>(null);
-  const [appState, setAppState] = useState<'intro' | 'workbook' | 'completion'>('intro');
+const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome, initialPage }) => {
+  const [currentPageIndex, setCurrentPageIndex] = useState<number | null>(() => {
+    if (initialPage !== undefined) {
+      const pageIndex = consonantWorkbookActivities.findIndex(act => act.page === initialPage);
+      return pageIndex > -1 ? pageIndex : null;
+    }
+    return null;
+  });
+  const [appState, setAppState] = useState<'intro' | 'workbook' | 'completion'>(() => {
+    if (initialPage !== undefined) {
+      const pageIndex = consonantWorkbookActivities.findIndex(act => act.page === initialPage);
+      if (pageIndex > -1) return 'workbook';
+    }
+    return 'intro';
+  });
 
   const handleNavigateToPage = useCallback((page: number) => {
     const pageIndex = consonantWorkbookActivities.findIndex(act => act.page === page);
@@ -162,9 +175,23 @@ const MenuScreen: React.FC<{ onSelectBook: (book: 'consonant' | 'vowel') => void
 
 // 메인 App 컴포넌트
 const App: React.FC = () => {
-  const [appState, setAppState] = useState<'menu' | 'consonant_workbook' | 'vowel_workbook'>('menu');
+  const [appState, setAppState] = useState<'menu' | 'consonant_workbook' | 'vowel_workbook'>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const book = params.get('book');
+    if (book === 'consonant') return 'consonant_workbook';
+    if (book === 'vowel') return 'vowel_workbook';
+    return 'menu';
+  });
+
+  const [initialPage, setInitialPage] = useState<number | undefined>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const pageStr = params.get('page');
+    const page = pageStr ? parseInt(pageStr, 10) : undefined;
+    return (page !== undefined && !isNaN(page)) ? page : undefined;
+  });
 
   const handleSelectBook = (book: 'consonant' | 'vowel') => {
+    setInitialPage(undefined); // Clear initial page on manual selection
     if (book === 'consonant') {
       setAppState('consonant_workbook');
     } else {
@@ -172,12 +199,19 @@ const App: React.FC = () => {
     }
   };
 
+  const handleGoHome = () => {
+    setInitialPage(undefined); // Clear initial page
+    setAppState('menu');
+    // 메뉴로 돌아갈 때 URL 파라미터 초기화
+    window.history.replaceState(null, '', window.location.pathname);
+  };
+
   const renderContent = () => {
     switch (appState) {
       case 'consonant_workbook':
-        return <ConsonantApp onGoHome={() => setAppState('menu')} />;
+        return <ConsonantApp onGoHome={handleGoHome} initialPage={initialPage} />;
       case 'vowel_workbook':
-        return <VowelApp onGoHome={() => setAppState('menu')} />;
+        return <VowelApp onGoHome={handleGoHome} initialPage={initialPage} />;
       default:
         return <MenuScreen onSelectBook={handleSelectBook} />;
     }

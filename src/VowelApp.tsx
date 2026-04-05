@@ -6,11 +6,31 @@ import TableOfContents from './components/vowel/TableOfContents'; // 경로 수�
 
 interface VowelAppProps {
   onGoHome: () => void;
+  initialPage?: number;
 }
 
-const VowelApp: React.FC<VowelAppProps> = ({ onGoHome }) => {
-  const [currentVowelIndex, setCurrentVowelIndex] = useState(-1);
-  const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
+const VowelApp: React.FC<VowelAppProps> = ({ onGoHome, initialPage }) => {
+  const [currentVowelIndex, setCurrentVowelIndex] = useState(() => {
+    if (initialPage !== undefined && initialPage > 0) {
+      const numActivitiesPerVowel = worksheetData[0]?.activities.length || 5;
+      const totalPages = worksheetData.length * numActivitiesPerVowel;
+      if (initialPage <= totalPages) {
+        return Math.floor((initialPage - 1) / numActivitiesPerVowel);
+      }
+    }
+    return -1;
+  });
+  
+  const [currentActivityIndex, setCurrentActivityIndex] = useState(() => {
+    if (initialPage !== undefined && initialPage > 0) {
+      const numActivitiesPerVowel = worksheetData[0]?.activities.length || 5;
+      const totalPages = worksheetData.length * numActivitiesPerVowel;
+      if (initialPage <= totalPages) {
+        return (initialPage - 1) % numActivitiesPerVowel;
+      }
+    }
+    return 0;
+  });
 
   const handleSelectVowel = useCallback((index: number) => {
     setCurrentVowelIndex(index);
