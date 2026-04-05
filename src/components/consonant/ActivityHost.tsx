@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { WorkbookActivity, ActivityType } from '../../types';
 import WordCloudSearchActivityComponent from './activities/WordCloudSearchActivity';
 import GridPathActivityComponent from './activities/GridPathActivity';
@@ -38,6 +39,7 @@ const ActivityHost: React.FC<ActivityHostProps> = ({
   onComplete,
   onNavigateToPage,
 }) => {
+  const { t } = useLanguage();
   const renderActivity = () => {
     switch (activity.type) {
       case ActivityType.WordCloudSearch:
@@ -99,7 +101,7 @@ const ActivityHost: React.FC<ActivityHostProps> = ({
     <div className="flex flex-col">
       <header className="mb-6">
         <div className="bg-lime-200 p-2 inline-block rounded-md mb-4 border-2 border-lime-300">
-           <h2 className="text-2xl font-bold text-lime-800">{activity.title}</h2>
+           <h2 className="text-2xl font-bold text-lime-800">{t(activity.title)}</h2>
         </div>
       </header>
       <div className="flex-grow mb-8 min-h-[400px]">
@@ -111,27 +113,27 @@ const ActivityHost: React.FC<ActivityHostProps> = ({
           disabled={isFirstPage}
           className="px-6 py-2 bg-gray-300 text-white font-bold rounded-lg shadow disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-400 transition"
         >
-          이전
+          {t('이전')}
         </button>
          <button
           onClick={handleTOCClick}
           className="px-6 py-2 bg-orange-400 text-white font-bold rounded-lg shadow hover:bg-orange-500 transition"
         >
-          목차
+          {t('목차')}
         </button>
         {isLastPage ? (
           <button
             onClick={handleCompleteClick}
             className="px-6 py-2 bg-blue-500 text-white font-bold rounded-lg shadow hover:bg-blue-600 transition"
           >
-            완료
+            {t('완료')}
           </button>
         ) : (
           <button
             onClick={handleNextClick}
             className="px-6 py-2 bg-green-500 text-white font-bold rounded-lg shadow hover:bg-green-600 transition"
           >
-            다음
+            {t('다음')}
           </button>
         )}
       </footer>

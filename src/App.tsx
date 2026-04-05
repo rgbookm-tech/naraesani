@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { useLanguage, LanguageSelector } from './i18n/LanguageContext';
 
 // 받침편 관련 import
 import { workbookActivities as consonantWorkbookActivities } from './data/consonantData';
@@ -19,7 +20,7 @@ const PortraitOverlay = () => (
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h11M9 21V3M17 16l4-4m0 0l-4-4m4 4H9" />
       </svg>
     </div>
-    <h2 className="text-3xl font-bold mb-4 text-center text-yellow-300 tracking-tight">화면을 눕혀주세요!</h2>
+    <h2 className="text-3xl font-bold mb-4 text-center text-yellow-300 tracking-tight">화면을 눕혀주세요! / Please rotate!</h2>
     <p className="text-xl text-gray-300 text-center leading-relaxed">
       이 화면은 <span className="font-bold text-white">가로 모드</span>에 맞추어져 있어요.<br/>
       스마트폰을 시계 방향으로 돌려주세요.
@@ -32,7 +33,9 @@ interface ConsonantAppProps {
   initialPage?: number;
 }
 
-const InfoScreen: React.FC<{ data: InfoData, onStart: () => void, onGoHome?: () => void, isLastPage: boolean }> = ({ data, onStart, onGoHome, isLastPage }) => (
+const InfoScreen: React.FC<{ data: InfoData, onStart: () => void, onGoHome?: () => void, isLastPage: boolean }> = ({ data, onStart, onGoHome, isLastPage }) => {
+  const { t } = useLanguage();
+  return (
     <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-12 w-full max-w-3xl mx-auto text-center border-4 border-[#f9cb9c] relative">
         <h2 className="text-3xl md:text-4xl font-bold text-[#e69138] mb-4">{data.title}</h2>
         <p className="text-lg md:text-xl text-gray-600 mb-8">{data.description}</p>
@@ -40,18 +43,19 @@ const InfoScreen: React.FC<{ data: InfoData, onStart: () => void, onGoHome?: () 
             onClick={onStart} 
             className="bg-[#f99a4c] text-white font-bold text-xl px-10 py-4 rounded-full shadow-lg hover:bg-[#e69138] transition-transform transform hover:scale-105"
         >
-            {isLastPage ? '다시하기' : '시작'}
+            {isLastPage ? t('다시하기') : t('시작')}
         </button>
         {onGoHome && (
           <button
             onClick={onGoHome}
             className="absolute top-4 left-4 flex items-center px-3 py-1 bg-gray-200 text-gray-700 font-bold rounded-lg shadow-sm hover:bg-gray-300 transition-colors z-10"
           >
-            처음으로
+            {t('처음으로')}
           </button>
         )}
     </div>
 );
+};
 
 const consonantIntroData: InfoData = {
   title: "나래와 산이의 글자 찾기 모험(받침편)",
@@ -137,12 +141,7 @@ const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome, initialPage }) =>
         }
         return (
           <>
-            <button
-              onClick={onGoHome}
-              className="absolute top-4 left-4 flex items-center px-3 py-1 bg-gray-200 text-gray-700 font-bold rounded-lg shadow-sm hover:bg-gray-300 transition-colors z-10"
-            >
-              처음으로
-            </button>
+            <GoHomeButton onClick={onGoHome} />
             <ConsonantActivityHost
               activity={currentConsonantActivity}
               onNextPage={handleNextPage}
@@ -163,31 +162,47 @@ const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome, initialPage }) =>
   return <>{renderContent()}</>;
 };
 
+// small reusable home button
+const GoHomeButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
+  const { t } = useLanguage();
+  return (
+    <button
+      onClick={onClick}
+      className="absolute top-4 left-4 flex items-center px-3 py-1 bg-gray-200 text-gray-700 font-bold rounded-lg shadow-sm hover:bg-gray-300 transition-colors z-10"
+    >
+      {t('처음으로')}
+    </button>
+  );
+};
+
 // 메인 메뉴 컴포넌트
-const MenuScreen: React.FC<{ onSelectBook: (book: 'consonant' | 'vowel') => void }> = ({ onSelectBook }) => (
-  <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-12 w-full max-w-3xl mx-auto text-center border-4 border-lime-200">
-    <h1 className="text-4xl md:text-5xl font-bold text-lime-700 mb-6">
-      나래와 산이의 한글 모험
-    </h1>
-    <p className="text-lg md:text-xl text-gray-600 mb-10">
-      배우고 싶은 내용을 선택해주세요!
-    </p>
-    <div className="flex flex-col md:flex-row gap-6 justify-center">
-      <button
-        onClick={() => onSelectBook('consonant')}
-        className="bg-[#f99a4c] text-white font-bold text-2xl px-12 py-6 rounded-2xl shadow-lg hover:bg-[#e69138] transition-transform transform hover:scale-105"
-      >
-        받침편
-      </button>
-      <button
-        onClick={() => onSelectBook('vowel')}
-        className="bg-lime-500 text-white font-bold text-2xl px-12 py-6 rounded-2xl shadow-lg hover:bg-lime-600 transition-transform transform hover:scale-105"
-      >
-        모음편
-      </button>
+const MenuScreen: React.FC<{ onSelectBook: (book: 'consonant' | 'vowel') => void }> = ({ onSelectBook }) => {
+  const { t } = useLanguage();
+  return (
+    <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-12 w-full max-w-3xl mx-auto text-center border-4 border-lime-200">
+      <h1 className="text-4xl md:text-5xl font-bold text-lime-700 mb-6">
+        {t('나래와 산이의 한글 모험')}
+      </h1>
+      <p className="text-lg md:text-xl text-gray-600 mb-10">
+        {t('배우고 싶은 내용을 선택해주세요!')}
+      </p>
+      <div className="flex flex-col md:flex-row gap-6 justify-center">
+        <button
+          onClick={() => onSelectBook('consonant')}
+          className="bg-[#f99a4c] text-white font-bold text-2xl px-12 py-6 rounded-2xl shadow-lg hover:bg-[#e69138] transition-transform transform hover:scale-105"
+        >
+          {t('받침편')}
+        </button>
+        <button
+          onClick={() => onSelectBook('vowel')}
+          className="bg-lime-500 text-white font-bold text-2xl px-12 py-6 rounded-2xl shadow-lg hover:bg-lime-600 transition-transform transform hover:scale-105"
+        >
+          {t('모음편')}
+        </button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // 메인 App 컴포넌트
 const App: React.FC = () => {
@@ -239,9 +254,12 @@ const App: React.FC = () => {
       {/* 모음편은 더 넓은 레이아웃을 사용하므로 max-w-5xl로 확장합니다. */}
       <main className={`w-full ${appState === 'vowel_workbook' ? 'max-w-5xl' : 'max-w-4xl'} mx-auto`}>
         <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10 border-4 border-lime-200 relative">
-          <div className="absolute top-4 right-4 flex space-x-2">
-             <img src={getImagePath("/images/bookcover.jpg")} alt="book cover" className="w-12 h-20 border-2 border-orange-300"/>
-             <img src={getImagePath("/images/rglogo.png")} alt="readersguide" className="w-12 h-20 border-2 border-green-300"/>
+          <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
+            <LanguageSelector />
+            <div className="flex space-x-2">
+              <img src={getImagePath("/images/bookcover.jpg")} alt="book cover" className="w-12 h-20 border-2 border-orange-300"/>
+              <img src={getImagePath("/images/rglogo.png")} alt="readersguide" className="w-12 h-20 border-2 border-green-300"/>
+            </div>
           </div>
           {renderContent()}
         </div>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import type { WorksheetData, ActivityData } from '../../types/vowelTypes'; 
+import type { WorksheetData } from '../../types/vowelTypes'; 
 import Header from './Header';
 import DrawingGrid from './DrawingGrid';
 import FillInTheBlanks from './FillInTheBlanks';
@@ -12,6 +12,7 @@ import WordImageMatchQuiz from './WordImageMatchQuiz';
 import DragAndDropFillQuiz from './DragAndDropFillQuiz';
 import VowelInputQuiz from './VowelInputQuiz';
 import BodyPoseQuiz from './BodyPoseQuiz';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface WorksheetPageProps {
   data: WorksheetData;
@@ -19,13 +20,12 @@ interface WorksheetPageProps {
 }
 
 const WorksheetPage: React.FC<WorksheetPageProps> = ({ data, activityIndex }) => {
+  const { t } = useLanguage();
   const activity = data.activities[activityIndex];
   if (!activity) return <div>Activity not found</div>;
 
   const renderActivity = () => {
-    // Cast data to any to avoid complex type assertions in each case
     const activityData: any = activity.data;
-    
     switch (activity.type) {
       case 'body-pose':
         return <BodyPoseQuiz {...activityData} />;
@@ -56,8 +56,8 @@ const WorksheetPage: React.FC<WorksheetPageProps> = ({ data, activityIndex }) =>
     <main className="flex flex-col">
       <Header vowel={data.vowel} pronunciation={data.pronunciation} />
       <div className="flex flex-col items-center justify-center p-4 min-h-96 sm:min-h-[500px]">
-        <h2 className="text-2xl font-bold text-center text-amber-700 mb-2">{activity.title}</h2>
-        {activity.instruction && <p className="text-center text-gray-600 mb-6">{activity.instruction}</p>}
+        <h2 className="text-2xl font-bold text-center text-amber-700 mb-2">{t(activity.title)}</h2>
+        {activity.instruction && <p className="text-center text-gray-600 mb-6">{t(activity.instruction)}</p>}
         {renderActivity()}
       </div>
     </main>
