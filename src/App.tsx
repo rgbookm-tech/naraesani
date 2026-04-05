@@ -11,6 +11,22 @@ import VowelApp from './VowelApp';
 // 이미지 경로 헬퍼
 import { getImagePath } from './utils/imagePath';
 
+const PortraitOverlay = () => (
+  <div className="portrait-overlay fixed inset-0 z-[100] bg-gray-900 flex-col items-center justify-center text-white p-6">
+    <div className="animate-pulse mb-6">
+      <svg className="w-24 h-24 text-yellow-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* Phone rotate icon */}
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h11M9 21V3M17 16l4-4m0 0l-4-4m4 4H9" />
+      </svg>
+    </div>
+    <h2 className="text-3xl font-bold mb-4 text-center text-yellow-300 tracking-tight">화면을 눕혀주세요!</h2>
+    <p className="text-xl text-gray-300 text-center leading-relaxed">
+      이 화면은 <span className="font-bold text-white">가로 모드</span>에 맞추어져 있어요.<br/>
+      스마트폰을 시계 방향으로 돌려주세요.
+    </p>
+  </div>
+);
+
 interface ConsonantAppProps {
   onGoHome: () => void;
   initialPage?: number;
@@ -219,6 +235,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-lime-50 text-gray-800 flex items-center justify-center p-4">
+      <PortraitOverlay />
       {/* 모음편은 더 넓은 레이아웃을 사용하므로 max-w-5xl로 확장합니다. */}
       <main className={`w-full ${appState === 'vowel_workbook' ? 'max-w-5xl' : 'max-w-4xl'} mx-auto`}>
         <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10 border-4 border-lime-200 relative">

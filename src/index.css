@@ -18,3 +18,14 @@ body {
 #root {
   min-height: 100vh;
 }
+
+/* 세로 모드 안내 오버레이 */
+.portrait-overlay {
+  display: none !important;
+}
+
+@media screen and (orientation: portrait) and (max-width: 899px) { /* tablets and phones */
+  .portrait-overlay {
+    display: flex !important;
+  }
+}
