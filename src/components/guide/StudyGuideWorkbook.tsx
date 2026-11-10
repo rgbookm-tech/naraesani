@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { WorkbookDetailData } from '../../data/studyGuideData';
+import { WorkbookDetailData, INTERACTIVE_ACTIVITY_TYPES } from '../../data/studyGuideData';
 import {
   fetchWorkbookDetail,
   saveDraftSubmission,
   loadSavedDraft,
   evaluateEssaySubmission,
+  askAiTutorQuestion,
   AiFeedbackResult,
   UserWallet,
+  RgMemberUser,
 } from '../../services/workbookApi';
+import ConsonantActivityHost from '../consonant/ActivityHost';
 
 interface StudyGuideWorkbookProps {
   workbookCode: string;
   userid: string;
   wallet: UserWallet;
+  currentUser?: RgMemberUser | null;
   onWalletChange: (newWallet: UserWallet) => void;
   onOpenWalletModal: () => void;
+  onOpenMemberModal?: () => void;
+  onOpenAdminModal?: (editCode?: string) => void;
   onGoHome: () => void;
   onSelectWorkbook: (code: string) => void;
 }
@@ -34,8 +40,11 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
   workbookCode,
   userid,
   wallet,
+  currentUser,
   onWalletChange,
   onOpenWalletModal,
+  onOpenMemberModal,
+  onOpenAdminModal,
   onGoHome,
   onSelectWorkbook,
 }) => {
@@ -43,6 +52,15 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
   const [activeStepIdx, setActiveStepIdx] = useState<number>(0);
   const [stepAnswers, setStepAnswers] = useState<Record<string, string>>({});
   const [showTableHints, setShowTableHints] = useState<boolean>(false);
+
+  // AI Tutor Q&A states (마일리지 차감형 AI 질문하기)
+  const [isAiTutorOpen, setIsAiTutorOpen] = useState<boolean>(false);
+  const [aiQuestion, setAiQuestion] = useState<string>('');
+  const [isAskingAi, setIsAskingAi] = useState<boolean>(false);
+  const [aiChatHistory, setAiChatHistory] = useState<
+    { q: string; a: string; mileageUsed?: number }[]
+  >([]);
+  const [aiTutorError, setAiTutorError] = useState<string | null>(null);
 
   // Essay states
   const [essayTitle, setEssayTitle] = useState<string>('');
@@ -60,6 +78,8 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
       setActiveStepIdx(0);
       setFeedback(null);
       setEvalError(null);
+      setAiChatHistory([]);
+      setAiTutorError(null);
 
       const saved = loadSavedDraft(userid, workbookCode);
       if (saved) {
@@ -88,10 +108,51 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
   const { workbook, steps, writing_prompts, roadmap_books } = detail;
   const currentStep = steps[activeStepIdx] || steps[0];
   const currentPrompt = writing_prompts[0];
-  const isElementary = workbook.target_group === 'ELEM_LOW' || workbook.target_group === 'ELEM_HIGH';
+  const isElementary =
+    workbook.target_group === 'ELEM_LOW' ||
+    workbook.target_group === 'ELEM_HIGH' ||
+    workbook.grade_group === 'ELEM_LOW' ||
+    workbook.grade_group === 'ELEM_MID' ||
+    workbook.grade_group === 'ELEM_HIGH';
+  const questionMileageCost = workbook.ai_question_mileage || 50;
+  const essayMileageCost = workbook.ai_essay_mileage || (isElementary ? 200 : 300);
 
   const updateAnswer = (key: string, val: string) => {
     setStepAnswers((prev) => ({ ...prev, [key]: val }));
+  };
+
+  const handleAskAiTutor = async (presetQuestion?: string) => {
+    const qText = (presetQuestion ?? aiQuestion).trim();
+    if (qText.length < 2) {
+      setAiTutorError('질문 내용을 2자 이상 입력해 주세요.');
+      return;
+    }
+
+    setIsAskingAi(true);
+    setAiTutorError(null);
+    try {
+      const res = await askAiTutorQuestion({
+        userid,
+        workbook_code: workbook.code,
+        question: qText,
+        step_title: currentStep?.step_title || '',
+        cost_mileage: questionMileageCost,
+      });
+      onWalletChange(res.wallet);
+      setAiChatHistory((prev) => [
+        ...prev,
+        {
+          q: qText,
+          a: res.answer,
+          mileageUsed: res.deducted_mileage,
+        },
+      ]);
+      setAiQuestion('');
+    } catch (err: any) {
+      setAiTutorError(err?.message || 'AI 질문 처리 중 오류가 발생했습니다.');
+    } finally {
+      setIsAskingAi(false);
+    }
   };
 
   const handleSaveDraft = async () => {
@@ -122,11 +183,20 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
       return;
     }
 
-    const totalCredits = wallet.free_trial_credits + wallet.paid_credits;
-    if (totalCredits < currentPrompt.required_credits) {
-      setEvalError('글쓰기 AI 첨삭 이용권(크레딧)이 부족합니다. 상단 [이용권 충전] 버튼을 눌러 충전해 주세요.');
-      onOpenWalletModal();
-      return;
+    if (currentUser || wallet.is_rg_member) {
+      const curMileage = wallet.member_mileage ?? currentUser?.mileage ?? 0;
+      if (curMileage < essayMileageCost && wallet.free_trial_credits + wallet.paid_credits < 1) {
+        setEvalError(`보유 마일리지(${curMileage}P)가 부족합니다. (필요 마일리지: ${essayMileageCost}P)`);
+        onOpenWalletModal();
+        return;
+      }
+    } else {
+      const totalCredits = wallet.free_trial_credits + wallet.paid_credits;
+      if (totalCredits < currentPrompt.required_credits) {
+        setEvalError('글쓰기 AI 첨삭 이용권(크레딧)이 부족합니다. 상단 [이용권 충전] 또는 [회원 로그인]을 이용해 주세요.');
+        onOpenWalletModal();
+        return;
+      }
     }
 
     setIsEvaluating(true);
@@ -168,12 +238,41 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
           </button>
 
           <div className="flex flex-wrap items-center gap-2">
-            <button
-              onClick={onOpenWalletModal}
-              className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-gray-900 text-xs font-extrabold px-3.5 py-1.5 rounded-xl shadow-sm transition-colors"
-            >
-              🎟️ AI 첨삭 이용권: 무료 {wallet.free_trial_credits}회 · 유료 {wallet.paid_credits}회 [충전]
-            </button>
+            {currentUser ? (
+              <button
+                onClick={onOpenWalletModal}
+                className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-gray-900 text-xs font-extrabold px-3.5 py-1.5 rounded-xl shadow-sm transition-colors"
+              >
+                💰 {currentUser.nickname || currentUser.userid}님 보유 마일리지:{' '}
+                {(wallet.member_mileage ?? currentUser.mileage ?? 0).toLocaleString()} P
+              </button>
+            ) : (
+              <button
+                onClick={onOpenWalletModal}
+                className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-gray-900 text-xs font-extrabold px-3.5 py-1.5 rounded-xl shadow-sm transition-colors"
+              >
+                🎟️ AI 이용권: 무료 {wallet.free_trial_credits}회 · 유료 {wallet.paid_credits}회 [충전]
+              </button>
+            )}
+
+            {onOpenMemberModal && (
+              <button
+                onClick={onOpenMemberModal}
+                className="inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl transition-colors"
+              >
+                {currentUser ? '👤 회원정보' : '🔐 리더스가이드 로그인'}
+              </button>
+            )}
+
+            {onOpenAdminModal && (
+              <button
+                onClick={() => onOpenAdminModal(workbook.code)}
+                className="inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl transition-colors"
+              >
+                ✏️ 지도안 수정
+              </button>
+            )}
+
             {workbook.purchase_url && (
               <a
                 href={workbook.purchase_url}
@@ -194,7 +293,7 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
                 {workbook.target_label}
               </span>
               <span className="text-xs font-bold bg-white/20 px-3 py-1 rounded-full">
-                분야: {workbook.theme_category}
+                교과: {workbook.subject_category || '국어'} · 기본학습: {workbook.basic_skill_category || '책읽기'}
               </span>
               <span className="text-xs font-bold bg-white/20 px-3 py-1 rounded-full">
                 ⏱️ 소요시간 {workbook.duration_minutes}분
@@ -207,7 +306,44 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
               {workbook.author} | {workbook.publisher} — {workbook.subtitle}
             </p>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setIsAiTutorOpen((prev) => !prev)}
+            className="px-4 py-2.5 rounded-2xl bg-white text-indigo-950 hover:bg-indigo-50 font-black text-xs shadow-md shrink-0"
+          >
+            🤖 AI 도우미에게 질문하기 (-{questionMileageCost}P)
+          </button>
         </div>
+
+        {/* NCIC 국가교육과정 성취기준 & 교육목표 배너 */}
+        {workbook.curriculum_links && workbook.curriculum_links.length > 0 && (
+          <div className="mt-4 bg-black/20 border border-white/20 rounded-2xl p-3.5 space-y-1.5">
+            <div className="text-[11px] font-extrabold text-amber-200">
+              🏛️ NCIC 국가교육과정 연계 성취기준 및 교육목표 (2022 개정 교육과정)
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {workbook.curriculum_links.map((lk, lIdx) => (
+                <div key={lk.curriculum_id || lIdx} className="bg-white/10 rounded-xl px-3 py-2 text-xs">
+                  <div className="font-extrabold text-white flex items-center gap-1.5">
+                    <span className="bg-amber-400 text-gray-900 px-1.5 py-0.5 rounded text-[10px] font-black">
+                      {lk.achievement_code || lk.curriculum_code}
+                    </span>
+                    <span>
+                      {lk.detail_subject} ({lk.domain_name})
+                    </span>
+                  </div>
+                  <div className="text-white/90 text-[11px] mt-0.5">
+                    {lk.achievement_text || lk.educational_goal}
+                  </div>
+                  {lk.linkage_note && (
+                    <div className="text-emerald-200 text-[10px] mt-0.5">💡 활동 초점: {lk.linkage_note}</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Step Navigation Tabs */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-6">
@@ -245,6 +381,94 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
           })}
         </div>
       </div>
+
+      {/* Collapsible AI Tutor Q&A Box (리더스가이드 마일리지 연동) */}
+      {isAiTutorOpen && (
+        <div className="bg-gradient-to-r from-indigo-50 via-white to-emerald-50 border-2 border-indigo-300 rounded-3xl p-5 shadow-md space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 className="text-base font-black text-indigo-950">
+                🤖 AI 독서 튜터에게 무엇이든 물어보세요! (질문 1회당 -{questionMileageCost} 마일리지)
+              </h3>
+              <p className="text-xs text-gray-600 mt-0.5">
+                책 속 어려운 어휘, 등장인물의 심리, 과학/역사 배경지식, 글쓰기 아이디어를 질문하면 눈높이에 맞춰 답해 줍니다.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsAiTutorOpen(false)}
+              className="text-xs font-bold text-gray-500 hover:text-gray-800 px-2.5 py-1 rounded-lg bg-gray-100"
+            >
+              닫기 ✕
+            </button>
+          </div>
+
+          {/* Preset Quick Questions */}
+          <div className="flex flex-wrap gap-1.5">
+            {[
+              `《${workbook.title}》의 핵심 주제를 쉽게 설명해 줘`,
+              '이 책이 우리나라 교육과정(교과서)과 어떻게 연결되나요?',
+              '글쓰기 서론을 어떻게 시작하면 좋을지 힌트를 줘',
+            ].map((pq, i) => (
+              <button
+                key={i}
+                type="button"
+                disabled={isAskingAi}
+                onClick={() => handleAskAiTutor(pq)}
+                className="text-xs font-bold bg-indigo-100/80 hover:bg-indigo-200 text-indigo-900 px-3 py-1.5 rounded-full transition-colors"
+              >
+                💬 {pq}
+              </button>
+            ))}
+          </div>
+
+          {/* Chat History */}
+          {aiChatHistory.length > 0 && (
+            <div className="space-y-3 max-h-64 overflow-y-auto bg-white rounded-2xl p-4 border border-indigo-100">
+              {aiChatHistory.map((item, idx) => (
+                <div key={idx} className="space-y-2 pb-3 border-b border-gray-100 last:border-none last:pb-0">
+                  <div className="flex items-center justify-between text-xs font-extrabold text-indigo-800">
+                    <span>🙋 나의 질문: {item.q}</span>
+                    {item.mileageUsed ? (
+                      <span className="text-[11px] text-rose-600">-{item.mileageUsed}P 차감</span>
+                    ) : null}
+                  </div>
+                  <div className="text-xs md:text-sm text-gray-800 leading-relaxed whitespace-pre-line bg-slate-50 p-3 rounded-xl">
+                    {item.a}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {aiTutorError && (
+            <div className="text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 px-3.5 py-2 rounded-xl">
+              ⚠️ {aiTutorError}
+            </div>
+          )}
+
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={aiQuestion}
+              onChange={(e) => setAiQuestion(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleAskAiTutor();
+              }}
+              placeholder="궁금한 점을 입력하세요 (예: 불광불급이 오늘날 왜 중요한가요?)"
+              className="flex-1 rounded-xl border border-indigo-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            />
+            <button
+              type="button"
+              disabled={isAskingAi}
+              onClick={() => handleAskAiTutor()}
+              className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-black text-xs shrink-0 shadow"
+            >
+              {isAskingAi ? '답변 생성 중...' : `질문하기 (-${questionMileageCost}P)`}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* STEP 1: BOOK_INTRO */}
       {currentStep.step_type === 'BOOK_INTRO' && (
@@ -596,6 +820,59 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
         </div>
       )}
 
+      {/* STEP: INTERACTIVE_ACTIVITY (표준 14종 인터랙티브 워크북 블록) */}
+      {currentStep.step_type === 'INTERACTIVE_ACTIVITY' && (
+        <div className="bg-white rounded-3xl border-2 border-amber-200 p-6 shadow-sm space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-100 pb-3">
+            <div>
+              <span className="text-xs font-extrabold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">
+                🎮 표준 인터랙티브 워크북 블록 ({currentStep.content?.activity_type || 'word-search'})
+              </span>
+              <h3 className="text-lg font-black text-gray-900 mt-1">{currentStep.step_title}</h3>
+            </div>
+          </div>
+
+          {currentStep.content?.activity_data ? (
+            <div className="pt-2">
+              <ConsonantActivityHost
+                activity={currentStep.content.activity_data}
+                onNextPage={() => setActiveStepIdx((i) => Math.min(steps.length - 1, i + 1))}
+                onPrevPage={() => setActiveStepIdx((i) => Math.max(0, i - 1))}
+                onGoToTOC={() => setActiveStepIdx(0)}
+                onNavigateToPage={() => {}}
+                isFirstPage={activeStepIdx === 0}
+                isLastPage={activeStepIdx === steps.length - 1}
+                onComplete={() => setActiveStepIdx((i) => Math.min(steps.length - 1, i + 1))}
+              />
+            </div>
+          ) : (
+            <div className="bg-amber-50/70 rounded-2xl p-6 text-center space-y-3 border border-amber-200">
+              <div className="text-3xl">🧩</div>
+              <div className="font-extrabold text-gray-900 text-base">
+                {INTERACTIVE_ACTIVITY_TYPES.find((t) => t.type === currentStep.content?.activity_type)?.label ||
+                  '인터랙티브 활동'}
+              </div>
+              <p className="text-xs text-gray-600">
+                {currentStep.content?.instruction ||
+                  '제시된 어휘와 문장을 활용하여 인터랙티브 워크북 활동을 수행해 보세요.'}
+              </p>
+              {currentStep.content?.words && Array.isArray(currentStep.content.words) && (
+                <div className="flex flex-wrap justify-center gap-2 pt-2">
+                  {currentStep.content.words.map((w: string, i: number) => (
+                    <span
+                      key={i}
+                      className="px-4 py-2 rounded-xl bg-white border-2 border-amber-300 font-black text-amber-900 text-sm shadow-sm"
+                    >
+                      {w}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* STEP 4: ESSAY_WRITING & AI FEEDBACK */}
       {currentStep.step_type === 'ESSAY_WRITING' && currentPrompt && (
         <div className="space-y-6">
@@ -744,6 +1021,8 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
                 >
                   {isEvaluating
                     ? '🤖 AI 멘토가 지침(Gems)에 따라 꼼꼼히 첨삭 중입니다...'
+                    : currentUser || wallet.is_rg_member
+                    ? `✨ AI 멘토 첨삭 받기 (-${essayMileageCost}P 마일리지 차감)`
                     : `✨ AI 멘토 첨삭 받기 (이용권 ${currentPrompt.required_credits}회 사용)`}
                 </button>
               </div>

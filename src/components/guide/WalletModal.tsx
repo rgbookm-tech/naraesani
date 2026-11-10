@@ -1,26 +1,30 @@
 import React, { useState } from 'react';
-import { UserWallet, CreditTransaction, chargeUserWallet } from '../../services/workbookApi';
+import { UserWallet, CreditTransaction, RgMemberUser, chargeUserWallet } from '../../services/workbookApi';
 
 interface WalletModalProps {
   isOpen: boolean;
   onClose: () => void;
   wallet: UserWallet;
+  currentUser?: RgMemberUser | null;
   transactions: CreditTransaction[];
   onWalletUpdated: (wallet: UserWallet, transactions: CreditTransaction[]) => void;
+  onOpenMemberModal?: () => void;
 }
 
 const PACKAGES = [
-  { credits: 1, price: 1000, label: 'AI 글쓰기 첨삭 1회권', badge: '단건 체험' },
-  { credits: 5, price: 4500, label: 'AI 글쓰기 첨삭 5회권', badge: '인기 (10% 할인)' },
-  { credits: 10, price: 8000, label: 'AI 글쓰기 첨삭 10회권', badge: '추천 (20% 할인)' },
+  { credits: 1, price: 1000, label: 'AI 글쓰기 첨삭 1회권 (+1,000P)', badge: '단건 체험' },
+  { credits: 5, price: 4500, label: 'AI 글쓰기 첨삭 5회권 (+5,000P)', badge: '인기 (10% 할인)' },
+  { credits: 10, price: 8000, label: 'AI 글쓰기 첨삭 10회권 (+10,000P)', badge: '추천 (20% 할인)' },
 ];
 
 const WalletModal: React.FC<WalletModalProps> = ({
   isOpen,
   onClose,
   wallet,
+  currentUser,
   transactions,
   onWalletUpdated,
+  onOpenMemberModal,
 }) => {
   const [selectedIdx, setSelectedIdx] = useState<number>(1);
   const [isCharging, setIsCharging] = useState(false);
@@ -40,13 +44,15 @@ const WalletModal: React.FC<WalletModalProps> = ({
         `${pkg.label} (${pkg.price.toLocaleString()}원 결제)`
       );
       onWalletUpdated(updated.wallet, updated.transactions);
-      setNotice(`✅ ${pkg.label}(+${pkg.credits}회) 충전이 완료되었습니다!`);
+      setNotice(`✅ ${pkg.label} 충전이 완료되었습니다!`);
     } catch (e: any) {
       setNotice(`❌ 충전 중 오류가 발생했습니다: ${e?.message || ''}`);
     } finally {
       setIsCharging(false);
     }
   };
+
+  const memberMileage = wallet.member_mileage ?? currentUser?.mileage ?? 0;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -55,9 +61,9 @@ const WalletModal: React.FC<WalletModalProps> = ({
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-5 text-white flex items-center justify-between">
           <div>
             <span className="text-xs font-bold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full">
-              Writing Credit & Billing DB
+              ReadersGuide Mileage &amp; Writing Credit DB
             </span>
-            <h3 className="text-2xl font-extrabold mt-1">🎟️ AI 글쓰기 첨삭 이용권 관리</h3>
+            <h3 className="text-2xl font-extrabold mt-1">💰 리더스가이드 마일리지 &amp; 이용권 관리</h3>
           </div>
           <button
             onClick={onClose}
@@ -68,37 +74,74 @@ const WalletModal: React.FC<WalletModalProps> = ({
         </div>
 
         <div className="p-6 max-h-[80vh] overflow-y-auto space-y-6">
+          {/* Member Status Banner */}
+          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div className="text-xs font-extrabold text-emerald-900">
+                {currentUser ? (
+                  <span>
+                    👤 리더스가이드 통합 회원:{' '}
+                    <strong>{currentUser.nickname || currentUser.userid}</strong> ({currentUser.userid})
+                  </span>
+                ) : (
+                  <span>🔓 현재 비회원 체험 모드입니다 (리더스가이드 계정 연동 가능)</span>
+                )}
+              </div>
+              <p className="text-[11px] text-emerald-700 mt-0.5">
+                리더스가이드 회원으로 로그인하면 서점 보유 마일리지(member.mileage)로 AI 질문(-50P) 및 첨삭(-200~300P)을 바로 이용할 수 있습니다.
+              </p>
+            </div>
+            {onOpenMemberModal && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenMemberModal();
+                }}
+                className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shrink-0 shadow-sm"
+              >
+                {currentUser ? '계정 전환 / 로그아웃' : '🔐 리더스가이드 회원 로그인'}
+              </button>
+            )}
+          </div>
+
           {/* Current Balance */}
-          <div className="grid grid-cols-3 gap-3 bg-indigo-50/70 p-4 rounded-2xl border border-indigo-100 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-indigo-50/70 p-4 rounded-2xl border border-indigo-100 text-center">
+            <div className="bg-white p-3 rounded-xl shadow-sm">
+              <div className="text-xs text-gray-500 font-semibold">리더스가이드 마일리지</div>
+              <div className="text-xl font-black text-amber-600 mt-1">
+                {memberMileage.toLocaleString()} P
+              </div>
+            </div>
             <div className="bg-white p-3 rounded-xl shadow-sm">
               <div className="text-xs text-gray-500 font-semibold">무료 체험권</div>
-              <div className="text-2xl font-extrabold text-emerald-600 mt-1">
+              <div className="text-xl font-extrabold text-emerald-600 mt-1">
                 {wallet.free_trial_credits}회
               </div>
             </div>
             <div className="bg-white p-3 rounded-xl shadow-sm">
               <div className="text-xs text-gray-500 font-semibold">유료 충전 이용권</div>
-              <div className="text-2xl font-extrabold text-indigo-600 mt-1">
+              <div className="text-xl font-extrabold text-indigo-600 mt-1">
                 {wallet.paid_credits}회
               </div>
             </div>
             <div className="bg-white p-3 rounded-xl shadow-sm">
-              <div className="text-xs text-gray-500 font-semibold">누적 첨삭 횟수</div>
-              <div className="text-2xl font-extrabold text-gray-700 mt-1">
+              <div className="text-xs text-gray-500 font-semibold">누적 이용 횟수</div>
+              <div className="text-xl font-extrabold text-gray-700 mt-1">
                 {wallet.total_used_credits}회
               </div>
             </div>
           </div>
 
           <div className="text-xs text-gray-600 bg-amber-50 border border-amber-200 rounded-xl p-3">
-            💡 <strong>과금 안내:</strong> 도서 소개, 내용 이해, 함께 이야기 나누기 등 모든 독서지도안 학습과{' '}
-            <strong>글쓰기 임시저장까지는 무료</strong>입니다. 작성 완료 후{' '}
-            <strong>[AI 멘토 첨삭 받기]</strong>를 실행할 때만 이용권 1회가 차감됩니다.
+            💡 <strong>마일리지 차감 안내:</strong> 도서 소개, 내용 이해, 함께 이야기 나누기 등 모든 독서지도안 학습과{' '}
+            <strong>글쓰기 임시저장까지는 무료</strong>입니다.{' '}
+            <strong>[AI 도우미 질문하기 (-50P)]</strong> 및 <strong>[AI 멘토 첨삭 받기 (-200~300P)]</strong> 실행 시에만 마일리지(또는 이용권)가 차감됩니다.
           </div>
 
           {/* Charge Packages */}
           <div>
-            <h4 className="font-bold text-gray-800 mb-3 text-sm">⚡ 글쓰기 첨삭 이용권 충전하기</h4>
+            <h4 className="font-bold text-gray-800 mb-3 text-sm">⚡ 이용권 &amp; 마일리지 간편 충전하기</h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {PACKAGES.map((pkg, idx) => {
                 const active = selectedIdx === idx;
@@ -116,7 +159,7 @@ const WalletModal: React.FC<WalletModalProps> = ({
                     <span className="inline-block text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 mb-2">
                       {pkg.badge}
                     </span>
-                    <div className="font-extrabold text-gray-900 text-base">{pkg.label}</div>
+                    <div className="font-extrabold text-gray-900 text-sm">{pkg.label}</div>
                     <div className="text-xl font-black text-indigo-600 mt-2">
                       {pkg.price.toLocaleString()}원
                     </div>
@@ -146,7 +189,7 @@ const WalletModal: React.FC<WalletModalProps> = ({
           {/* Transaction History */}
           <div>
             <h4 className="font-bold text-gray-800 mb-2 text-sm">
-              📋 최근 이용권 충전·차감 내역 (DB 원장)
+              📋 최근 마일리지 · 이용권 사용/충전 내역
             </h4>
             <div className="border border-gray-200 rounded-xl overflow-hidden text-xs">
               {transactions.length === 0 ? (

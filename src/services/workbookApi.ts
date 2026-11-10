@@ -1,23 +1,39 @@
 import {
   INITIAL_WORKBOOKS,
   INITIAL_ROADMAPS,
+  INITIAL_CURRICULUM_STANDARDS,
   WORKBOOK_DETAILS_MAP,
   WorkbookItem,
   RoadmapTheme,
   WorkbookDetailData,
+  CurriculumStandard,
 } from '../data/studyGuideData';
+
+export interface RgMemberUser {
+  userid: string;
+  nickname: string;
+  username?: string;
+  mileage: number;
+  level?: number;
+  permission?: number;
+  is_admin: boolean;
+}
 
 export interface UserWallet {
   userid: string;
   free_trial_credits: number;
   paid_credits: number;
   total_used_credits: number;
+  is_rg_member?: boolean;
+  nickname?: string;
+  member_mileage?: number;
+  is_admin?: boolean;
   updated_at?: string;
 }
 
 export interface CreditTransaction {
   id: number;
-  tx_type: 'FREE_GRANT' | 'CHARGE' | 'USE_ESSAY' | 'REFUND';
+  tx_type: 'FREE_GRANT' | 'CHARGE' | 'USE_ESSAY' | 'USE_QUESTION' | 'REFUND';
   amount: number;
   balance_free_after: number;
   balance_paid_after: number;
@@ -50,17 +66,56 @@ export interface AiFeedbackResult {
   formatted_markdown?: string;
 }
 
+export interface DynamicThemeItem {
+  key: string;
+  label: string;
+  count: number;
+}
+
 const API_BASE_CANDIDATES = [
   process.env.REACT_APP_API_BASE_URL,
   window.location.hostname === 'localhost' ? 'http://localhost:8000/api/workbook-app' : null,
   'https://www.readersguide.co.kr/api/workbook-app',
 ].filter(Boolean) as string[];
 
-const LOCAL_WALLET_KEY = 'rg_workbook_wallet_v1';
-const LOCAL_TX_KEY = 'rg_workbook_tx_v1';
-const LOCAL_SUBMISSIONS_KEY = 'rg_workbook_submissions_v1';
+const LOCAL_WALLET_KEY = 'rg_workbook_wallet_v2';
+const LOCAL_TX_KEY = 'rg_workbook_tx_v2';
+const LOCAL_SUBMISSIONS_KEY = 'rg_workbook_submissions_v2';
+const LOCAL_TOKEN_KEY = 'rg_workbook_jwt_token';
+const LOCAL_USER_KEY = 'rg_workbook_member_user';
+const LOCAL_CUSTOM_WORKBOOKS_KEY = 'rg_workbook_custom_catalog_v1';
+const LOCAL_CUSTOM_DETAILS_KEY = 'rg_workbook_custom_details_v1';
+const LOCAL_CUSTOM_CURRICULUM_KEY = 'rg_workbook_custom_curriculum_v1';
+
+export function getAuthToken(): string | null {
+  const params = new URLSearchParams(window.location.search);
+  const urlToken = params.get('token') || params.get('jwt');
+  if (urlToken) {
+    localStorage.setItem(LOCAL_TOKEN_KEY, urlToken);
+    return urlToken;
+  }
+  return (
+    localStorage.getItem(LOCAL_TOKEN_KEY) ||
+    localStorage.getItem('access_token') ||
+    localStorage.getItem('jwt_token') ||
+    null
+  );
+}
+
+export function getSavedMemberUser(): RgMemberUser | null {
+  const raw = localStorage.getItem(LOCAL_USER_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
 
 export function getCurrentUserId(): string {
+  const savedUser = getSavedMemberUser();
+  if (savedUser?.userid) return savedUser.userid;
+
   const params = new URLSearchParams(window.location.search);
   const urlUser = params.get('userid') || params.get('user');
   if (urlUser) {
@@ -75,42 +130,64 @@ export function getCurrentUserId(): string {
 }
 
 async function tryFetchJson(path: string, options?: RequestInit): Promise<any | null> {
+  const token = getAuthToken();
   for (const base of API_BASE_CANDIDATES) {
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), options?.method === 'POST' ? 35000 : 4500);
+      const timeout = setTimeout(() => controller.abort(), options?.method === 'POST' ? 35000 : 5000);
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        ...((options?.headers as Record<string, string>) || {}),
+      };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
       const res = await fetch(`${base}${path}`, {
         ...options,
-        headers: {
-          'Content-Type': 'application/json',
-          ...(options?.headers || {}),
-        },
+        headers,
         signal: controller.signal,
       });
       clearTimeout(timeout);
-      if (res.status === 402) {
+      if (res.status === 401 || res.status === 402 || res.status === 400) {
         const errBody = await res.json().catch(() => ({}));
-        throw new Error(errBody.detail || 'PAYMENT_REQUIRED');
+        if (errBody.detail) {
+          throw new Error(errBody.detail);
+        }
       }
       if (res.ok) {
         return await res.json();
       }
     } catch (err: any) {
-      if (err?.message?.includes('이용권') || err?.message === 'PAYMENT_REQUIRED') {
+      if (
+        err?.message?.includes('마일리지') ||
+        err?.message?.includes('이용권') ||
+        err?.message?.includes('비밀번호') ||
+        err?.message?.includes('아이디') ||
+        err?.message === 'PAYMENT_REQUIRED'
+      ) {
         throw err;
       }
-      // continue to next candidate or fallback
     }
   }
   return null;
 }
 
 function getLocalWalletState(userid: string): { wallet: UserWallet; transactions: CreditTransaction[] } {
+  const savedUser = getSavedMemberUser();
   const rawW = localStorage.getItem(`${LOCAL_WALLET_KEY}_${userid}`);
   const rawTx = localStorage.getItem(`${LOCAL_TX_KEY}_${userid}`);
   if (rawW && rawTx) {
+    const parsedW: UserWallet = JSON.parse(rawW);
+    if (savedUser && savedUser.userid === userid) {
+      parsedW.is_rg_member = true;
+      parsedW.nickname = savedUser.nickname;
+      parsedW.is_admin = savedUser.is_admin;
+      if (parsedW.member_mileage === undefined) {
+        parsedW.member_mileage = savedUser.mileage;
+      }
+    }
     return {
-      wallet: JSON.parse(rawW),
+      wallet: parsedW,
       transactions: JSON.parse(rawTx),
     };
   }
@@ -120,6 +197,10 @@ function getLocalWalletState(userid: string): { wallet: UserWallet; transactions
     free_trial_credits: 3,
     paid_credits: 0,
     total_used_credits: 0,
+    is_rg_member: Boolean(savedUser && savedUser.userid === userid),
+    nickname: savedUser?.nickname || '게스트 체험',
+    member_mileage: savedUser?.mileage || 0,
+    is_admin: Boolean(savedUser?.is_admin),
     updated_at: now,
   };
   const initialTx: CreditTransaction[] = [
@@ -128,7 +209,7 @@ function getLocalWalletState(userid: string): { wallet: UserWallet; transactions
       tx_type: 'FREE_GRANT',
       amount: 3,
       balance_free_after: 3,
-      balance_paid_after: 0,
+      balance_paid_after: initialWallet.member_mileage || 0,
       payment_amount_krw: 0,
       description: '신규 이용자 무료 AI 첨삭 체험권 3회 지급',
       created_at: now,
@@ -139,19 +220,157 @@ function getLocalWalletState(userid: string): { wallet: UserWallet; transactions
   return { wallet: initialWallet, transactions: initialTx };
 }
 
+// ─── 리더스가이드 회원 로그인 / 로그아웃 / 상태 확인 ─────────────────────────
+
+export async function loginReadersGuideMember(
+  userid: string,
+  password: string
+): Promise<{ user: RgMemberUser; wallet: UserWallet }> {
+  const remote = await tryFetchJson('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ userid, password }),
+  });
+  if (remote && remote.access_token && remote.user) {
+    localStorage.setItem(LOCAL_TOKEN_KEY, remote.access_token);
+    localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(remote.user));
+    localStorage.setItem('rg_workbook_userid', remote.user.userid);
+    if (remote.wallet) {
+      localStorage.setItem(`${LOCAL_WALLET_KEY}_${remote.user.userid}`, JSON.stringify(remote.wallet));
+    }
+    return { user: remote.user, wallet: remote.wallet };
+  }
+
+  // Fallback: 리더스가이드 기본 /auth/token/ OAuth2 폼 로그인 시도
+  try {
+    const formBody = new URLSearchParams();
+    formBody.append('username', userid.trim());
+    formBody.append('password', password);
+    const res = await fetch('https://www.readersguide.co.kr/api/auth/token/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formBody.toString(),
+    });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.detail || '아이디 또는 비밀번호를 확인해 주세요.');
+    }
+    const tokenData = await res.json();
+    const token = tokenData.access_token;
+    localStorage.setItem(LOCAL_TOKEN_KEY, token);
+
+    // 회원 프로필 조회
+    const meRes = await fetch('https://www.readersguide.co.kr/api/auth/users/me/', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (meRes.ok) {
+      const me = await meRes.json();
+      const userObj: RgMemberUser = {
+        userid: me.userid,
+        nickname: me.nickname || me.username || me.userid,
+        username: me.username,
+        mileage: Number(me.mileage || 0),
+        level: Number(me.level || 1),
+        permission: Number(me.permission || 1),
+        is_admin:
+          me.userid === '알지' ||
+          me.userid === 'admin' ||
+          Number(me.permission || 0) >= 9 ||
+          Number(me.level || 0) >= 9,
+      };
+      localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(userObj));
+      localStorage.setItem('rg_workbook_userid', userObj.userid);
+      const wState = getLocalWalletState(userObj.userid);
+      wState.wallet.is_rg_member = true;
+      wState.wallet.nickname = userObj.nickname;
+      wState.wallet.member_mileage = userObj.mileage;
+      wState.wallet.is_admin = userObj.is_admin;
+      localStorage.setItem(`${LOCAL_WALLET_KEY}_${userObj.userid}`, JSON.stringify(wState.wallet));
+      return { user: userObj, wallet: wState.wallet };
+    }
+  } catch (e: any) {
+    throw new Error(e?.message || '로그인에 실패했습니다.');
+  }
+
+  throw new Error('로그인 서버에 연결할 수 없습니다.');
+}
+
+export function logoutReadersGuideMember(): void {
+  localStorage.removeItem(LOCAL_TOKEN_KEY);
+  localStorage.removeItem(LOCAL_USER_KEY);
+  const guestId = 'student_' + Math.random().toString(36).substring(2, 9);
+  localStorage.setItem('rg_workbook_userid', guestId);
+}
+
+// ─── 대시보드 & 동적 주제 집계 & NCIC 교육과정 조회 ──────────────────────────
+
+function computeDynamicThemes(workbooks: WorkbookItem[]): DynamicThemeItem[] {
+  const counter: Record<string, number> = {};
+  for (const wb of workbooks) {
+    const tags = Array.isArray(wb.theme_tags) && wb.theme_tags.length > 0 ? wb.theme_tags : [wb.theme_category];
+    for (const t of tags) {
+      if (t) counter[t] = (counter[t] || 0) + 1;
+    }
+  }
+  return Object.entries(counter)
+    .sort((a, b) => b[1] - a[1])
+    .map(([key, count]) => ({ key, label: key, count }));
+}
+
+function mergeLocalCustomWorkbooks(baseList: WorkbookItem[]): WorkbookItem[] {
+  const raw = localStorage.getItem(LOCAL_CUSTOM_WORKBOOKS_KEY);
+  if (!raw) return baseList;
+  try {
+    const customs: WorkbookItem[] = JSON.parse(raw);
+    const map = new Map<string, WorkbookItem>();
+    for (const item of baseList) map.set(item.code, item);
+    for (const c of customs) map.set(c.code, c);
+    return Array.from(map.values());
+  } catch {
+    return baseList;
+  }
+}
+
+function mergeLocalCustomCurriculum(baseList: CurriculumStandard[]): CurriculumStandard[] {
+  const raw = localStorage.getItem(LOCAL_CUSTOM_CURRICULUM_KEY);
+  if (!raw) return baseList;
+  try {
+    const customs: CurriculumStandard[] = JSON.parse(raw);
+    const map = new Map<string, CurriculumStandard>();
+    for (const item of baseList) map.set(item.curriculum_code, item);
+    for (const c of customs) map.set(c.curriculum_code, c);
+    return Array.from(map.values());
+  } catch {
+    return baseList;
+  }
+}
+
 export async function fetchDashboardData(): Promise<{
   workbooks: WorkbookItem[];
+  curriculum_standards: CurriculumStandard[];
+  dynamic_themes: DynamicThemeItem[];
   roadmaps: RoadmapTheme[];
 }> {
   const remote = await tryFetchJson('/dashboard');
   if (remote && Array.isArray(remote.workbooks) && remote.workbooks.length > 0) {
+    const mergedWbs = mergeLocalCustomWorkbooks(remote.workbooks);
+    const mergedCurr = mergeLocalCustomCurriculum(
+      Array.isArray(remote.curriculum_standards) && remote.curriculum_standards.length > 0
+        ? remote.curriculum_standards
+        : INITIAL_CURRICULUM_STANDARDS
+    );
     return {
-      workbooks: remote.workbooks,
+      workbooks: mergedWbs,
+      curriculum_standards: mergedCurr,
+      dynamic_themes: computeDynamicThemes(mergedWbs),
       roadmaps: Array.isArray(remote.roadmaps) && remote.roadmaps.length > 0 ? remote.roadmaps : INITIAL_ROADMAPS,
     };
   }
+  const fallbackWbs = mergeLocalCustomWorkbooks(INITIAL_WORKBOOKS);
+  const fallbackCurr = mergeLocalCustomCurriculum(INITIAL_CURRICULUM_STANDARDS);
   return {
-    workbooks: INITIAL_WORKBOOKS,
+    workbooks: fallbackWbs,
+    curriculum_standards: fallbackCurr,
+    dynamic_themes: computeDynamicThemes(fallbackWbs),
     roadmaps: INITIAL_ROADMAPS,
   };
 }
@@ -160,6 +379,17 @@ export async function fetchWorkbookDetail(workbookCode: string): Promise<Workboo
   const remote = await tryFetchJson(`/workbooks/${workbookCode}`);
   if (remote && remote.workbook && Array.isArray(remote.steps) && remote.steps.length > 0) {
     return remote as WorkbookDetailData;
+  }
+  const rawCustom = localStorage.getItem(LOCAL_CUSTOM_DETAILS_KEY);
+  if (rawCustom) {
+    try {
+      const customMap: Record<string, WorkbookDetailData> = JSON.parse(rawCustom);
+      if (customMap[workbookCode]) {
+        return customMap[workbookCode];
+      }
+    } catch {
+      // ignore
+    }
   }
   return WORKBOOK_DETAILS_MAP[workbookCode] || WORKBOOK_DETAILS_MAP.mania_essay;
 }
@@ -191,7 +421,7 @@ export async function chargeUserWallet(
       userid,
       credits,
       payment_amount_krw: paymentAmountKrw,
-      description: description || `AI 글쓰기 첨삭권 ${credits}회 충전`,
+      description: description || `AI 마일리지/이용권 충전`,
     }),
   });
   if (remote && remote.wallet) {
@@ -202,22 +432,25 @@ export async function chargeUserWallet(
     return remote;
   }
 
-  // Fallback local wallet update
   const state = getLocalWalletState(userid);
   const now = new Date().toISOString();
+  const addedMileage = state.wallet.is_rg_member ? credits * 300 : 0;
   const updatedWallet: UserWallet = {
     ...state.wallet,
-    paid_credits: state.wallet.paid_credits + credits,
+    paid_credits: state.wallet.is_rg_member ? state.wallet.paid_credits : state.wallet.paid_credits + credits,
+    member_mileage: (state.wallet.member_mileage || 0) + addedMileage,
     updated_at: now,
   };
   const newTx: CreditTransaction = {
     id: Date.now(),
     tx_type: 'CHARGE',
-    amount: credits,
+    amount: state.wallet.is_rg_member ? addedMileage : credits,
     balance_free_after: updatedWallet.free_trial_credits,
-    balance_paid_after: updatedWallet.paid_credits,
+    balance_paid_after: state.wallet.is_rg_member ? updatedWallet.member_mileage || 0 : updatedWallet.paid_credits,
     payment_amount_krw: paymentAmountKrw,
-    description: description || `AI 글쓰기 첨삭권 ${credits}회 충전`,
+    description:
+      description ||
+      (state.wallet.is_rg_member ? `[마일리지 충전] +${addedMileage}P` : `AI 글쓰기 첨삭권 ${credits}회 충전`),
     created_at: now,
   };
   const updatedTx = [newTx, ...state.transactions].slice(0, 20);
@@ -225,6 +458,57 @@ export async function chargeUserWallet(
   localStorage.setItem(`${LOCAL_TX_KEY}_${userid}`, JSON.stringify(updatedTx));
   return { wallet: updatedWallet, transactions: updatedTx };
 }
+
+// ─── AI 도우미에게 질문하기 (마일리지 차감 연동) ─────────────────────────────
+
+export async function askAiTutorQuestion(params: {
+  userid: string;
+  workbook_code: string;
+  step_title?: string;
+  question: string;
+  context_text?: string;
+  cost_mileage?: number;
+}): Promise<{
+  answer: string;
+  deducted_mileage: number;
+  wallet: UserWallet;
+}> {
+  const remote = await tryFetchJson('/ai/ask-question', {
+    method: 'POST',
+    body: JSON.stringify(params),
+  });
+  if (remote && remote.answer && remote.wallet) {
+    localStorage.setItem(`${LOCAL_WALLET_KEY}_${params.userid}`, JSON.stringify(remote.wallet));
+    return remote;
+  }
+
+  // Fallback local mileage / trial deduction
+  const cost = params.cost_mileage || 50;
+  const state = getLocalWalletState(params.userid);
+  const w = state.wallet;
+  const now = new Date().toISOString();
+
+  if (w.is_rg_member && (w.member_mileage || 0) >= cost) {
+    w.member_mileage = (w.member_mileage || 0) - cost;
+  } else if (w.free_trial_credits > 0) {
+    w.free_trial_credits -= 1;
+  } else if (w.paid_credits > 0) {
+    w.paid_credits -= 1;
+  } else {
+    throw new Error(`AI 질문에 필요한 마일리지(${cost}P) 또는 무료 체험권이 부족합니다.`);
+  }
+  w.total_used_credits += 1;
+  w.updated_at = now;
+  localStorage.setItem(`${LOCAL_WALLET_KEY}_${params.userid}`, JSON.stringify(w));
+
+  return {
+    answer: `💡 질문해주신 "${params.question}"에 대해 함께 생각해 볼까요?\n책 속 인물이 처한 상황과 입장을 먼저 떠올려 본 뒤, '왜 그런 선택을 했을까?'와 '내가 그 인물이라면 어떻게 했을까?'를 비교해 보면 훨씬 깊이 있는 답을 찾을 수 있어요!`,
+    deducted_mileage: w.is_rg_member ? cost : 0,
+    wallet: w,
+  };
+}
+
+// ─── 글쓰기 초안 저장 및 AI 첨삭 ────────────────────────────────────────────
 
 export async function saveDraftSubmission(params: {
   userid: string;
@@ -352,7 +636,6 @@ function buildSmartFallbackFeedback(
     };
   }
 
-  // 미쳐야 미친다 (중·고등 논술 멘토 피드백)
   const hasKeyConcept = /불광불급|벽|미쳐야|몰입|열정/.test(text);
   const hasHistoricalPerson = /김득신|백이전|김덕형|백화보|정약용|황상|이옥|정철조|이덕무|허균|홍대용/.test(text);
   const firstSentence = sentences[0] || '미쳐야 미친다를 읽고 마니아에 대해 생각해보았다.';
@@ -435,12 +718,11 @@ export async function evaluateEssaySubmission(params: {
 }): Promise<{
   submission_id: number;
   status: string;
-  credit_type_used: 'FREE' | 'PAID';
+  credit_type_used: 'MILEAGE' | 'FREE' | 'PAID';
   credits_used: number;
   wallet: UserWallet;
   feedback: AiFeedbackResult;
 }> {
-  // 1. Try Backend API first (where Hidden Gems prompt is injected on server)
   const remote = await tryFetchJson('/submissions/evaluate', {
     method: 'POST',
     body: JSON.stringify(params),
@@ -450,30 +732,38 @@ export async function evaluateEssaySubmission(params: {
     return remote;
   }
 
-  // 2. Fallback wallet check & deduction if backend server is unreachable
   const state = getLocalWalletState(params.userid);
-  const totalAvailable = state.wallet.free_trial_credits + state.wallet.paid_credits;
-  if (totalAvailable < 1) {
-    throw new Error('글쓰기 AI 첨삭 이용권(크레딧)이 부족합니다. 상단 [이용권 충전] 버튼을 눌러 충전해 주세요.');
-  }
+  const w = state.wallet;
+  const costMileage = params.workbook_code === 'gmo_kid' ? 200 : 300;
+  let creditType: 'MILEAGE' | 'FREE' | 'PAID' = 'FREE';
+  let newFree = w.free_trial_credits;
+  let newPaid = w.paid_credits;
+  let newMileage = w.member_mileage || 0;
 
-  let newFree = state.wallet.free_trial_credits;
-  let newPaid = state.wallet.paid_credits;
-  let creditType: 'FREE' | 'PAID' = 'FREE';
-  if (newFree >= 1) {
+  if (w.is_rg_member && newMileage >= costMileage) {
+    newMileage -= costMileage;
+    creditType = 'MILEAGE';
+  } else if (newFree >= 1) {
     newFree -= 1;
     creditType = 'FREE';
-  } else {
+  } else if (newPaid >= 1) {
     newPaid -= 1;
     creditType = 'PAID';
+  } else {
+    throw new Error(
+      w.is_rg_member
+        ? `보유 마일리지(${newMileage}P)가 부족합니다. (필요: ${costMileage}P)`
+        : '무료 AI 첨삭 체험권을 모두 사용했습니다. 상단 [회원 로그인] 또는 [이용권 충전]을 이용해 주세요.'
+    );
   }
 
   const now = new Date().toISOString();
   const updatedWallet: UserWallet = {
-    ...state.wallet,
+    ...w,
     free_trial_credits: newFree,
     paid_credits: newPaid,
-    total_used_credits: state.wallet.total_used_credits + 1,
+    member_mileage: newMileage,
+    total_used_credits: w.total_used_credits + 1,
     updated_at: now,
   };
 
@@ -487,13 +777,13 @@ export async function evaluateEssaySubmission(params: {
   const newTx: CreditTransaction = {
     id: subId,
     tx_type: 'USE_ESSAY',
-    amount: -1,
+    amount: creditType === 'MILEAGE' ? -costMileage : -1,
     balance_free_after: newFree,
-    balance_paid_after: newPaid,
+    balance_paid_after: creditType === 'MILEAGE' ? newMileage : newPaid,
     payment_amount_krw: 0,
-    description: `AI 독서논술 첨삭 (${params.workbook_code === 'gmo_kid' ? 'GMO 아이' : '미쳐야 미친다'}) - ${
-      creditType === 'FREE' ? '무료체험권' : '유료이용권'
-    } 1회 사용`,
+    description: `[독서활동앱] AI 글쓰기 첨삭 (${params.workbook_code}) - ${
+      creditType === 'MILEAGE' ? `${costMileage} 마일리지 차감` : '무료체험권 사용'
+    }`,
     created_at: now,
   };
 
@@ -512,7 +802,7 @@ export async function evaluateEssaySubmission(params: {
     submitted_text: params.submitted_text,
     char_count: params.submitted_text.length,
     credit_type_used: creditType,
-    credits_used: 1,
+    credits_used: creditType === 'MILEAGE' ? costMileage : 1,
     feedback,
     created_at: now,
   });
@@ -522,8 +812,134 @@ export async function evaluateEssaySubmission(params: {
     submission_id: subId,
     status: 'COMPLETED',
     credit_type_used: creditType,
-    credits_used: 1,
+    credits_used: creditType === 'MILEAGE' ? costMileage : 1,
     wallet: updatedWallet,
     feedback,
   };
+}
+
+// ─── 관리자 메뉴 전용 API 함수들 ──────────────────────────────────────────────
+
+export async function searchAdminBooks(query: string): Promise<any[]> {
+  const remote = await tryFetchJson(`/admin/books/search?q=${encodeURIComponent(query)}`);
+  if (remote && Array.isArray(remote.books)) {
+    return remote.books;
+  }
+  return [];
+}
+
+export async function recommendAdminCurriculum(payload: {
+  title: string;
+  subtitle?: string;
+  grade_group?: string;
+  subject_category?: string;
+  keywords?: string[];
+  synopsis?: string;
+}): Promise<Array<{ curriculum_id: number; is_primary: number; linkage_note: string }>> {
+  const remote = await tryFetchJson('/admin/curriculum/recommend', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+  if (remote && Array.isArray(remote.recommendations)) {
+    return remote.recommendations;
+  }
+  // 로컬 폴백 추천
+  const all = mergeLocalCustomCurriculum(INITIAL_CURRICULUM_STANDARDS);
+  const matched = all.filter(
+    (c) => c.grade_group === payload.grade_group || c.subject_category === payload.subject_category
+  );
+  const picks = (matched.length > 0 ? matched : all).slice(0, 2);
+  return picks.map((p, idx) => ({
+    curriculum_id: p.id,
+    is_primary: idx === 0 ? 1 : 0,
+    linkage_note: `[${p.grade_label} · ${p.subject_category}] '${p.domain_name}' 교육목표와 연계된 독서·사고력 활동`,
+  }));
+}
+
+export async function saveAdminCurriculum(payload: CurriculumStandard): Promise<{ status: string }> {
+  const remote = await tryFetchJson('/admin/curriculum', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+  const raw = localStorage.getItem(LOCAL_CUSTOM_CURRICULUM_KEY);
+  const list: CurriculumStandard[] = raw ? JSON.parse(raw) : [];
+  const filtered = list.filter((c) => c.curriculum_code !== payload.curriculum_code);
+  filtered.push({ ...payload, id: payload.id || Date.now() });
+  localStorage.setItem(LOCAL_CUSTOM_CURRICULUM_KEY, JSON.stringify(filtered));
+  return remote || { status: 'ok' };
+}
+
+export async function fetchAdminWorkbookFull(workbookCode: string): Promise<WorkbookDetailData> {
+  const remote = await tryFetchJson(`/admin/workbooks/${workbookCode}/full`);
+  if (remote && remote.workbook) {
+    return remote as WorkbookDetailData;
+  }
+  return fetchWorkbookDetail(workbookCode);
+}
+
+export async function saveAdminWorkbook(payload: any): Promise<{ status: string; code: string }> {
+  const remote = await tryFetchJson('/admin/workbooks', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+
+  // 로컬 캐시에도 반영하여 즉시 대시보드와 상세 화면에서 확인 가능하게 처리
+  const rawWbs = localStorage.getItem(LOCAL_CUSTOM_WORKBOOKS_KEY);
+  const wbList: WorkbookItem[] = rawWbs ? JSON.parse(rawWbs) : [];
+  const wbItem: WorkbookItem = {
+    id: payload.id || Date.now(),
+    code: payload.code,
+    bookno: payload.bookno || null,
+    isbn: payload.isbn || null,
+    title: payload.title,
+    subtitle: payload.subtitle || '',
+    author: payload.author || '',
+    publisher: payload.publisher || '',
+    target_group: payload.grade_group,
+    grade_group: payload.grade_group,
+    target_label: payload.target_label,
+    subject_category: payload.subject_category,
+    basic_skill_category: payload.basic_skill_category,
+    theme_category: payload.theme_category,
+    theme_tags: payload.theme_tags || [payload.theme_category],
+    duration_minutes: Number(payload.duration_minutes || 60),
+    keywords: payload.keywords || [],
+    cover_emoji: payload.cover_emoji || '📘',
+    badge_color: payload.badge_color || 'emerald',
+    template_mode: payload.template_mode || 'STANDARD_GUIDE',
+    is_builtin_interactive: Number(payload.is_builtin_interactive || 0),
+    is_free_content: 1,
+    ai_question_mileage: Number(payload.ai_question_mileage || 50),
+    ai_essay_mileage: Number(payload.ai_essay_mileage || 300),
+    purchase_url: payload.bookno ? `https://www.readersguide.co.kr/book/${payload.bookno}` : null,
+    curriculum_links: payload.curriculum_links || [],
+  };
+  const nextList = wbList.filter((w) => w.code !== wbItem.code);
+  nextList.push(wbItem);
+  localStorage.setItem(LOCAL_CUSTOM_WORKBOOKS_KEY, JSON.stringify(nextList));
+
+  const rawDetails = localStorage.getItem(LOCAL_CUSTOM_DETAILS_KEY);
+  const detailsMap: Record<string, WorkbookDetailData> = rawDetails ? JSON.parse(rawDetails) : {};
+  detailsMap[wbItem.code] = {
+    workbook: wbItem,
+    steps: payload.steps || [],
+    writing_prompts: payload.writing_prompt ? [payload.writing_prompt] : [],
+    roadmap_books: [],
+    gem_config: payload.gem_config || null,
+  };
+  localStorage.setItem(LOCAL_CUSTOM_DETAILS_KEY, JSON.stringify(detailsMap));
+
+  return remote || { status: 'saved', code: payload.code };
+}
+
+export async function deleteAdminWorkbook(workbookCode: string): Promise<void> {
+  await tryFetchJson(`/admin/workbooks/${workbookCode}`, { method: 'DELETE' });
+  const rawWbs = localStorage.getItem(LOCAL_CUSTOM_WORKBOOKS_KEY);
+  if (rawWbs) {
+    const wbList: WorkbookItem[] = JSON.parse(rawWbs);
+    localStorage.setItem(
+      LOCAL_CUSTOM_WORKBOOKS_KEY,
+      JSON.stringify(wbList.filter((w) => w.code !== workbookCode))
+    );
+  }
 }

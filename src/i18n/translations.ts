@@ -338,6 +338,12 @@ export const translations: Record<string, Partial<Record<Language, string>>> = {
   },
 
   // ─── UI labels ────────────────────────────────────────────────────────
+  "독서활동앱": {
+    en: "Reading Activity App",
+    ja: "読書活動アプリ",
+    zh: "阅读活动应用",
+    es: "App de Actividades de Lectura",
+  },
   "나래와 산이의 한글 모험": {
     en: "Narae & Sani's Korean Adventure",
     ja: "ナレとサニのハングル冒険",

@@ -1,25 +1,181 @@
+export type GradeGroupKey =
+  | 'INFANT'
+  | 'ELEM_LOW'
+  | 'ELEM_MID'
+  | 'ELEM_HIGH'
+  | 'MID_1_2'
+  | 'MID3_HIGH1'
+  | 'HIGH';
+
+export type SubjectCategoryKey =
+  | '국어'
+  | '영어'
+  | '수학'
+  | '과학'
+  | '사회/역사/도덕'
+  | '기술/가정/정보'
+  | '예술/체육';
+
+export type BasicSkillCategoryKey = '한국어' | '책읽기' | '논술' | '글쓰기';
+
+export const GRADE_GROUPS: Array<{
+  key: GradeGroupKey | 'ALL';
+  label: string;
+  shortLabel: string;
+  icon: string;
+  desc: string;
+}> = [
+  { key: 'ALL', label: '전체 학년', shortLabel: '전체', icon: '🌈', desc: '영유아부터 고등 대입까지' },
+  { key: 'INFANT', label: '영유아', shortLabel: '영유아', icon: '🌱', desc: '누리과정 · 한글 입문 (5~7세)' },
+  { key: 'ELEM_LOW', label: '초등저학년', shortLabel: '초1~2', icon: '🐣', desc: '초등 1~2학년 · 기초문해·통합교과' },
+  { key: 'ELEM_MID', label: '초등중학년', shortLabel: '초3~4', icon: '🌿', desc: '초등 3~4학년 · 중심생각·교과독서' },
+  { key: 'ELEM_HIGH', label: '초등고학년', shortLabel: '초5~6', icon: '🧬', desc: '초등 5~6학년 · 비판적 읽기·토론' },
+  { key: 'MID_1_2', label: '중1~2', shortLabel: '중1~2', icon: '📘', desc: '중학교 1~2학년 · 교과확장·논증' },
+  { key: 'MID3_HIGH1', label: '중3~고1', shortLabel: '중3~고1', icon: '🔥', desc: '중3~고1 · 공통교과·통합사회/과학' },
+  { key: 'HIGH', label: '고등학생', shortLabel: '고등', icon: '🎓', desc: '고등 심화 · 고교학점제·대입논술' },
+];
+
+export const SUBJECT_CATEGORIES: Array<{
+  key: SubjectCategoryKey | 'ALL';
+  label: string;
+  icon: string;
+}> = [
+  { key: 'ALL', label: '전체 교과', icon: '📚' },
+  { key: '국어', label: '국어', icon: '✍️' },
+  { key: '영어', label: '영어', icon: '🔤' },
+  { key: '수학', label: '수학', icon: '📐' },
+  { key: '과학', label: '과학', icon: '🔬' },
+  { key: '사회/역사/도덕', label: '사회/역사/도덕', icon: '🏛️' },
+  { key: '기술/가정/정보', label: '기술/가정/정보', icon: '💻' },
+  { key: '예술/체육', label: '예술/체육', icon: '🎨' },
+];
+
+export const BASIC_SKILL_CATEGORIES: Array<{
+  key: BasicSkillCategoryKey | 'ALL';
+  label: string;
+  icon: string;
+  desc: string;
+}> = [
+  { key: 'ALL', label: '전체 독서활동', icon: '✨', desc: '모든 교과·주제·기본학습 통합 보기' },
+  { key: '한국어', label: '한국어', icon: '🔤', desc: '한글 자모·받침·기초 어휘 익히기' },
+  { key: '책읽기', label: '책읽기', icon: '📖', desc: '줄거리 파악·인물 이해·교과 독해' },
+  { key: '논술', label: '논술', icon: '⚖️', desc: '쟁점 찬반 토론·비판적 사고·대입 논술' },
+  { key: '글쓰기', label: '글쓰기', icon: '📝', desc: '독후감·요약·자기생각 한단락 쓰기' },
+];
+
+export const STANDARD_STEP_TYPES = [
+  {
+    type: 'BOOK_INTRO',
+    label: '도서 소개 & 생각 열기 (표준 블록)',
+    badge: '독서 준비',
+    desc: '작품·작가 소개, 핵심 어휘, 읽기 전 사전 질문으로 구성된 도입 단계',
+  },
+  {
+    type: 'COMPREHENSION',
+    label: '내용 이해 표 & Q&A (표준 블록)',
+    badge: '내용 파악',
+    desc: '인물 변화 비교표 채우기, 단답/서술형 질문, 본문 발췌문 독해 단계',
+  },
+  {
+    type: 'DISCUSSION',
+    label: '생각 넓히기 토론 & 조사활동 (표준 블록)',
+    badge: '생각 넓히기',
+    desc: '찬반 토론 주제, 쟁점 비교, 생활 속 조사 활동 및 AI 도우미 질문하기 단계',
+  },
+  {
+    type: 'INTERACTIVE_ACTIVITY',
+    label: '인터랙티브 워크북 퍼즐 (14종 표준 액티비티)',
+    badge: '인터랙티브 활동',
+    desc: '낱말 구름, 미로 길찾기, 선잇기, 사다리타기, 빈칸채우기 등 게임형 활동 단계',
+  },
+  {
+    type: 'ESSAY_WRITING',
+    label: '실전 글쓰기 & 비공개 Gems AI 첨삭 (표준 블록)',
+    badge: 'AI 첨삭 과제',
+    desc: '읽기 제시문, 글자수 가이드, 루브릭 기반 AI 선생님 맞춤형 첨삭 단계',
+  },
+];
+
+export const INTERACTIVE_ACTIVITY_TYPES = [
+  { type: 'WORD_CLOUD_SEARCH', label: '낱말 구름 찾기 (WordCloudSearch)' },
+  { type: 'GRID_PATH', label: '격자 미로 길찾기 (GridPath)' },
+  { type: 'FILL_IN_THE_BLANKS', label: '문장 빈칸 채우기 (FillInTheBlanks)' },
+  { type: 'RADIAL_FILL_IN_THE_BLANKS', label: '방사형 낱말 빈칸 퍼즐 (RadialFillInTheBlanks)' },
+  { type: 'SENTENCE_BUILDER', label: '단어로 문장 만들기 (SentenceBuilder)' },
+  { type: 'CONNECT_PAIRS', label: '그림-단어 선잇기 (ConnectPairs)' },
+  { type: 'CONNECT_TEXT_PAIRS', label: '텍스트 뜻 짝짓기 (ConnectTextPairs)' },
+  { type: 'MATCHING_LADDER', label: '사다리 타기 매칭 (MatchingLadder)' },
+  { type: 'MULTIPLE_CHOICE_SENTENCE', label: '객관식 문장 퀴즈 (MultipleChoiceSentence)' },
+  { type: 'MULTIPLE_CHOICE_IMAGE', label: '객관식 그림 퀴즈 (MultipleChoiceImage)' },
+  { type: 'CLOUD_DRAG_AND_DROP', label: '구름 드래그 앤 드롭 (CloudDragAndDrop)' },
+  { type: 'FILL_THE_BLANK_IN_SYLLABLE', label: '음절·받침 빈칸 채우기 (FillTheBlankInSyllable)' },
+];
+
+export interface CurriculumStandard {
+  id: number;
+  curriculum_code: string;
+  revision_year: string;
+  grade_group: GradeGroupKey | string;
+  grade_label: string;
+  subject_category: SubjectCategoryKey | string;
+  detail_subject: string;
+  domain_name: string;
+  educational_goal: string;
+  achievement_code?: string;
+  achievement_text?: string;
+  ncic_ref_id?: string;
+  keywords?: string[];
+}
+
+export interface CurriculumLink {
+  curriculum_id: number;
+  is_primary: number;
+  linkage_note: string;
+  curriculum_code?: string;
+  revision_year?: string;
+  grade_group?: string;
+  grade_label?: string;
+  subject_category?: string;
+  detail_subject?: string;
+  domain_name?: string;
+  educational_goal?: string;
+  achievement_code?: string;
+  achievement_text?: string;
+  ncic_ref_id?: string;
+}
+
 export interface WorkbookItem {
   id: number;
   code: string;
-  bookno: number;
+  bookno?: number | null;
+  isbn?: string | null;
   title: string;
   subtitle: string;
   author: string;
   publisher: string;
-  target_group: 'INFANT' | 'ELEM_LOW' | 'ELEM_HIGH' | 'MID_HIGH';
+  cover_image_url?: string | null;
+  target_group: string;
+  grade_group: GradeGroupKey | string;
   target_label: string;
+  subject_category: SubjectCategoryKey | string;
+  basic_skill_category: BasicSkillCategoryKey | string;
   theme_category: string;
-  roadmap_theme_id: number;
-  roadmap_name: string;
-  roadmap_desc: string;
+  theme_tags?: string[];
+  roadmap_theme_id?: number | null;
+  roadmap_name?: string;
+  roadmap_desc?: string;
   duration_minutes: number;
   keywords: string[];
   cover_emoji: string;
   badge_color: string;
+  template_mode?: 'BUILTIN_VOWEL' | 'BUILTIN_CONSONANT' | 'INTERACTIVE_WORKBOOK' | 'STANDARD_GUIDE' | string;
   is_builtin_interactive: number;
   is_free_content: number;
+  ai_question_mileage?: number;
+  ai_essay_mileage?: number;
   book_price?: number;
-  purchase_url: string;
+  purchase_url?: string | null;
+  curriculum_links?: CurriculumLink[];
 }
 
 export interface RoadmapBook {
@@ -47,7 +203,7 @@ export interface StudyStep {
   id: number;
   workbook_code: string;
   step_order: number;
-  step_type: 'BOOK_INTRO' | 'COMPREHENSION' | 'DISCUSSION' | 'ESSAY_WRITING';
+  step_type: 'BOOK_INTRO' | 'COMPREHENSION' | 'DISCUSSION' | 'ESSAY_WRITING' | 'INTERACTIVE_ACTIVITY' | string;
   step_title: string;
   step_badge: string;
   content: any;
@@ -70,7 +226,184 @@ export interface WorkbookDetailData {
   steps: StudyStep[];
   writing_prompts: WritingPrompt[];
   roadmap_books: RoadmapBook[];
+  gem_config?: {
+    gem_code: string;
+    title: string;
+    target_audience: string;
+    system_instruction: string;
+    rubric: Array<{ name: string; weight: number; desc: string }>;
+    reference_context: string;
+    model_name: string;
+  } | null;
 }
+
+export const INITIAL_CURRICULUM_STANDARDS: CurriculumStandard[] = [
+  {
+    id: 1,
+    curriculum_code: '2022-INFANT-KOR-HANGUL',
+    revision_year: '2022 개정·누리',
+    grade_group: 'INFANT',
+    grade_label: '영유아',
+    subject_category: '국어',
+    detail_subject: '누리과정 의사소통 / 한국어(KSL)',
+    domain_name: '듣기·말하기와 한글 깨치기',
+    educational_goal:
+      '일상생활에서 말소리와 글자의 관계를 이해하고, 한글 모음·자음·받침의 원리를 놀이와 신체 활동으로 즐겁게 익힌다.',
+    achievement_code: '[누리-의사03 / KSL-초1]',
+    ncic_ref_id: '10069355',
+    keywords: ['한글 모음', '한글 받침', '기초 문해력', '낱말 놀이'],
+  },
+  {
+    id: 2,
+    curriculum_code: '2022-INFANT-ART-PLAY',
+    revision_year: '2022 개정·누리',
+    grade_group: 'INFANT',
+    grade_label: '영유아',
+    subject_category: '예술/체육',
+    detail_subject: '누리과정 신체운동·예술경험',
+    domain_name: '신체 표현과 창의적 놀이',
+    educational_goal:
+      '주변 사물과 글자의 모양을 몸으로 표현하고 시각·청각적 놀이 활동을 통해 감각과 표현력을 기른다.',
+    achievement_code: '[누리-예술02]',
+    ncic_ref_id: '10069263',
+    keywords: ['신체 표현', '미로 놀이', '창의 놀이'],
+  },
+  {
+    id: 3,
+    curriculum_code: '2022-ELEM12-KOR-READ',
+    revision_year: '2022 개정',
+    grade_group: 'ELEM_LOW',
+    grade_label: '초등저학년',
+    subject_category: '국어',
+    detail_subject: '국어 (초1~2)',
+    domain_name: '글자·낱말 읽기와 그림책 공감',
+    educational_goal:
+      '받침이 있는 글자와 낱말을 정확하게 소리 내어 읽고, 그림책과 동화를 읽으며 인물의 마음과 상황을 상상한다.',
+    achievement_code: '[2국02-01 / 2국05-02]',
+    ncic_ref_id: '10069355',
+    keywords: ['받침 읽기', '그림책', '인물 공감', '어휘력'],
+  },
+  {
+    id: 7,
+    curriculum_code: '2022-ELEM34-KOR-COMP',
+    revision_year: '2022 개정',
+    grade_group: 'ELEM_MID',
+    grade_label: '초등중학년',
+    subject_category: '국어',
+    detail_subject: '국어 (초3~4)',
+    domain_name: '중심 생각 파악과 자기 생각 쓰기',
+    educational_goal:
+      '글의 문단별 중심 생각을 파악하며 읽고, 읽은 책에 대한 자신의 생각이나 느낌을 근거를 들어 문장으로 쓴다.',
+    achievement_code: '[4국02-02 / 4국03-03]',
+    ncic_ref_id: '10069356',
+    keywords: ['중심 생각', '독서 감상문', '근거 들어 쓰기'],
+  },
+  {
+    id: 11,
+    curriculum_code: '2022-ELEM56-SCI-BIO',
+    revision_year: '2022 개정',
+    grade_group: 'ELEM_HIGH',
+    grade_label: '초등고학년',
+    subject_category: '과학',
+    detail_subject: '과학 (초5~6)',
+    domain_name: '생물의 구조와 첨단 생명공학 기술',
+    educational_goal:
+      '생물의 특성과 유전·생명과학 기술이 인류의 식량·질병 치료 및 생태계에 미치는 양면적 영향을 탐구한다.',
+    achievement_code: '[6과13-03 / 6과05-03]',
+    ncic_ref_id: '10069375',
+    keywords: ['GMO', '유전자 조작', '생명공학', '미래 과학'],
+  },
+  {
+    id: 12,
+    curriculum_code: '2022-ELEM56-SOC-BIOETHICS',
+    revision_year: '2022 개정',
+    grade_group: 'ELEM_HIGH',
+    grade_label: '초등고학년',
+    subject_category: '사회/역사/도덕',
+    detail_subject: '도덕·사회 (초5~6)',
+    domain_name: '인권·생명윤리와 과학기술의 책임',
+    educational_goal:
+      '과학기술의 발달에 따른 윤리적 쟁점(생명 조작, 인간의 존엄성, 사회적 불평등)을 성찰하고 올바른 가치관을 세운다.',
+    achievement_code: '[6도03-02 / 6사08-03]',
+    ncic_ref_id: '10069385',
+    keywords: ['생명 존엄성', '과학 윤리', '인권'],
+  },
+  {
+    id: 13,
+    curriculum_code: '2022-ELEM56-KOR-DEBATE',
+    revision_year: '2022 개정',
+    grade_group: 'ELEM_HIGH',
+    grade_label: '초등고학년',
+    subject_category: '국어',
+    detail_subject: '국어 (초5~6)',
+    domain_name: '비판적 읽기와 찬반 논설문 쓰기',
+    educational_goal:
+      '사회적 쟁점이 담긴 글을 비판적으로 읽고, 찬성과 반대 입장의 근거를 비교하여 자신의 주장이 담긴 논설문을 쓴다.',
+    achievement_code: '[6국02-04 / 6국03-04]',
+    ncic_ref_id: '10069357',
+    keywords: ['찬반 토론', '논설문 쓰기', '비판적 읽기'],
+  },
+  {
+    id: 15,
+    curriculum_code: '2022-MID12-KOR-ESSAY',
+    revision_year: '2022 개정',
+    grade_group: 'MID_1_2',
+    grade_label: '중1~2',
+    subject_category: '국어',
+    detail_subject: '국어 (중1~2)',
+    domain_name: '복합 지문 독해와 논증적 글쓰기',
+    educational_goal:
+      '다양한 시대와 분야의 책을 깊이 있게 읽고, 타당한 논거를 구성하여 서론-본론-결론을 갖춘 논증하는 글을 쓴다.',
+    achievement_code: '[9국02-05 / 9국03-04]',
+    ncic_ref_id: '10070101',
+    keywords: ['논술', '비판적 독서', '3단 구성'],
+  },
+  {
+    id: 19,
+    curriculum_code: '2022-MID3H1-SOC-CULTURE',
+    revision_year: '2022 개정',
+    grade_group: 'MID3_HIGH1',
+    grade_label: '중3~고1',
+    subject_category: '사회/역사/도덕',
+    detail_subject: '한국사·통합사회',
+    domain_name: '18세기 조선 르네상스와 현대 문화 다양성',
+    educational_goal:
+      '18세기 조선 지식인들의 학문적 열정(벽·癖, 실학, 박학)을 역사적으로 이해하고 현대 사회의 마니아·시민 지식 문화와 연결한다.',
+    achievement_code: '[10한사02-04 / 10통사07-02]',
+    ncic_ref_id: '10071101',
+    keywords: ['불광불급', '벽(癖)', '18세기 조선', '마니아 문화'],
+  },
+  {
+    id: 20,
+    curriculum_code: '2022-MID3H1-KOR-CRITIC',
+    revision_year: '2022 개정',
+    grade_group: 'MID3_HIGH1',
+    grade_label: '중3~고1',
+    subject_category: '국어',
+    detail_subject: '공통국어 (중3~고1)',
+    domain_name: '주제 통합적 독서와 시사 논술',
+    educational_goal:
+      '서로 다른 관점이나 시대의 글을 주제 통합적으로 읽고, 현대 사회의 현상과 자신의 삶을 연결하여 심층 논술문을 작성한다.',
+    achievement_code: '[10공국02-05 / 10공국03-03]',
+    ncic_ref_id: '10071001',
+    keywords: ['주제 통합 독서', '고전 읽기', '시사 논술'],
+  },
+  {
+    id: 23,
+    curriculum_code: '2022-HIGH-KOR-UNIVESSAY',
+    revision_year: '2022 개정',
+    grade_group: 'HIGH',
+    grade_label: '고등학생',
+    subject_category: '국어',
+    detail_subject: '독서와 작문 / 주제탐구독서',
+    domain_name: '학문적 탐구 태도와 대입 실전 인문논술',
+    educational_goal:
+      '고전 원전과 현대 과학·사회 제시문을 융합 독해하고, 학문하는 사람의 태도(격물치지·불광불급)를 주제로 대입 수준의 논술문을 완성한다.',
+    achievement_code: '[12독작02-04 / 12독작03-05]',
+    ncic_ref_id: '10072001',
+    keywords: ['대입 논술', '제시문 통합', '격물치지'],
+  },
+];
 
 export const INITIAL_WORKBOOKS: WorkbookItem[] = [
   {
@@ -82,8 +415,12 @@ export const INITIAL_WORKBOOKS: WorkbookItem[] = [
     author: '어린이한글교육연구회',
     publisher: '리더스가이드',
     target_group: 'INFANT',
-    target_label: '유아·초등1 (5~8세)',
-    theme_category: '기초문해력',
+    grade_group: 'INFANT',
+    target_label: '영유아 (5~7세)',
+    subject_category: '국어',
+    basic_skill_category: '한국어',
+    theme_category: '한글·기초문해',
+    theme_tags: ['한글·기초문해', '모음 깨치기', '낱말 놀이'],
     roadmap_theme_id: 64,
     roadmap_name: '글쓰기 & 문장력 수업 로드맵',
     roadmap_desc: '일기와 에세이 쓰기 첫걸음부터 작가들의 문장론과 스토리텔링 작법까지',
@@ -91,10 +428,28 @@ export const INITIAL_WORKBOOKS: WorkbookItem[] = [
     keywords: ['한글 모음', '기초 문해력', '획순 익히기', '낱말 놀이'],
     cover_emoji: '🌱',
     badge_color: 'amber',
+    template_mode: 'BUILTIN_VOWEL',
     is_builtin_interactive: 1,
     is_free_content: 1,
+    ai_question_mileage: 30,
+    ai_essay_mileage: 100,
     book_price: 12000,
     purchase_url: 'https://www.readersguide.co.kr/book/79546',
+    curriculum_links: [
+      {
+        curriculum_id: 1,
+        is_primary: 1,
+        curriculum_code: '2022-INFANT-KOR-HANGUL',
+        grade_label: '영유아',
+        subject_category: '국어',
+        detail_subject: '누리과정 의사소통 / 한국어(KSL)',
+        domain_name: '듣기·말하기와 한글 깨치기',
+        achievement_code: '[누리-의사03 / KSL-초1]',
+        educational_goal:
+          '일상생활에서 말소리와 글자의 관계를 이해하고, 한글 모음·자음·받침의 원리를 놀이와 신체 활동으로 즐겁게 익힌다.',
+        linkage_note: '한글 기본 모음 10자의 소리와 모양을 그림·미로 활동으로 익히는 누리과정·한국어(KSL) 기초 문해 연계',
+      },
+    ],
   },
   {
     id: 2,
@@ -105,8 +460,12 @@ export const INITIAL_WORKBOOKS: WorkbookItem[] = [
     author: '어린이한글교육연구회',
     publisher: '리더스가이드',
     target_group: 'INFANT',
-    target_label: '유아·초등1 (5~8세)',
-    theme_category: '기초문해력',
+    grade_group: 'ELEM_LOW',
+    target_label: '영유아·초등저학년',
+    subject_category: '국어',
+    basic_skill_category: '한국어',
+    theme_category: '한글·기초문해',
+    theme_tags: ['한글·기초문해', '받침 퍼즐', '낱말 조합'],
     roadmap_theme_id: 64,
     roadmap_name: '글쓰기 & 문장력 수업 로드맵',
     roadmap_desc: '일기와 에세이 쓰기 첫걸음부터 작가들의 문장론과 스토리텔링 작법까지',
@@ -114,10 +473,27 @@ export const INITIAL_WORKBOOKS: WorkbookItem[] = [
     keywords: ['한글 받침', '낱말 조합', '기초 어휘', '문장 완성'],
     cover_emoji: '🔤',
     badge_color: 'orange',
+    template_mode: 'BUILTIN_CONSONANT',
     is_builtin_interactive: 1,
     is_free_content: 1,
+    ai_question_mileage: 30,
+    ai_essay_mileage: 100,
     book_price: 12000,
     purchase_url: 'https://www.readersguide.co.kr/book/79546',
+    curriculum_links: [
+      {
+        curriculum_id: 3,
+        is_primary: 1,
+        curriculum_code: '2022-ELEM12-KOR-READ',
+        grade_label: '초등저학년',
+        subject_category: '국어',
+        detail_subject: '국어 (초1~2)',
+        domain_name: '글자·낱말 읽기와 그림책 공감',
+        achievement_code: '[2국02-01 / 2국05-02]',
+        educational_goal: '받침이 있는 글자와 낱말을 정확하게 소리 내어 읽고 문장을 완성한다.',
+        linkage_note: '받침 글자의 결합 원리와 소리를 구름 퍼즐·사다리타기 놀이로 깨치는 초등 1~2 국어 연계',
+      },
+    ],
   },
   {
     id: 3,
@@ -127,9 +503,13 @@ export const INITIAL_WORKBOOKS: WorkbookItem[] = [
     subtitle: "유전자 조작과 생명의 존엄성을 주인공 '나무'와 함께 생각하는 독서 워크북",
     author: '문선이 글 · 유준재 그림',
     publisher: '창비',
-    target_group: 'ELEM_LOW',
-    target_label: '초등 독서지도 (초등 전학년)',
-    theme_category: '과학/IT',
+    target_group: 'ELEM_HIGH',
+    grade_group: 'ELEM_HIGH',
+    target_label: '초등고학년 (4~6학년)',
+    subject_category: '과학',
+    basic_skill_category: '책읽기',
+    theme_category: '생명윤리·미래과학',
+    theme_tags: ['생명윤리·미래과학', '유전자와 GMO', '가족과 인권', '환경·생태'],
     roadmap_theme_id: 62,
     roadmap_name: '생명과학 & 자연·생태 관찰',
     roadmap_desc: '동식물 도감과 생태 에세이부터 진화생물학과 생명윤리 고전까지',
@@ -137,10 +517,40 @@ export const INITIAL_WORKBOOKS: WorkbookItem[] = [
     keywords: ['GMO', '유전자 조작', '생명 존엄성', '과학 윤리', '가족의 의미'],
     cover_emoji: '🧬',
     badge_color: 'emerald',
+    template_mode: 'STANDARD_GUIDE',
     is_builtin_interactive: 0,
     is_free_content: 1,
+    ai_question_mileage: 50,
+    ai_essay_mileage: 200,
     book_price: 11000,
     purchase_url: 'https://www.readersguide.co.kr/book/32204',
+    curriculum_links: [
+      {
+        curriculum_id: 11,
+        is_primary: 1,
+        curriculum_code: '2022-ELEM56-SCI-BIO',
+        grade_label: '초등고학년',
+        subject_category: '과학',
+        detail_subject: '과학 (초5~6)',
+        domain_name: '생물의 구조와 첨단 생명공학 기술',
+        achievement_code: '[6과13-03 / 6과05-03]',
+        educational_goal:
+          '생물의 특성과 유전·생명과학 기술이 인류의 식량·질병 치료 및 생태계에 미치는 양면적 영향을 탐구한다.',
+        linkage_note: '유전자 조작(GMO)과 생명공학 기술이 인류 건강·식량 및 생태계에 미치는 양면적 영향 탐구',
+      },
+      {
+        curriculum_id: 12,
+        is_primary: 0,
+        curriculum_code: '2022-ELEM56-SOC-BIOETHICS',
+        grade_label: '초등고학년',
+        subject_category: '사회/역사/도덕',
+        detail_subject: '도덕·사회 (초5~6)',
+        domain_name: '인권·생명윤리와 과학기술의 책임',
+        achievement_code: '[6도03-02 / 6사08-03]',
+        educational_goal: '과학기술의 발달에 따른 윤리적 쟁점을 성찰하고 생명의 존엄성을 존중하는 태도를 기른다.',
+        linkage_note: "맞춤형 아기('나무') 사례를 통해 생명의 존엄성과 과학기술의 윤리적 책임을 성찰하는 도덕·인권 연계",
+      },
+    ],
   },
   {
     id: 4,
@@ -151,8 +561,12 @@ export const INITIAL_WORKBOOKS: WorkbookItem[] = [
     author: '정민 지음',
     publisher: '푸른역사',
     target_group: 'MID_HIGH',
-    target_label: '중·고등 심화 (90분 논술)',
-    theme_category: '인문/철학',
+    grade_group: 'MID3_HIGH1',
+    target_label: '중3~고1·고등 심화',
+    subject_category: '사회/역사/도덕',
+    basic_skill_category: '논술',
+    theme_category: '조선사·인문철학',
+    theme_tags: ['조선사·인문철학', '불광불급·열정', '진로와 몰입', '과학기술과 문화'],
     roadmap_theme_id: 30,
     roadmap_name: '인문 고전 & 지성사 입문',
     roadmap_desc: '동서양을 관통하는 필독 인문 고전을 청소년 눈높이부터 벽돌책까지 안내하는 지도',
@@ -160,10 +574,40 @@ export const INITIAL_WORKBOOKS: WorkbookItem[] = [
     keywords: ['불광불급', '벽(癖)', '마니아', '격물치지', '18세기 조선', '대입 논술'],
     cover_emoji: '🔥',
     badge_color: 'indigo',
+    template_mode: 'STANDARD_GUIDE',
     is_builtin_interactive: 0,
     is_free_content: 1,
+    ai_question_mileage: 50,
+    ai_essay_mileage: 300,
     book_price: 15000,
     purchase_url: 'https://www.readersguide.co.kr/book/1103',
+    curriculum_links: [
+      {
+        curriculum_id: 19,
+        is_primary: 1,
+        curriculum_code: '2022-MID3H1-SOC-CULTURE',
+        grade_label: '중3~고1',
+        subject_category: '사회/역사/도덕',
+        detail_subject: '한국사·통합사회',
+        domain_name: '18세기 조선 르네상스와 현대 문화 다양성',
+        achievement_code: '[10한사02-04 / 10통사07-02]',
+        educational_goal:
+          '18세기 조선 지식인들의 학문적 열정(벽·癖, 실학, 박학)을 역사적으로 이해하고 현대 사회의 마니아·시민 지식 문화와 연결한다.',
+        linkage_note: "18세기 조선 지식인들의 '벽(癖)'과 실학적 탐구 열정을 통해 조선 후기 문화 변동과 현대 마니아 문화를 탐구",
+      },
+      {
+        curriculum_id: 23,
+        is_primary: 0,
+        curriculum_code: '2022-HIGH-KOR-UNIVESSAY',
+        grade_label: '고등학생',
+        subject_category: '국어',
+        detail_subject: '독서와 작문 / 주제탐구독서',
+        domain_name: '학문적 탐구 태도와 대입 실전 인문논술',
+        achievement_code: '[12독작02-04 / 12독작03-05]',
+        educational_goal: '고전 원전과 현대 과학·사회 제시문을 융합 독해하여 대입 수준의 논술문을 완성한다.',
+        linkage_note: '학문하는 사람의 태도(불광불급·격물치지)를 다룬 대입 수시 인문논술 기출 연계 심화 글쓰기',
+      },
+    ],
   },
 ];
 
@@ -405,7 +849,7 @@ export const WORKBOOK_DETAILS_MAP: Record<string, WorkbookDetailData> = {
           '1) GMO 아이와 유전자 변형이 무엇인지 쉽게 설명하고, 2) 질병 치료 등 좋은 점과 윤리적 문제(나무의 아픔 등)를 균형 있게 살펴본 뒤, 3) 내 생각과 다짐을 정돈된 문장(~다, ~라고 생각한다)으로 적어보세요.',
         min_length: 150,
         recommended_length: 400,
-        required_credits: 1,
+        required_credits: 200,
         reading_materials: [
           {
             title: '글쓰기 도움말: 《GMO 아이》 핵심 돌아보기',
@@ -438,7 +882,7 @@ export const WORKBOOK_DETAILS_MAP: Record<string, WorkbookDetailData> = {
             target: '중 / 고등학생',
             keywords: ['벽(癖)', '마니아', '치(痴)', '삶을 바꾼 만남', '일상 속의 깨달음'],
             related_exam: '2000 경희대 수시모집 논술고사 문제 - 학문하는 사람이 지녀야 할 태도',
-            related_subject: '고등학교 국사 Ⅵ. 민족 문화의 발달',
+            related_subject: '한국사·통합사회 / 독서와 작문',
             objectives: [
               '무엇인가를 이루기 위해서 과정으로서 그 일에 미쳐야 함(불광불급)을 이해한다.',
               '18세기 조선의 학문의 성과와 그 시대의 문화를 배운다.',
@@ -577,7 +1021,7 @@ export const WORKBOOK_DETAILS_MAP: Record<string, WorkbookDetailData> = {
           '1) 불광불급(미치지 않으면 도달하지 못한다)의 핵심 의미, 2) 김득신·김덕형·정약용 등 책 속 인물의 사례와 현대 마니아 문화(제시문 1·2)의 연결, 3) 서론-본론-결론 3단 구성과 나의 삶(진로·공부·취미)에의 적용을 담아 작성해 보세요.',
         min_length: 300,
         recommended_length: 500,
-        required_credits: 1,
+        required_credits: 300,
         reading_materials: [
           {
             title: '읽기 자료 1: 과학은 마니아를 먹고 자란다 (김동광 / 과학저술가 · 고려대 강사)',
