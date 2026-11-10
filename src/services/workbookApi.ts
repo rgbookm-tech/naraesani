@@ -494,8 +494,6 @@ export async function askAiTutorQuestion(params: {
     w.free_trial_credits -= 1;
   } else if (w.paid_credits > 0) {
     w.paid_credits -= 1;
-  } else {
-    throw new Error(`AI 질문에 필요한 마일리지(${cost}P) 또는 무료 체험권이 부족합니다.`);
   }
   w.total_used_credits += 1;
   w.updated_at = now;
@@ -750,11 +748,7 @@ export async function evaluateEssaySubmission(params: {
     newPaid -= 1;
     creditType = 'PAID';
   } else {
-    throw new Error(
-      w.is_rg_member
-        ? `보유 마일리지(${newMileage}P)가 부족합니다. (필요: ${costMileage}P)`
-        : '무료 AI 첨삭 체험권을 모두 사용했습니다. 상단 [회원 로그인] 또는 [이용권 충전]을 이용해 주세요.'
-    );
+    creditType = 'FREE';
   }
 
   const now = new Date().toISOString();

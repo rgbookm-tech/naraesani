@@ -183,22 +183,6 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
       return;
     }
 
-    if (currentUser || wallet.is_rg_member) {
-      const curMileage = wallet.member_mileage ?? currentUser?.mileage ?? 0;
-      if (curMileage < essayMileageCost && wallet.free_trial_credits + wallet.paid_credits < 1) {
-        setEvalError(`보유 마일리지(${curMileage}P)가 부족합니다. (필요 마일리지: ${essayMileageCost}P)`);
-        onOpenWalletModal();
-        return;
-      }
-    } else {
-      const totalCredits = wallet.free_trial_credits + wallet.paid_credits;
-      if (totalCredits < currentPrompt.required_credits) {
-        setEvalError('글쓰기 AI 첨삭 이용권(크레딧)이 부족합니다. 상단 [이용권 충전] 또는 [회원 로그인]을 이용해 주세요.');
-        onOpenWalletModal();
-        return;
-      }
-    }
-
     setIsEvaluating(true);
     setEvalError(null);
     try {
@@ -234,42 +218,16 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
             onClick={onGoHome}
             className="inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-sm font-bold px-3.5 py-1.5 rounded-xl transition-colors"
           >
-            ← 통합 대시보드로
+            ← 대시보드로 돌아가기
           </button>
 
           <div className="flex flex-wrap items-center gap-2">
-            {currentUser ? (
-              <button
-                onClick={onOpenWalletModal}
-                className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-gray-900 text-xs font-extrabold px-3.5 py-1.5 rounded-xl shadow-sm transition-colors"
-              >
-                💰 {currentUser.nickname || currentUser.userid}님 보유 마일리지:{' '}
-                {(wallet.member_mileage ?? currentUser.mileage ?? 0).toLocaleString()} P
-              </button>
-            ) : (
-              <button
-                onClick={onOpenWalletModal}
-                className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-gray-900 text-xs font-extrabold px-3.5 py-1.5 rounded-xl shadow-sm transition-colors"
-              >
-                🎟️ AI 이용권: 무료 {wallet.free_trial_credits}회 · 유료 {wallet.paid_credits}회 [충전]
-              </button>
-            )}
-
-            {onOpenMemberModal && (
-              <button
-                onClick={onOpenMemberModal}
-                className="inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl transition-colors"
-              >
-                {currentUser ? '👤 회원정보' : '🔐 리더스가이드 로그인'}
-              </button>
-            )}
-
             {onOpenAdminModal && (
               <button
                 onClick={() => onOpenAdminModal(workbook.code)}
-                className="inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl transition-colors"
+                className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-gray-950 text-xs font-extrabold px-3.5 py-1.5 rounded-xl shadow-sm transition-colors"
               >
-                ✏️ 지도안 수정
+                🛠️ 지도안 수정 (관리자)
               </button>
             )}
 
@@ -312,7 +270,7 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
             onClick={() => setIsAiTutorOpen((prev) => !prev)}
             className="px-4 py-2.5 rounded-2xl bg-white text-indigo-950 hover:bg-indigo-50 font-black text-xs shadow-md shrink-0"
           >
-            🤖 AI 도우미에게 질문하기 (-{questionMileageCost}P)
+            🤖 AI 도우미에게 질문하기
           </button>
         </div>
 
@@ -388,7 +346,7 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h3 className="text-base font-black text-indigo-950">
-                🤖 AI 독서 튜터에게 무엇이든 물어보세요! (질문 1회당 -{questionMileageCost} 마일리지)
+                🤖 AI 독서 튜터에게 무엇이든 물어보세요!
               </h3>
               <p className="text-xs text-gray-600 mt-0.5">
                 책 속 어려운 어휘, 등장인물의 심리, 과학/역사 배경지식, 글쓰기 아이디어를 질문하면 눈높이에 맞춰 답해 줍니다.
@@ -464,7 +422,7 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
               onClick={() => handleAskAiTutor()}
               className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-black text-xs shrink-0 shadow"
             >
-              {isAskingAi ? '답변 생성 중...' : `질문하기 (-${questionMileageCost}P)`}
+              {isAskingAi ? '답변 생성 중...' : '질문하기'}
             </button>
           </div>
         </div>
@@ -1021,9 +979,7 @@ const StudyGuideWorkbook: React.FC<StudyGuideWorkbookProps> = ({
                 >
                   {isEvaluating
                     ? '🤖 AI 멘토가 지침(Gems)에 따라 꼼꼼히 첨삭 중입니다...'
-                    : currentUser || wallet.is_rg_member
-                    ? `✨ AI 멘토 첨삭 받기 (-${essayMileageCost}P 마일리지 차감)`
-                    : `✨ AI 멘토 첨삭 받기 (이용권 ${currentPrompt.required_credits}회 사용)`}
+                    : '✨ AI 멘토 첨삭 받기'}
                 </button>
               </div>
             </div>

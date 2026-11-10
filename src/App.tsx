@@ -224,10 +224,13 @@ const App: React.FC = () => {
   });
   const [transactions, setTransactions] = useState<CreditTransaction[]>([]);
 
-  // Modal states
+  // Modal states (?admin=1 파라미터가 있으면 즉시 관리자 콘솔 오픈)
   const [isWalletModalOpen, setIsWalletModalOpen] = useState<boolean>(false);
   const [isMemberModalOpen, setIsMemberModalOpen] = useState<boolean>(false);
-  const [isAdminModalOpen, setIsAdminModalOpen] = useState<boolean>(false);
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState<boolean>(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('admin') === '1' || params.get('admin') === 'true';
+  });
   const [adminEditCode, setAdminEditCode] = useState<string | null>(null);
 
   const [selectedGuideCode, setSelectedGuideCode] = useState<string>(() => {
@@ -374,7 +377,7 @@ const App: React.FC = () => {
       {isInfantInteractive && <PortraitOverlay />}
       <main className={`w-full ${isInfantInteractive ? 'max-w-5xl' : 'max-w-6xl'} mx-auto`}>
         <div className="bg-white rounded-3xl shadow-lg p-5 md:p-8 border-4 border-lime-200 relative">
-          {/* Top Bar with Language Selector, Member Status, Admin Menu & Brand Logos */}
+          {/* Top Bar: "독서맵으로 하는 독서활동" 단일 타이틀 + 나래와 산이 모음/받침편에서만 다국어 선택기 노출 */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-lime-100">
             <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleGoHome}>
               <img
@@ -383,48 +386,40 @@ const App: React.FC = () => {
                 className="w-8 h-10 object-contain rounded border border-green-300"
               />
               <div>
-                <div className="font-black text-emerald-900 text-base md:text-lg leading-none flex items-center gap-2">
-                  <span>독서활동앱</span>
-                  <span className="text-[11px] font-extrabold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
-                    ReadersGuide 모듈
-                  </span>
-                </div>
-                <div className="text-[11px] text-gray-500 mt-0.5">
-                  학년별 · 7대 교과별(NCIC 교육과정) · 주제별 · 기본학습(한국어/책읽기/논술/글쓰기)
+                <div className="font-black text-emerald-900 text-lg md:text-xl leading-none">
+                  독서맵으로 하는 독서활동
                 </div>
               </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-2 ml-auto">
-              <button
-                type="button"
-                onClick={() => setIsMemberModalOpen(true)}
-                className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-extrabold transition-colors"
-              >
-                {currentUser
-                  ? `👤 ${currentUser.nickname || currentUser.userid} (${(wallet.member_mileage ?? currentUser.mileage ?? 0).toLocaleString()}P)`
-                  : '🔐 리더스가이드 로그인'}
-              </button>
+              {/* 다국어(한국어/영어/일본어/중문/에스파뇰)는 오직 나래와 산이 받침편·모음편 내부에서만 표시 */}
+              {isInfantInteractive && <LanguageSelector />}
+
               <button
                 type="button"
                 onClick={() => handleOpenAdminModal()}
-                className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-extrabold transition-colors"
+                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs md:text-sm font-black shadow-sm transition-colors"
               >
-                ⚙️ 관리자 메뉴
+                🛠️ 관리자 페이지
               </button>
-              <LanguageSelector />
-              <img
-                src={getImagePath('/images/bookcover.jpg')}
-                alt="book cover"
-                className="w-8 h-11 object-cover rounded border border-orange-300 hidden sm:block"
-              />
+
+              <button
+                type="button"
+                onClick={() => setIsMemberModalOpen(true)}
+                className="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-extrabold transition-colors"
+              >
+                {currentUser
+                  ? `👤 ${currentUser.nickname || currentUser.userid}`
+                  : '🔐 회원 로그인'}
+              </button>
             </div>
           </div>
 
           {renderContent()}
         </div>
         <footer className="text-center mt-4 text-emerald-800 font-semibold text-xs md:text-sm">
-          © ReadersGuide (리더스가이드) · 독서활동앱 (NCIC 국가교육과정 연계 독서·워크북·논술 플랫폼)
+          © ReadersGuide (리더스가이드) · 독서맵으로 하는 독서활동
         </footer>
       </main>
 
