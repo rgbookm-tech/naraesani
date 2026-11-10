@@ -34,9 +34,6 @@ import WalletModal from './components/guide/WalletModal';
 import MemberLoginModal from './components/guide/MemberLoginModal';
 import AdminConsoleModal from './components/guide/AdminConsoleModal';
 
-// 이미지 경로 헬퍼
-import { getImagePath } from './utils/imagePath';
-
 const PortraitOverlay = () => (
   <div className="portrait-overlay fixed inset-0 z-[100] bg-gray-900 flex-col items-center justify-center text-white p-6">
     <div className="animate-pulse mb-6">
@@ -380,11 +377,6 @@ const App: React.FC = () => {
           {/* Top Bar: "독서맵으로 하는 독서활동" 단일 타이틀 + 나래와 산이 모음/받침편에서만 다국어 선택기 노출 */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-lime-100">
             <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleGoHome}>
-              <img
-                src={getImagePath('/images/rglogo.png')}
-                alt="readersguide"
-                className="w-8 h-10 object-contain rounded border border-green-300"
-              />
               <div>
                 <div className="font-black text-emerald-900 text-lg md:text-xl leading-none">
                   독서맵으로 하는 독서활동
