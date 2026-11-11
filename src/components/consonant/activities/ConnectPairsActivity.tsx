@@ -86,9 +86,18 @@ const ConnectPairsActivityComponent: React.FC<ConnectPairsActivityProps> = ({ ac
 
   const activityGroups = useMemo(() => activity.groups || (activity.pairs ? [activity.pairs] : []), [activity]);
 
-  const imageGroups = useMemo(() => 
-    activityGroups.map(group => [...group].sort((a, b) => a.id - b.id)),
-  [activityGroups]);
+  const imageGroups = useMemo(
+    () =>
+      activityGroups.map((group) => {
+        if (activity.imageOrder && activity.imageOrder.length > 0 && activityGroups.length === 1) {
+          return activity.imageOrder
+            .map((targetId) => group.find((p) => p.id === targetId))
+            .filter((p): p is NonNullable<typeof p> => !!p);
+        }
+        return [...group].sort((a, b) => a.id - b.id);
+      }),
+    [activityGroups, activity.imageOrder]
+  );
 
   const lineCoords = useMemo(() => {
     return Array.from(completedPairs).map(pairId => {
@@ -97,6 +106,11 @@ const ConnectPairsActivityComponent: React.FC<ConnectPairsActivityProps> = ({ ac
         return { x1: startPos.x, y1: startPos.y, x2: endPos.x, y2: endPos.y, id: pairId };
     });
   }, [completedPairs, getElementPosition, dimensions]);
+
+  const wordGridClass =
+    activity.wordColumns === 2
+      ? 'w-[45%] grid grid-cols-2 gap-3'
+      : 'w-2/5 space-y-4';
 
   return (
     <div>
@@ -108,7 +122,7 @@ const ConnectPairsActivityComponent: React.FC<ConnectPairsActivityProps> = ({ ac
         <div className="flex flex-col space-y-4">
            {activityGroups.map((group, index) => (
             <div key={index} className="flex justify-between items-center py-4 bg-lime-50 rounded-lg p-4">
-              <div className="w-2/5 space-y-4">
+              <div className={wordGridClass}>
                  {group.map(pair => (
                    <button
                      key={`word-${pair.id}`}

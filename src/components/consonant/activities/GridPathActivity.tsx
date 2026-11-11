@@ -67,7 +67,13 @@ const GridPathActivityComponent: React.FC<GridPathActivityProps> = ({ activity }
                   ${isComplete && isCellInPath(rowIndex, colIndex) ? 'animate-pulse' : ''}
                 `}
               >
-                {item}
+                {item === '출발' ? (
+                  <span className="inline-flex items-center gap-1">
+                    출발 <span className="text-xl font-black text-red-600">↑</span>
+                  </span>
+                ) : (
+                  item
+                )}
               </div>
             ))
           ))}

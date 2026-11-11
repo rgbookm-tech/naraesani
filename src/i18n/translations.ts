@@ -185,6 +185,18 @@ export const translations: Record<string, Partial<Record<Language, string>>> = {
     zh: "将单词与图片配对",
     es: "Une la palabra con el dibujo",
   },
+  "낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.": {
+    en: "Find and press the picture that matches each word.",
+    ja: "単語に合う絵を見つけて押してみましょう。",
+    zh: "找出与单词匹配的图片并按一下。",
+    es: "Encuentra y presiona el dibujo que corresponde a cada palabra.",
+  },
+  "다음 낱말 중 하나를 사용하여 한 문장으로 말하거나 써 보세요.": {
+    en: "Use one of the words below to say or write a sentence.",
+    ja: "次の単語の中から1つを使って一文で話すか書いてみましょう。",
+    zh: "使用下列单词中的一个说或写一句话。",
+    es: "Usa una de las siguientes palabras para decir o escribir una oración.",
+  },
   "알맞은 낱말과 그림을 선으로 이어보세요.": {
     en: "Draw a line to match each word with the correct picture.",
     ja: "正しい絵と単語を線でつなぎましょう。",

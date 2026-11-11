@@ -85,7 +85,7 @@ const VowelInputQuiz: React.FC<VowelInputQuizProps> = ({ exampleSentence, vowel 
         <button
           type="submit"
           disabled={status !== 'idle' || !inputValue.trim()}
-          className="w-full sm:w-auto px-6 py-3 bg-sky-500 text-white font-bold rounded-lg hover:bg-sky-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="w-full sm:w-auto shrink-0 whitespace-nowrap px-6 py-3 bg-sky-500 text-white font-bold rounded-lg hover:bg-sky-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
           확인
         </button>

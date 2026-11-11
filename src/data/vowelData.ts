@@ -1,4 +1,4 @@
-﻿import type { WorksheetData } from '../types/vowelTypes';
+import type { WorksheetData } from '../types/vowelTypes';
 
 export const worksheetData: WorksheetData[] = [
   {
@@ -36,7 +36,7 @@ export const worksheetData: WorksheetData[] = [
             { word: '야구', isCorrect: false }, { word: '사자', isCorrect: true }, { word: '지붕', isCorrect: false }, { word: '이웃', isCorrect: false }, { word: '우주', isCorrect: false },
             { word: '태양', isCorrect: false }, { word: '나리', isCorrect: true }, { word: '여우', isCorrect: false }, { word: '이리', isCorrect: false }, { word: '수영', isCorrect: false },
             { word: '오소리', isCorrect: false }, { word: '아기', isCorrect: true }, { word: '엄마', isCorrect: false }, { word: '안개', isCorrect: true }, { word: '태권도', isCorrect: false },
-            { word: '친구', isCorrect: false }, { word: '가방', isCorrect: false }, { word: '이름', isCorrect: false }, { word: '고양이', isCorrect: false }, { word: '구두', isCorrect: false },
+            { word: '친구', isCorrect: false }, { word: '가방', isCorrect: true }, { word: '이름', isCorrect: false }, { word: '고양이', isCorrect: false }, { word: '구두', isCorrect: false },
             { word: '언니', isCorrect: false }, { word: '아빠', isCorrect: true }, { word: '고기', isCorrect: false }, { word: '오이', isCorrect: false }, { word: '잉어', isCorrect: false },
           ],
         },
@@ -82,7 +82,7 @@ export const worksheetData: WorksheetData[] = [
       {
         type: 'word-image-match',
         title: '낱말과 그림 잇기',
-        instruction: '알맞은 낱말과 그림을 선으로 이어보세요.',
+        instruction: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
         data: {
           pairs: [
             { id: 1, word: '야구', image: './images/yagu.png' },
@@ -97,7 +97,7 @@ export const worksheetData: WorksheetData[] = [
         title: "'ㅑ' 들어간 낱말 만들기",
         instruction: "예시문을 보고 'ㅑ'가 들어간 낱말을 만들어보세요.",
         data: {
-          exampleSentence: '양이가 이야기를 좋아해요.',
+          exampleSentence: '할머니가 이야기를 해주세요.',
         },
       },
       {
@@ -193,7 +193,7 @@ export const worksheetData: WorksheetData[] = [
        {
         type: 'word-image-match',
         title: '낱말과 그림 잇기',
-        instruction: '알맞은 낱말과 그림을 선으로 이어보세요.',
+        instruction: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
         data: {
           pairs: [
             { id: 1, word: '여자', image: 'https://via.placeholder.com/100/E91E63/FFFFFF?text=여자' },
@@ -250,7 +250,7 @@ export const worksheetData: WorksheetData[] = [
        /*{
         type: 'word-image-match',
         title: '낱말과 그림 잇기',
-        instruction: '알맞은 낱말과 그림을 선으로 이어보세요.',
+        instruction: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
         data: {
           pairs: [
             { id: 1, word: '오이', image: 'https://via.placeholder.com/100/4CAF50/FFFFFF?text=오이' },
@@ -392,7 +392,7 @@ export const worksheetData: WorksheetData[] = [
       {
         type: 'word-image-match',
         title: '낱말과 그림 잇기',
-        instruction: '알맞은 낱말과 그림을 선으로 이어보세요.',
+        instruction: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
         data: {
           pairs: [
             { id: 1, word: '우유', image: 'https://via.placeholder.com/100/FFFFFF/000000?text=우유' },
@@ -468,7 +468,7 @@ export const worksheetData: WorksheetData[] = [
       /* {
         type: 'word-image-match',
         title: '낱말과 그림 잇기',
-        instruction: '알맞은 낱말과 그림을 선으로 이어보세요.',
+        instruction: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
         data: {
           pairs: [
             { id: 1, word: '그릇', image: 'https://via.placeholder.com/100/BDBDBD/000000?text=그릇' },

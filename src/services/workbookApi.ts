@@ -317,16 +317,33 @@ function computeDynamicThemes(workbooks: WorkbookItem[]): DynamicThemeItem[] {
 }
 
 function mergeLocalCustomWorkbooks(baseList: WorkbookItem[]): WorkbookItem[] {
+  const normalizedBase = baseList.map((wb) => {
+    if (wb.code === 'naraesani_vowel') {
+      return { ...wb, title: '나래와 산이의 글자 찾기 모험_ 모음편' };
+    }
+    if (wb.code === 'naraesani_consonant') {
+      return { ...wb, title: '나래와 산이의 글자 찾기 모험_받침편' };
+    }
+    return wb;
+  });
   const raw = localStorage.getItem(LOCAL_CUSTOM_WORKBOOKS_KEY);
-  if (!raw) return baseList;
+  if (!raw) return normalizedBase;
   try {
     const customs: WorkbookItem[] = JSON.parse(raw);
     const map = new Map<string, WorkbookItem>();
-    for (const item of baseList) map.set(item.code, item);
-    for (const c of customs) map.set(c.code, c);
+    for (const item of normalizedBase) map.set(item.code, item);
+    for (const c of customs) {
+      if (c.code === 'naraesani_vowel') {
+        map.set(c.code, { ...c, title: '나래와 산이의 글자 찾기 모험_ 모음편' });
+      } else if (c.code === 'naraesani_consonant') {
+        map.set(c.code, { ...c, title: '나래와 산이의 글자 찾기 모험_받침편' });
+      } else {
+        map.set(c.code, c);
+      }
+    }
     return Array.from(map.values());
   } catch {
-    return baseList;
+    return normalizedBase;
   }
 }
 

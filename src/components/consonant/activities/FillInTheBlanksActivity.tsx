@@ -148,7 +148,7 @@ const FillInTheBlanksActivityComponent: React.FC<FillInTheBlanksActivityProps> =
         </div>
         <div className="flex-1 w-11/12 h-full flex flex-col">
             <div className="flex justify-between items-center mb-2">
-                <h4 className="font-semibold">그림으로 그려 보세요.</h4>
+                <h4 className="font-semibold">마우스(손)으로 직접 써보세요.</h4>
                 <button onClick={clearCanvas} className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 rounded-md transition-colors">지우기</button>
             </div>
             <canvas

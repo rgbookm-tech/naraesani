@@ -84,7 +84,7 @@ const InfoScreen: React.FC<{ data: InfoData; onStart: () => void; onGoHome?: () 
 };
 
 const consonantIntroData: InfoData = {
-  title: '나래와 산이의 글자 찾기 모험(받침편)',
+  title: '나래와 산이의 글자 찾기 모험_받침편',
   description: "나래와 산이와 함께 받침 글자를 찾아 모험을 떠나보아요! '시작' 버튼을 눌러 학습을 시작하세요.",
 };
 
@@ -97,28 +97,25 @@ const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome, initialPage }) =>
   const [currentPageIndex, setCurrentPageIndex] = useState<number | null>(() => {
     if (initialPage !== undefined) {
       const pageIndex = consonantWorkbookActivities.findIndex((act) => act.page === initialPage);
-      return pageIndex > -1 ? pageIndex : null;
+      if (pageIndex > -1) return pageIndex;
     }
-    return null;
+    const tocIndex = consonantWorkbookActivities.findIndex((act) => act.page === 0);
+    return tocIndex > -1 ? tocIndex : 0;
   });
-  const [appState, setAppState] = useState<'intro' | 'workbook' | 'completion'>(() => {
-    if (initialPage !== undefined) {
-      const pageIndex = consonantWorkbookActivities.findIndex((act) => act.page === initialPage);
-      if (pageIndex > -1) return 'workbook';
-    }
-    return 'intro';
-  });
+  const [appState, setAppState] = useState<'intro' | 'workbook' | 'completion'>('workbook');
 
   const handleNavigateToPage = useCallback((page: number) => {
     const pageIndex = consonantWorkbookActivities.findIndex((act) => act.page === page);
     if (pageIndex > -1) {
       setCurrentPageIndex(pageIndex);
+      setAppState('workbook');
     }
   }, []);
 
   const handleGoToTOC = useCallback(() => {
     const tocIndex = consonantWorkbookActivities.findIndex((act) => act.page === 0);
     setCurrentPageIndex(tocIndex > -1 ? tocIndex : 0);
+    setAppState('workbook');
   }, []);
 
   const handleNextPage = useCallback(() => {
@@ -140,8 +137,9 @@ const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome, initialPage }) =>
   }, []);
 
   const handleRestart = useCallback(() => {
-    setAppState('intro');
-    setCurrentPageIndex(null);
+    setAppState('workbook');
+    const tocIndex = consonantWorkbookActivities.findIndex((act) => act.page === 0);
+    setCurrentPageIndex(tocIndex > -1 ? tocIndex : 0);
   }, []);
 
   const handleComplete = useCallback(() => {
@@ -153,51 +151,66 @@ const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome, initialPage }) =>
       ? (consonantWorkbookActivities[currentPageIndex] as ConsonantActivity)
       : null;
 
+  const totalActivitiesCount = consonantWorkbookActivities.length - 1; // 목차(index 0) 제외한 전체 활동 쪽수
+  const currentActivityOrder = currentPageIndex !== null && currentPageIndex > 0 ? currentPageIndex : 0;
+
   const renderContent = () => {
     switch (appState) {
-      case 'intro':
-        return <InfoScreen data={consonantIntroData} onStart={handleStartConsonantWorkbook} onGoHome={onGoHome} isLastPage={false} />;
       case 'completion':
         return <InfoScreen data={consonantCompletionData} onStart={handleRestart} onGoHome={onGoHome} isLastPage={true} />;
       case 'workbook':
+      default:
         if (currentConsonantActivity === null) {
           const tocIndex = consonantWorkbookActivities.findIndex((act) => act.page === 0);
           setCurrentPageIndex(tocIndex > -1 ? tocIndex : 0);
           return null;
         }
         return (
-          <>
-            <GoHomeButton onClick={onGoHome} />
-            <ConsonantActivityHost
-              activity={currentConsonantActivity}
-              onNextPage={handleNextPage}
-              onPrevPage={handlePrevPage}
-              onGoToTOC={handleGoToTOC}
-              onNavigateToPage={handleNavigateToPage}
-              isFirstPage={currentPageIndex === 0}
-              isLastPage={currentPageIndex === consonantWorkbookActivities.length - 1}
-              onComplete={handleComplete}
-            />
-          </>
+          <div className="min-h-[600px] flex flex-col items-center justify-center p-2 sm:p-4 bg-lime-50/70 rounded-2xl text-gray-800">
+            <div className="w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-xl p-4 sm:p-8 border-4 border-lime-200 relative">
+              {currentConsonantActivity.page === 0 ? (
+                <div className="mb-4 flex justify-between items-center">
+                  <button
+                    onClick={onGoHome}
+                    className="flex items-center px-4 py-2 bg-emerald-600 text-white font-bold rounded-xl shadow hover:bg-emerald-700 transition-colors"
+                  >
+                    <span role="img" aria-label="home icon" className="mr-2">🏠</span>
+                    메인화면으로 가기
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <button
+                    onClick={handleGoToTOC}
+                    className="absolute top-4 left-4 flex items-center px-3 py-1 bg-gray-200 text-gray-700 font-bold rounded-lg shadow-sm hover:bg-gray-300 transition-colors z-10"
+                  >
+                    <span role="img" aria-label="home icon" className="mr-2">🏠</span>
+                    처음으로
+                  </button>
+                  <div className="absolute top-4 right-4 text-sm font-bold text-amber-600 bg-amber-100 px-3.5 py-1 rounded-full">
+                    {currentActivityOrder} / {totalActivitiesCount}
+                  </div>
+                </>
+              )}
+              <div className={currentConsonantActivity.page === 0 ? '' : 'pt-8'}>
+                <ConsonantActivityHost
+                  activity={currentConsonantActivity}
+                  onNextPage={handleNextPage}
+                  onPrevPage={handlePrevPage}
+                  onGoToTOC={handleGoToTOC}
+                  onNavigateToPage={handleNavigateToPage}
+                  isFirstPage={currentPageIndex === 0}
+                  isLastPage={currentPageIndex === consonantWorkbookActivities.length - 1}
+                  onComplete={handleComplete}
+                />
+              </div>
+            </div>
+          </div>
         );
-      default:
-        return <InfoScreen data={consonantIntroData} onStart={handleStartConsonantWorkbook} onGoHome={onGoHome} isLastPage={false} />;
     }
   };
 
   return <>{renderContent()}</>;
-};
-
-const GoHomeButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
-  const { t } = useLanguage();
-  return (
-    <button
-      onClick={onClick}
-      className="absolute top-4 left-4 flex items-center px-3 py-1 bg-gray-200 text-gray-700 font-bold rounded-lg shadow-sm hover:bg-gray-300 transition-colors z-10"
-    >
-      {t('처음으로')}
-    </button>
-  );
 };
 
 type AppRouteState = 'dashboard' | 'consonant_workbook' | 'vowel_workbook' | 'study_guide';
@@ -368,51 +381,70 @@ const App: React.FC = () => {
   };
 
   const isInfantInteractive = appState === 'consonant_workbook' || appState === 'vowel_workbook';
+  const activeWorkbookTitle =
+    appState === 'vowel_workbook'
+      ? '나래와 산이의 글자 찾기 모험_ 모음편'
+      : appState === 'consonant_workbook'
+      ? '나래와 산이의 글자 찾기 모험_받침편'
+      : workbooks.find((w) => w.code === selectedGuideCode)?.title || '독서맵으로 하는 독서활동';
 
   return (
     <div className="min-h-screen bg-lime-50 text-gray-800 flex items-center justify-center p-3 md:p-6">
       {isInfantInteractive && <PortraitOverlay />}
       <main className={`w-full ${isInfantInteractive ? 'max-w-5xl' : 'max-w-6xl'} mx-auto`}>
         <div className="bg-white rounded-3xl shadow-lg p-5 md:p-8 border-4 border-lime-200 relative">
-          {/* Top Bar: "독서맵으로 하는 독서활동" 단일 타이틀 + 나래와 산이 모음/받침편에서만 다국어 선택기 노출 */}
+          {/* Top Bar: 대시보드에서는 타이틀/관리자/회원로그인 노출, 활동 중에는 다국어 선택기(왼쪽)와 활동제목(오른쪽)만 노출 */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-lime-100">
-            <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleGoHome}>
-              <div>
-                <div className="font-black text-emerald-900 text-lg md:text-xl leading-none">
-                  독서맵으로 하는 독서활동
+            {appState === 'dashboard' ? (
+              <>
+                <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleGoHome}>
+                  <div>
+                    <div className="font-black text-emerald-900 text-lg md:text-xl leading-none">
+                      독서맵으로 하는 독서활동
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="flex flex-wrap items-center gap-2 ml-auto">
-              {/* 다국어(한국어/영어/일본어/중문/에스파뇰)는 오직 나래와 산이 받침편·모음편 내부에서만 표시 */}
-              {isInfantInteractive && <LanguageSelector />}
+                <div className="flex flex-wrap items-center gap-2 ml-auto">
+                  <button
+                    type="button"
+                    onClick={() => handleOpenAdminModal()}
+                    className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs md:text-sm font-black shadow-sm transition-colors"
+                  >
+                    🛠️ 관리자 페이지
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => handleOpenAdminModal()}
-                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs md:text-sm font-black shadow-sm transition-colors"
-              >
-                🛠️ 관리자 페이지
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setIsMemberModalOpen(true)}
-                className="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-extrabold transition-colors"
-              >
-                {currentUser
-                  ? `👤 ${currentUser.nickname || currentUser.userid}`
-                  : '🔐 회원 로그인'}
-              </button>
-            </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsMemberModalOpen(true)}
+                    className="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-extrabold transition-colors"
+                  >
+                    {currentUser
+                      ? `👤 ${currentUser.nickname || currentUser.userid}`
+                      : '🔐 회원 로그인'}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* 다국어(한국어/영어/일본어/중문/에스파뇰)는 오직 나래와 산이 받침편·모음편 내부에서만 표시 */}
+                  {isInfantInteractive && <LanguageSelector />}
+                </div>
+                <div className="ml-auto font-black text-emerald-900 text-base md:text-xl leading-none">
+                  {activeWorkbookTitle}
+                </div>
+              </>
+            )}
           </div>
 
           {renderContent()}
         </div>
-        <footer className="text-center mt-4 text-emerald-800 font-semibold text-xs md:text-sm">
-          © ReadersGuide (리더스가이드) · 독서맵으로 하는 독서활동
-        </footer>
+        {!isInfantInteractive && (
+          <footer className="text-center mt-4 text-emerald-800 font-semibold text-xs md:text-sm">
+            © ReadersGuide (리더스가이드) · 독서맵으로 하는 독서활동
+          </footer>
+        )}
       </main>
 
       <WalletModal

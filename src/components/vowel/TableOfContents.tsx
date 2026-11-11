@@ -3,13 +3,25 @@ import { worksheetData } from '../../data/vowelData';
 
 interface TableOfContentsProps {
   onSelect: (index: number) => void;
+  onGoHome?: () => void;
 }
 
-const TableOfContents: React.FC<TableOfContentsProps> = ({ onSelect }) => {
+const TableOfContents: React.FC<TableOfContentsProps> = ({ onSelect, onGoHome }) => {
   const vowels = worksheetData.map(data => data.vowel);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-amber-50">
+    <div className="min-h-[600px] flex flex-col items-center justify-center p-4 bg-amber-50 rounded-2xl relative">
+      {onGoHome && (
+        <div className="w-full max-w-4xl flex justify-start mb-4">
+          <button
+            onClick={onGoHome}
+            className="flex items-center px-4 py-2 bg-emerald-600 text-white font-bold rounded-xl shadow hover:bg-emerald-700 transition-colors"
+          >
+            <span role="img" aria-label="home icon" className="mr-2">🏠</span>
+            메인화면으로 가기
+          </button>
+        </div>
+      )}
       <div className="w-full max-w-4xl text-center">
         <h1 className="text-4xl sm:text-5xl font-extrabold text-amber-800 mb-4">
           한글 모음 배우기

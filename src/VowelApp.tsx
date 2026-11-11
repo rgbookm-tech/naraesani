@@ -37,8 +37,13 @@ const VowelApp: React.FC<VowelAppProps> = ({ onGoHome, initialPage }) => {
     setCurrentActivityIndex(0);
   }, []);
 
+  const handleGoToTOC = useCallback(() => {
+    setCurrentVowelIndex(-1);
+    setCurrentActivityIndex(0);
+  }, []);
+
   if (currentVowelIndex === -1) {
-    return <TableOfContents onSelect={handleSelectVowel} />;
+    return <TableOfContents onSelect={handleSelectVowel} onGoHome={onGoHome} />;
   }
 
   const numActivitiesPerVowel = worksheetData[0]?.activities.length || 5;
@@ -69,12 +74,12 @@ const VowelApp: React.FC<VowelAppProps> = ({ onGoHome, initialPage }) => {
   const currentWorksheet = worksheetData[currentVowelIndex];
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-amber-50 text-gray-800">
+    <div className="min-h-[600px] flex flex-col items-center justify-center p-4 bg-amber-50 rounded-2xl text-gray-800">
       <div className="w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl p-4 sm:p-8 border-4 border-amber-200 relative">
         <button
-          onClick={onGoHome}
+          onClick={handleGoToTOC}
           className="absolute top-4 left-4 flex items-center px-3 py-1 bg-gray-200 text-gray-700 font-bold rounded-lg shadow-sm hover:bg-gray-300 transition-colors z-10"
-          aria-label="Go to Main Menu"
+          aria-label="Go to Table of Contents"
         >
           <span role="img" aria-label="home icon" className="mr-2">🏠</span>
           처음으로
@@ -88,9 +93,6 @@ const VowelApp: React.FC<VowelAppProps> = ({ onGoHome, initialPage }) => {
         />
         <Navigation onPrev={handlePrev} onNext={handleNext} />
       </div>
-      <footer className="mt-6 text-center text-gray-500 text-sm">
-        <p>나래와 산이 한글 모험 (모음편)</p>
-      </footer>
     </div>
   );
 };

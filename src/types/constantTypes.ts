@@ -74,6 +74,8 @@ export interface SentenceBuilderActivity extends BaseActivity {
 export interface ConnectPairsActivity extends BaseActivity {
   type: ActivityType.ConnectPairs;
   question: string;
+  wordColumns?: number;
+  imageOrder?: number[];
   pairs?: {
     word: string;
     image: string;

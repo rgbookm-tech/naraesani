@@ -1,4 +1,4 @@
-﻿import { Activity, ActivityType } from '../types/consonantTypes';
+import { Activity, ActivityType } from '../types/consonantTypes';
 
 export const workbookActivities: Activity[] = [
   {
@@ -8,15 +8,33 @@ export const workbookActivities: Activity[] = [
     type: ActivityType.TableOfContents,
     groups: [
       {
-        title: 'ㅁ받침 활동',
+        title: 'ㅁ 받침 활동',
         items: [
           { title: '낱말 찾기', page: 2 },
-          { title: '받침 오리기', page: 3 },
+          { title: '받침 달리기', page: 3 },
           { title: '공통 글자 찾기', page: 4 },
           { title: '문장 만들기', page: 5 },
         ],
       },
-       {
+      {
+        title: 'ㅂ 받침 활동',
+        items: [
+          { title: '낱말 찾기', page: 6 },
+          { title: '그림 찾기', page: 7 },
+          { title: '공통 글자 찾기', page: 8 },
+          { title: '문장 만들기', page: 9 },
+        ],
+      },
+      {
+        title: 'ㅇ 받침 활동',
+        items: [
+          { title: '낱말 찾기', page: 10 },
+          { title: '낱말-그림 쓰기', page: 11 },
+          { title: '공통 글자 찾기', page: 12 },
+          { title: '문장 만들기', page: 13 },
+        ],
+      },
+      {
         title: 'ㄱ 받침 활동',
         items: [
           { title: '낱말 찾기', page: 14 },
@@ -47,22 +65,22 @@ export const workbookActivities: Activity[] = [
         title: 'ㄷ 받침 활동',
         items: [
           { title: '낱말 찾기', page: 26 },
-          { title: '그림 연결하기', page: 27 },
+          { title: '그림 찾기', page: 27 },
           { title: '공통 글자 찾기', page: 28 },
           { title: '문장 만들기', page: 29 },
         ],
       },
       {
-        title: 'ㅂ 받침 가족 활동',
+        title: 'ㅂ받침 가족(ㅂ,ㅍ) 활동',
         items: [
           { title: '낱말 찾기', page: 30 },
-          { title: '그림 연결하기', page: 31 },
+          { title: '그림 찾기', page: 31 },
           { title: '문장 완성하기', page: 32 },
           { title: '맞는 표현 고르기', page: 33 },
         ],
       },
       {
-        title: 'ㄱ 받침 가족 활동',
+        title: 'ㄱ받침 가족(ㄱ,ㄲ,ㅋ) 활동',
         items: [
           { title: '낱말 찾기', page: 34 },
           { title: '받침 채우기', page: 35 },
@@ -71,7 +89,7 @@ export const workbookActivities: Activity[] = [
         ],
       },
       {
-        title: 'ㄷ 받침 가족 활동',
+        title: 'ㄷ받침 가족(ㄷ,ㅌ,ㅅ) 활동',
         items: [
           { title: '낱말 찾기', page: 39 },
           { title: '사다리 타기', page: 40 },
@@ -125,7 +143,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㅁ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 그림으로 그려보세요.',
+    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
     sentences: [
       '___집이 크니 ___무게가 많이 나간다.',
       '___살이 났다. 온 ___이 아프다.',
@@ -138,7 +156,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㅁ 받침 활동',
     activityNumber: 4,
     type: ActivityType.SentenceBuilder,
-    question: '다음 낱말을 사용하여 한 문장으로 말하거나 써 보세요.',
+    question: '다음 낱말 중 하나를 사용하여 한 문장으로 말하거나 써 보세요.',
     words: ['김', '밤', '감자', '김치', '감', '곰국', '햄'],
   },
   {
@@ -165,15 +183,17 @@ export const workbookActivities: Activity[] = [
     title: 'ㅂ 받침 활동',
     activityNumber: 2,
     type: ActivityType.ConnectPairs,
-    question: '낱말과 어울리는 그림을 찾아 연결해보세요.',
-  pairs: [
-    { word: '집게', image: './images/b_jipgae.png', id: 1 },
-    { word: '춥다', image: './images/b_chupda.png', id: 2 },
-    { word: '잡다', image: './images/b_japda.png', id: 3 },
-    { word: '자다', image: './images/b_jada.png', id: 4 },
-    { word: '추다', image: './images/b_chuda.png', id: 5 },
-    { word: '지게', image: './images/b_jigae.png', id: 6 },
-  ],
+    question: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
+    wordColumns: 2,
+    imageOrder: [6, 5, 4, 3, 2, 1],
+    pairs: [
+      { word: '지게', image: './images/b_jigae.png', id: 6 },
+      { word: '집게', image: './images/b_jipgae.png', id: 1 },
+      { word: '추다', image: './images/b_chuda.png', id: 5 },
+      { word: '춥다', image: './images/b_chupda.png', id: 2 },
+      { word: '자다', image: './images/b_jada.png', id: 4 },
+      { word: '잡다', image: './images/b_japda.png', id: 3 },
+    ],
   },
   {
     page: 8,
@@ -194,7 +214,7 @@ export const workbookActivities: Activity[] = [
       { 
         word: '밥', 
         example: '(밥)을 먹으니 배가 든든하다.',
-        placeholder: '나는 밥곡이 좋다.\n쌀이 익으면 밥이 된다.\n누구나 밥을 먹어야 살 수 있다.'
+        placeholder: '나는 잡곡밥이 좋다.\n쌀이 익으면 밥이 된다.\n누구나 밥을 먹어야 살 수 있다.'
       }
     ],
   },
@@ -236,7 +256,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㅇ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 그림으로 그려보세요.',
+    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
     sentences: [
       '나는 친구들이 놀릴까 봐 학교에선 ___을 싸기 싫다.',
       '그런데 오늘 아침에 아무리 ___을 누려고 해도 ___이 나오지 않았다.',
@@ -296,7 +316,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㄱ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 그림으로 그려보세요.',
+    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
     sentences: [
       '도서실에서는 작은 ___소리로 말하기',
       '나는 ___청이 크다.',
@@ -357,7 +377,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㄴ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 그림으로 그려보세요.',
+    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
     sentences: [
       '___물이 흐르다             ___짓을 하다',
       '___을 뜨다 속              ___썹이 길다',
@@ -431,7 +451,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㄹ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 그림으로 그려보세요.',
+    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
     sentences: [
       '손___                     ___바닥',
       '___가락                                마당___',
@@ -491,20 +511,21 @@ export const workbookActivities: Activity[] = [
     title: 'ㄷ 받침 활동',
     activityNumber: 2,
     type: ActivityType.ConnectPairs,
-    question: '낱말과 어울리는 그림을 찾아 연결해보세요.',
-  pairs: [
-    { word: '시다', image: './images/d_sida.png', id: 1 },
-    { word: '싣다', image: './images/d_sitda.png', id: 2 },
-    { word: '뜨다', image: './images/d_ttuda.png', id: 3 },
-    { word: '뜯다', image: './images/d_ttutda.png', id: 4 },
-  ],
+    question: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
+    wordColumns: 2,
+    pairs: [
+      { word: '시다', image: './images/d_sida.png', id: 1 },
+      { word: '싣다', image: './images/d_sitda.png', id: 2 },
+      { word: '뜨다', image: './images/d_ttuda.png', id: 3 },
+      { word: '뜯다', image: './images/d_ttutda.png', id: 4 },
+    ],
   },
   {
     page: 28,
    title: 'ㄷ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 그림으로 그려보세요.',
+    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
     sentences: [
       '친구와 편지를 주고 ___다.',
       '위인을 본___다.',
@@ -518,7 +539,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㄷ 받침 활동',
     activityNumber: 4,
     type: ActivityType.SentenceBuilder,
-    question: '한 문장으로 말해요.',
+    question: '다음 낱말 중 하나를 사용하여 한 문장으로 말하거나 써 보세요.',
     words: [
       { 
         word: '돋보기/ 받아쓰기', 
@@ -529,7 +550,7 @@ export const workbookActivities: Activity[] = [
   },
   {
     page: 30,
-    title: 'ㅂ 받침 가족 활동',
+    title: 'ㅂ받침 가족(ㅂ,ㅍ) 활동',
     activityNumber: 1,
     type: ActivityType.WordCloudSearch,
     question: 'ㅂ 받침 가족 낱말을 찾아요.',
@@ -548,10 +569,10 @@ export const workbookActivities: Activity[] = [
   },
   {
     page: 31,
-    title: 'ㅂ 받침 가족 활동',
+    title: 'ㅂ받침 가족(ㅂ,ㅍ) 활동',
     activityNumber: 2,
     type: ActivityType.ConnectPairs,
-    question: '낱말과 어울리는 그림을 찾아 연결해보세요.',
+    question: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
     groups: [
       [
         { word: '이', image: './images/bf_yi.png', id: 1 },
@@ -575,7 +596,7 @@ export const workbookActivities: Activity[] = [
   },
   {
     page: 32,
-    title: 'ㅂ 받침 가족 활동',
+    title: 'ㅂ받침 가족(ㅂ,ㅍ) 활동',
     activityNumber: 3,
     type: ActivityType.MultipleChoiceSentence,
     question: '다음 빈칸에 들어갈 말을 선택하세요.',
@@ -599,7 +620,7 @@ export const workbookActivities: Activity[] = [
   },
   {
     page: 33,
-    title: 'ㅂ 받침 가족 활동',
+    title: 'ㅂ받침 가족(ㅂ,ㅍ) 활동',
     activityNumber: 4,
     type: ActivityType.MultipleChoiceSentence,
     question: '맞는 표현을 선택 하세요.',
@@ -611,7 +632,7 @@ export const workbookActivities: Activity[] = [
   },
   {
     page: 34,
-    title: 'ㄱ 받침 가족 활동',
+    title: 'ㄱ받침 가족(ㄱ,ㄲ,ㅋ) 활동',
     activityNumber: 1,
     type: ActivityType.WordCloudSearch,
     question: 'ㄱ 받침 가족 낱말을 찾아요.',
@@ -629,7 +650,7 @@ export const workbookActivities: Activity[] = [
   },
   {
     page: 35,
-    title: 'ㄱ 받침 가족 활동',
+    title: 'ㄱ받침 가족(ㄱ,ㄲ,ㅋ) 활동',
     activityNumber: 2,
     type: ActivityType.FillTheBlankInSyllable,
     question: '빈 칸에 알맞은 받침을 선택하여 낱말을 완성해보세요.',
@@ -637,7 +658,7 @@ export const workbookActivities: Activity[] = [
     items: [
       {
         id: 1,
-        left: { image: './../../public/images/kf_hagyo.png', word: '하교' },
+        left: { image: './images/hakyo.png', word: '하교' },
         right: { image: './images/kf_hakgyo.png', wordParts: ['하', '교'], correctAnswer: 'ㄱ' },
       },
       {
@@ -659,7 +680,7 @@ export const workbookActivities: Activity[] = [
   },
   {
     page: 36,
-    title: 'ㄱ 받침 가족 활동',
+    title: 'ㄱ받침 가족(ㄱ,ㄲ,ㅋ) 활동',
     activityNumber: 3,
     type: ActivityType.MultipleChoiceSentence,
     question: '알맞은 글자에 O 표 하세요.',
@@ -668,15 +689,15 @@ export const workbookActivities: Activity[] = [
       { sentence: '( )도 보이고', choices: ['식탁', '식탂', '식탘'], correctAnswer: ['식탁'] },
       { sentence: '( )도 보이네?', choices: ['국자', '굮자', '궄자'], correctAnswer: ['국자'] },
       { sentence: '( )으로 바람이 불어와요.', choices: ['창박', '창밖', '창밬'], correctAnswer: ['창밖'] },
-      { sentence: '( ) 중 어떤 음식을 좋아하니?', choices: ['복음밥', '볶음밥', '보끔밥'], correctAnswer: ['볶음밥'] },
+      { sentence: '나는 ( )을 좋아한다.', choices: ['복음밥', '볶음밥', '보끔밥'], correctAnswer: ['볶음밥'] },
     ],
   },
   {
     page: 37,
-    title: 'ㄱ 받침 가족 활동',
+    title: 'ㄱ받침 가족(ㄱ,ㄲ,ㅋ) 활동',
     activityNumber: 4,
     type: ActivityType.SentenceBuilder,
-    question: '한 문장으로 말해요.',
+    question: '다음 낱말 중 하나를 사용하여 한 문장으로 말하거나 써 보세요.',
     words: [
       { 
         word: '볶음 / 해 질 녘 / 낚싯대', 
@@ -687,7 +708,7 @@ export const workbookActivities: Activity[] = [
   },
   {
     page: 39,
-    title: 'ㄷ 받침 가족 활동',
+    title: 'ㄷ받침 가족(ㄷ,ㅌ,ㅅ) 활동',
     activityNumber: 1,
     type: ActivityType.WordCloudSearch,
     question: 'ㄷ 받침 가족 낱말을 찾아요.',
@@ -706,7 +727,7 @@ export const workbookActivities: Activity[] = [
   },
   {
     page: 40,
-    title: 'ㄷ 받침 가족 활동',
+    title: 'ㄷ받침 가족(ㄷ,ㅌ,ㅅ) 활동',
     activityNumber: 2,
     type: ActivityType.MatchingLadder,
     question: '같은 소리가 나는 낱말을 함게 클릭해 보세요.',
@@ -723,7 +744,7 @@ export const workbookActivities: Activity[] = [
   },
   {
     page: 41,
-    title: 'ㄷ 받침 가족 활동',
+    title: 'ㄷ받침 가족(ㄷ,ㅌ,ㅅ) 활동',
     activityNumber: 3,
     type: ActivityType.MultipleChoiceImage,
     question: '그림에 어울리는 글자를 고르세요.',
@@ -756,7 +777,7 @@ export const workbookActivities: Activity[] = [
   },
   {
     page: 42,
-    title: 'ㄷ 받침 가족 활동',
+    title: 'ㄷ받침 가족(ㄷ,ㅌ,ㅅ) 활동',
     activityNumber: 4,
     type: ActivityType.SentenceBuilder,
     question: '빛을 나타내는 말을 써 보세요.',
