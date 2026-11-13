@@ -32,7 +32,7 @@ export const MimicMatchFillGame: React.FC<{
   return (
     <div className="w-full flex flex-col items-center">
       <p className="text-sm text-gray-600 mb-4 font-bold">
-        왼쪽 그림을 누른 뒤 오른쪽에서 알맞은 ‘ㅋ’ 흉내 말을 눌러 빈칸을 완성해 보세요!
+        왼쪽 그림을 누른 뒤 오른쪽에서 알맞은 ‘ㅋ’ 흉내 내는 말을 눌러 빈칸을 완성해 보세요!
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl items-center">
@@ -113,7 +113,7 @@ export const MimicMatchFillGame: React.FC<{
 
       {allDone && (
         <div className="mt-5 px-5 py-2 rounded-xl bg-emerald-500 text-white font-black text-sm shadow animate-bounce">
-          🎉 콩콩 · 킁킁 · 쿨쿨! ㅋ 흉내 말을 모두 완성했어요!
+          🎉 콩콩 · 킁킁 · 쿨쿨! ‘ㅋ’ 흉내 내는 말을 모두 완성했어요!
         </div>
       )}
     </div>

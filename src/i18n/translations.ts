@@ -415,7 +415,7 @@ export const translations: Record<string, Partial<Record<Language, string>>> = {
     zh: "按字母顺序选择你想学习的韩语辅音吧！",
     es: "¡Elige la consonante coreana que quieras aprender en orden alfabético!",
   },
-  "글자를 따라쓰며 소리내어 읽어 보세요.": {
+  "글자를 따라 쓰며 소리 내어 읽어 보세요.": {
     en: "Trace the letters and read them aloud.",
     ja: "文字をなぞりながら声に出して読んでみましょう。",
     zh: "边描红文字边大声朗读吧。",

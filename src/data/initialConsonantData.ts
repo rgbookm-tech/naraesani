@@ -19,7 +19,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 22 28 L 76 28 L 70 76', numX: 18, numY: 22 },
     ],
     step1Instruction: 'ㄱ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['가', '갸', '거', '겨', '고', '교', '구', '규', '그', '기'],
     step3: {
       mode: 'slot-fill',
@@ -57,7 +57,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'color-grid-animal',
-      instruction: 'ㄱ 글자가 들어간 낱말을 모두 색칠하고, 색칠되어 보이는 글자가 표현하는 동물을 찾아보세요.',
+      instruction: '‘ㄱ’ 글자가 들어간 낱말을 모두 색칠하고, 색칠되어 보이는 글자가 표현하는 동물을 찾아보세요.',
       rows: 4,
       cols: 6,
       cells: [
@@ -75,14 +75,14 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       revealHint: '색칠된 칸들을 멀리서 보면 ‘개’라는 글자 모양이 나타나요!',
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ‘ㄱ’을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㄱ’을 찾아 동그라미표 해 보세요.',
       title: '가거고구그기',
       lines: [
-        '거꾸로 도깨비 만나',
-        '수수께끼 풀어보자',
+        '거꾸로도깨비 만나',
+        '수수께끼 풀어 보자',
         '추장보다 높은 건',
         '고 고 고 추장',
-        '피 안나는 칼은',
+        '피 안 나는 칼은',
         '칼 칼 머리칼',
         '가거고구그기',
       ],
@@ -108,7 +108,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 24 50 L 68 50', numX: 18, numY: 50 },
     ],
     step1Instruction: 'ㅋ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['카', '캬', '커', '켜', '코', '쿄', '쿠', '큐', '크', '키'],
     step3: {
       mode: 'slot-fill',
@@ -146,7 +146,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'mimic-match-fill',
-      instruction: '‘ㅋ’이 들어가는 흉내 말입니다. 어울리는 그림과 말을 찾아 꾹 눌러보세요.',
+      instruction: '‘ㅋ’이 들어가는 흉내 내는 말입니다. 어울리는 그림과 말을 찾아 꾹 눌러 보세요.',
       items: [
         { id: 'kk1', image: IMG('k_kongkong.png'), word: '콩콩', desc: '제자리에서 뛰는 모양' },
         { id: 'kk2', image: IMG('k_keungkeung.png'), word: '킁킁', desc: '코로 냄새를 맡는 소리' },
@@ -155,16 +155,16 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       choices: ['킁킁', '콩콩', '쿨쿨'],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ㅋ을 찾아 동그라미 해 보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㅋ’을 찾아 동그라미표 해 보세요.',
       title: '카커코쿠크키',
       lines: [
-        '이 백년 동안',
+        '이백 년 동안',
         '킁킁 콧물이 나와',
         '킁킁 코가 간지러워',
         '꼬물꼬물 꼬물벌레',
         '콧속을 들락달락',
         '키득키득 키득벌레',
-        '조심조심 제거해줘',
+        '조심조심 제거해 줘',
         '카커코쿠크키',
       ],
       targetConsonants: ['ㅋ'],
@@ -188,7 +188,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 26 24 L 26 74 L 78 74', numX: 20, numY: 20 },
     ],
     step1Instruction: 'ㄴ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['나', '냐', '너', '녀', '노', '뇨', '누', '뉴', '느', '니'],
     step3: {
       mode: 'word-choice',
@@ -201,7 +201,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'image-maze-n',
-      instruction: 'ㄴ 글자가 있는 이름을 가진 그림을 따라 이동해보세요.',
+      instruction: '‘ㄴ’ 글자가 있는 이름을 가진 그림을 따라 이동해 보세요.',
       mazeImage: IMG('n_maze.jpg'),
       steps: [
         {
@@ -235,7 +235,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       ],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고, ㄴ을 찾아 동그라미표 해 보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㄴ’을 찾아 동그라미표 해 보세요.',
       title: '나너노누느니',
       lines: [
         '나발도깨비 만나',
@@ -268,7 +268,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 26 26 L 26 74 L 78 74', numX: 18, numY: 52 },
     ],
     step1Instruction: 'ㄷ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['다', '댜', '더', '뎌', '도', '됴', '두', '듀', '드', '디'],
     step3: {
       mode: 'slot-fill',
@@ -308,7 +308,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'word-search-puzzle',
-      instruction: '퍼즐에서 낱말에 맞는 글자를 찾아 동그라미표 하세요.',
+      instruction: '퍼즐에서 낱말에 알맞은 글자를 찾아 동그라미표 해 보세요.',
       targetWords: ['다람쥐', '더위', '도깨비', '두꺼비'],
       grid: [
         ['다', '더', '위', '이'],
@@ -324,7 +324,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       ],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ㄷ을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㄷ’을 찾아 동그라미표 해 보세요.',
       title: '다더도두드디',
       lines: [
         '둥둥 북도깨비 나타나',
@@ -348,7 +348,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     ganadaOrder: 12,
     consonant: 'ㅌ',
     name: '티읕',
-    goblinTitle: '탁탁 딱지도깨비와 딱지 한판',
+    goblinTitle: '탁탁 딱지도깨비와 딱지 한 판',
     goblinStorySummary: '납작한 딱지도깨비와 신나는 말판·딱지 대결을 펼쳐 ㅌ 소리구슬을 얻어요!',
     beadColor: '#ec4899',
     beadLabel: '분홍 ㅌ 소리구슬',
@@ -358,11 +358,11 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 26 25 L 26 75 L 78 75', numX: 16, numY: 68 },
     ],
     step1Instruction: 'ㅌ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['타', '탸', '터', '텨', '토', '툐', '투', '튜', '트', '티'],
     step3: {
       mode: 'word-choice',
-      instruction: '그림에 맞는 낱말에 동그라미 하세요.',
+      instruction: '그림에 알맞은 낱말에 동그라미표 해 보세요.',
       items: [
         { id: 't1', image: IMG('t_triangle.png'), options: ['트라이앵글', '터라이앵글'], answer: '트라이앵글' },
         { id: 't2', image: IMG('t_clover.png'), options: ['투끼풀', '토끼풀'], answer: '토끼풀' },
@@ -372,7 +372,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     step4: {
       playType: 'board-game-t',
       instruction: '친구와 말판 놀이를 합니다.',
-      ruleText: '주사위를 던지거나 가위(3칸)·바위(2칸)·보(1칸)를 선택해 말판을 이동하고, 도착한 곳의 낱말을 소리내어 읽어 보세요!',
+      ruleText: '주사위를 던지거나 가위(3칸)·바위(2칸)·보(1칸)를 선택해 말판을 이동하고, 도착한 곳의 낱말을 소리 내어 읽어 보세요!',
       cells: [
         '출발',
         '타',
@@ -397,11 +397,11 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       ],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ‘ㅌ’을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㅌ’을 찾아 동그라미표 해 보세요.',
       title: '타터토투트티',
       lines: [
         '딱지도깨비와',
-        '딱지 한판',
+        '딱지 한 판',
         '타닥타닥 타조, 얍',
         '토실토실 토끼, 얍',
         '탈탈탈탈 트럭, 얍',
@@ -421,7 +421,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     consonant: 'ㄹ',
     name: '리을',
     goblinTitle: '리리 릿자도깨비의 레몬 바람',
-    goblinStorySummary: '상큼한 레몬향 바람을 일으키는 릿자도깨비와 함께 숨은 ㄹ 그림을 찾아요!',
+    goblinStorySummary: '상큼한 레몬 향 바람을 일으키는 릿자도깨비와 함께 숨은 ㄹ 그림을 찾아요!',
     beadColor: '#84cc16',
     beadLabel: '레몬색 ㄹ 소리구슬',
     strokeGuides: [
@@ -430,7 +430,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 24 47 L 24 76 L 78 76', numX: 16, numY: 66 },
     ],
     step1Instruction: 'ㄹ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['라', '랴', '러', '려', '로', '료', '루', '류', '르', '리'],
     step3: {
       mode: 'slot-fill',
@@ -468,7 +468,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'hidden-objects-r',
-      instruction: 'ㄹ이 들어간 낱말의 그림을 모두 찾아 보세요.',
+      instruction: '‘ㄹ’이 들어간 낱말의 그림을 모두 찾아 보세요.',
       sceneImage: IMG('r_hidden_room.jpg'),
       targets: [
         {
@@ -543,10 +543,10 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       ],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ‘ㄹ’을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㄹ’을 찾아 동그라미표 해 보세요.',
       title: '라러로루 루우 루우 루우우',
       lines: [
-        '레몬향 바람이 불어오네',
+        '레몬 향 바람이 불어오네',
         '앗 차가워',
         '릿자도깨비 만나',
         '개구리 너구리 목소리 병아리 유리항아리',
@@ -567,7 +567,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     consonant: 'ㅁ',
     name: '미음',
     goblinTitle: '말랑말랑 수염·흉내도깨비',
-    goblinStorySummary: '모든 것이 말랑거리는 숲에서 ㅁ 흉내말을 외치고 민트색 구슬을 받아요!',
+    goblinStorySummary: '모든 것이 말랑거리는 숲에서 ㅁ 흉내 내는 말을 외치고 민트색 구슬을 받아요!',
     beadColor: '#10b981',
     beadLabel: '민트색 ㅁ 소리구슬',
     strokeGuides: [
@@ -576,7 +576,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 24 76 L 76 76', numX: 48, numY: 85 },
     ],
     step1Instruction: 'ㅁ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['마', '먀', '머', '며', '모', '묘', '무', '뮤', '므', '미'],
     step3: {
       mode: 'slot-fill',
@@ -614,7 +614,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'corridor-maze-m',
-      instruction: '아래 그림에서 ㅁ이 들어간 글자를 따라 길을 찾아 가세요.',
+      instruction: '아래 그림에서 ‘ㅁ’이 들어간 글자를 따라 길을 찾아가세요.',
       mazeImage: IMG('m_maze.jpg'),
       checkpoints: [
         {
@@ -645,7 +645,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       ],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ‘ㅁ’을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㅁ’을 찾아 동그라미표 해 보세요.',
       title: '바위도, 나무도, 길도',
       lines: [
         '말랑말랑 몰랑몰랑 물렁물렁',
@@ -680,7 +680,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 25 76 L 75 76', numX: 50, numY: 85 },
     ],
     step1Instruction: 'ㅂ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['바', '뱌', '버', '벼', '보', '뵤', '부', '뷰', '브', '비'],
     step3: {
       mode: 'slot-fill',
@@ -719,7 +719,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'rebus-sentences-b',
-      instruction: '그림을 보며 ㅂ이 들어간 문장을 소리내어 읽어 보세요.',
+      instruction: '그림을 보며 ‘ㅂ’이 들어간 문장을 소리 내어 읽어 보세요.',
       sentences: [
         {
           id: 'bs1',
@@ -748,7 +748,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
           segments: [
             { kind: 'picture-word', word: '배', image: IMG('b_ship.jpg'), meaningHint: '물에 떠서 가는 배' },
             { kind: 'text', text: ' 위에서 ' },
-            { kind: 'picture-word', word: '배', image: IMG('b_pear.jpg'), meaningHint: '달콤아삭한 과일 배' },
+            { kind: 'picture-word', word: '배', image: IMG('b_pear.jpg'), meaningHint: '달콤하고 아삭한 과일 배' },
             { kind: 'text', text: '를 먹으니 ' },
             { kind: 'picture-word', word: '배', image: IMG('b_belly.jpg'), meaningHint: '우리 몸의 배' },
             { kind: 'text', text: '가 불러요.' },
@@ -757,7 +757,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       ],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ‘ㅂ’을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㅂ’을 찾아 동그라미표 해 보세요.',
       title: '바버보부브비',
       lines: [
         '바버보부 보글보글 빙글빙글',
@@ -790,7 +790,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 18 75 L 82 75', numX: 50, numY: 85 },
     ],
     step1Instruction: 'ㅍ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['파', '퍄', '퍼', '펴', '포', '표', '푸', '퓨', '프', '피'],
     step3: {
       mode: 'slot-fill',
@@ -829,7 +829,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'color-grid-blue-p',
-      instruction: 'ㅍ낱말이 있는 칸을 파란색으로 색칠하세요.',
+      instruction: '‘ㅍ’ 낱말이 있는 칸을 파란색으로 색칠해 보세요.',
       grid: [
         ['파도', '편지', '풍선', '팔', '푸르다'],
         ['미소', '파', '타조', '펭귄', '노랑'],
@@ -844,13 +844,13 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       ],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ‘ㅍ’을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㅍ’을 찾아 동그라미표 해 보세요.',
       title: '파퍼포푸프피',
       lines: [
         '팥빵은 폭신폭신 팽이는 팽글팽글',
         '팔랑개비 팔랑팔랑 풀벌레는 폴짝폴짝',
-        '펄럭펄럭 춤추는 포대기 도깨비',
-        '푸른 계곡에서 도깨비 춤을 추네',
+        '펄럭펄럭 춤추는 포대기도깨비',
+        '푸른 계곡에서 도깨비춤을 추네',
       ],
       targetConsonants: ['ㅍ'],
       matchMode: 'any-position',
@@ -874,7 +874,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 46 42 L 80 76', numX: 62, numY: 44 },
     ],
     step1Instruction: 'ㅅ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['사', '샤', '서', '셔', '소', '쇼', '수', '슈', '스', '시'],
     step3: {
       mode: 'slot-fill',
@@ -914,7 +914,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'minimal-pair-circle-s',
-      instruction: '그림에 알맞은 글자를 찾아 동그라미(O)하세요.',
+      instruction: '그림에 알맞은 글자를 찾아 동그라미표(O) 해 보세요.',
       items: [
         { id: 'sp1', image: IMG('s_cow.png'), options: ['소', '쏘', '쪼'], answer: '소', fullWord: '소' },
         { id: 'sp2', image: IMG('s_clap.png'), prefix: '박', options: ['수', '쑤', '쭈'], answer: '수', fullWord: '박수' },
@@ -923,7 +923,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       ],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ‘ㅅ’과 ‘ㅆ’을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㅅ’과 ‘ㅆ’을 찾아 동그라미표 해 보세요.',
       title: '사서소수시',
       lines: [
         '사자머리 흔드는',
@@ -955,7 +955,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 48 48 L 80 76', numX: 66, numY: 48 },
     ],
     step1Instruction: 'ㅈ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['자', '쟈', '저', '져', '조', '죠', '주', '쥬', '즈', '지'],
     step3: {
       mode: 'slot-fill',
@@ -994,7 +994,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'word-search-puzzle',
-      instruction: '퍼즐에서 ㅈ이 들어간 낱말을 찾아 O표 하세요.',
+      instruction: '퍼즐에서 ‘ㅈ’이 들어간 낱말을 찾아 동그라미표(O) 해 보세요.',
       targetWords: ['저고리', '가지', '장소', '지게', '종이', '가족', '자장가', '지렁이'],
       grid: [
         ['자', '장', '가', '족'],
@@ -1015,17 +1015,17 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       ],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고, ㅈ을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㅈ’을 찾아 동그라미표 해 보세요.',
       title: '자저조주지',
       lines: [
         '주문을 외자',
         '지직지직 금이 간다',
         '조심조심 걸어라',
         '자저조주! 자루도깨비 말아라 얍!',
-        '저 멀리 날려버린 자루도깨비 뒤로',
+        '저 멀리 날려 버린 자루도깨비 뒤로',
         '지게 작대기 저고리 주걱',
-        'ㅈ도깨비들 살아났지',
-        '잘 했어 쿵쿵!',
+        'ㅈ 도깨비들 살아났지',
+        '잘했어 쿵쿵!',
       ],
       targetConsonants: ['ㅈ'],
       includeStandaloneJamo: true,
@@ -1051,7 +1051,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 48 54 L 80 80', numX: 66, numY: 54 },
     ],
     step1Instruction: 'ㅊ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['차', '챠', '처', '쳐', '초', '쵸', '추', '츄', '츠', '치'],
     step3: {
       mode: 'slot-fill',
@@ -1090,19 +1090,19 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'balloon-story-ch',
-      instruction: '앞의 이야기에 ㅊ이 들어간 표현을 찾아 풍선에 채워보세요.',
+      instruction: '앞의 이야기에서 ‘ㅊ’이 들어간 표현을 찾아 풍선에 채워 보세요.',
       balloonImage: IMG('ch_balloons.jpg'),
       storyLines: [
         '갑자기 천둥 같은 고함이 터졌어.',
         '여러 개로 쪼개져 천천히 움직여.',
         '그림자도깨비는 채찍이 되어 산이의 발목을 낚아챘어.',
-        '그림자도깨비는 “치잇” 콧방귀를 뀌며, 몸을 흔들어댔어.',
+        '그림자도깨비는 “치잇” 콧방귀를 뀌며, 몸을 흔들어 댔어.',
       ],
       correctExpressions: ['천둥', '천천히', '채찍', '낚아챘어', '치잇'],
       choicesPool: ['천둥', '고함', '천천히', '채찍', '발목', '낚아챘어', '치잇', '콧방귀'],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ‘ㅊ’을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㅊ’을 찾아 동그라미표 해 보세요.',
       title: '차처초추치',
       lines: [
         '창창창 청청청',
@@ -1111,7 +1111,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
         '창도깨비 창을 던져',
         '그림자도깨비 쫓아냈지',
         '칭찬해 쿵쿵!',
-        '잘 했어 쿵쿵!',
+        '잘했어 쿵쿵!',
       ],
       targetConsonants: ['ㅊ'],
       matchMode: 'any-position',
@@ -1134,7 +1134,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 50 22 A 28 28 0 1 0 50.1 22', numX: 50, numY: 14 },
     ],
     step1Instruction: 'ㅇ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['아', '야', '어', '여', '오', '요', '우', '유', '으', '이'],
     step3: {
       mode: 'slot-fill',
@@ -1172,7 +1172,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'picture-diary-ng',
-      instruction: '알맞은 낱말에 O를 하고 일기를 완성해 보세요.',
+      instruction: '알맞은 낱말에 동그라미표(O)를 하고 일기를 완성해 보세요.',
       diaryImage: IMG('ng_diary.png'),
       dateLabel: 'O월 O일  날씨: 구름 조금 ⛅',
       fullText: '오후에 엄마랑 치과에 갔다. 의자에 누워 입을 크게 벌렸다. 치료가 끝나고 입을 헹궜다. 오글오글 푸우! 잉잉, 치과는 무섭다.',
@@ -1190,16 +1190,16 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       ],
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ‘ㅇ’을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㅇ’을 찾아 동그라미표 해 보세요.',
       title: '아어오우으이',
       lines: [
         '알쏭달쏭 ‘ㅇ’ 암호',
-        'ㅇ하나에',
+        'ㅇ 하나에',
         '옷, 입, 용, 알',
-        'ㅇ두개에',
+        'ㅇ 두 개에',
         '아이, 여우, 오이, 얼음',
         '으랏차차!',
-        '드디어 살아난 열쇠 도깨비',
+        '드디어 살아난 열쇠도깨비',
       ],
       targetConsonants: ['ㅇ'],
       includeStandaloneJamo: true,
@@ -1225,7 +1225,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       { d: 'M 50 44 A 18 18 0 1 0 50.1 44', numX: 25, numY: 62 },
     ],
     step1Instruction: 'ㅎ을 순서에 따라 써 보세요.',
-    step2Instruction: '글자를 따라쓰며 소리내어 읽어 보세요.',
+    step2Instruction: '글자를 따라 쓰며 소리 내어 읽어 보세요.',
     syllables10: ['하', '햐', '허', '혀', '호', '효', '후', '휴', '흐', '히'],
     step3: {
       mode: 'tap-match',
@@ -1239,7 +1239,7 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
     },
     step4: {
       playType: 'walled-maze-h',
-      instruction: '‘ㅎ’이 들어가는 낱말을 따라 길을 찾아 봅시다.',
+      instruction: '‘ㅎ’이 들어가는 낱말을 따라 길을 찾아 보세요.',
       grid: [
         ['하마', '코끼리', '다리', '우유', '히히히'],
         ['호수', '해바라기', '소나기', '주루룩', '호랑이'],
@@ -1280,13 +1280,13 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       },
     },
     step5: {
-      instruction: '동시를 소리내어 읽고 ‘ㅎ’을 찾아 동그라미표 해보세요.',
+      instruction: '동시를 소리 내어 읽고 ‘ㅎ’을 찾아 동그라미표 해 보세요.',
       title: '하허호후흐히',
       lines: [
-        '휘익휘익 흉내 도깨비',
+        '휘익휘익 흉내도깨비',
         '활활 불도깨비',
         '호리병 속에 호로록',
-        '제 꾀에 넘어간 그림자 도깨비',
+        '제 꾀에 넘어간 그림자도깨비',
         '도깨비들의 환호 소리',
         '하허호후흐히',
       ],
