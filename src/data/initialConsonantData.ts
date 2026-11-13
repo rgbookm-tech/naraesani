@@ -63,10 +63,10 @@ export const INITIAL_CONSONANT_UNITS: InitialConsonantUnit[] = [
       cells: [
         ['코', '콩', '알', '길', '빛', '귀'],
         ['감', '곰', '꿈', '굴', '게', '공'],
-        ['깨', '강', '코', '각', '국', '귤'],
+        ['깨', '강', '코', '각', '둑', '귤'],
         ['껌', '말', '꽃', '책', '산', '금'],
       ],
-      correctWords: ['길', '귀', '감', '곰', '굴', '게', '공', '강', '각', '국', '귤', '금'],
+      correctWords: ['길', '귀', '감', '곰', '굴', '게', '공', '강', '각', '귤', '책', '금'],
       animals: [
         { id: 'dog', name: '개', image: IMG('g_dog.png'), isCorrect: true },
         { id: 'cow', name: '소', image: IMG('g_cow.png'), isCorrect: false },
