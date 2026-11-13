@@ -9,6 +9,9 @@ import ConsonantActivityHost from './components/consonant/ActivityHost';
 // 모음편 관련 import
 import VowelApp from './VowelApp';
 
+// 자음편 관련 import
+import InitialConsonantApp from './InitialConsonantApp';
+
 // 통합 대시보드 & 독서·논술 지도안 & NCIC 교육과정 & 회원/관리자 모달 import
 import {
   INITIAL_WORKBOOKS,
@@ -213,7 +216,7 @@ const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome, initialPage }) =>
   return <>{renderContent()}</>;
 };
 
-type AppRouteState = 'dashboard' | 'consonant_workbook' | 'vowel_workbook' | 'study_guide';
+type AppRouteState = 'dashboard' | 'consonant_workbook' | 'vowel_workbook' | 'initial_consonant_workbook' | 'study_guide';
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<RgMemberUser | null>(() => getSavedMemberUser());
@@ -257,6 +260,7 @@ const App: React.FC = () => {
     const book = params.get('book');
     if (book === 'consonant' || book === 'naraesani_consonant') return 'consonant_workbook';
     if (book === 'vowel' || book === 'naraesani_vowel') return 'vowel_workbook';
+    if (book === 'initial' || book === 'naraesani_initial') return 'initial_consonant_workbook';
     if (book) {
       return 'study_guide';
     }
@@ -320,6 +324,8 @@ const App: React.FC = () => {
       setAppState('consonant_workbook');
     } else if (code === 'vowel' || code === 'naraesani_vowel') {
       setAppState('vowel_workbook');
+    } else if (code === 'initial' || code === 'naraesani_initial') {
+      setAppState('initial_consonant_workbook');
     } else {
       setSelectedGuideCode(code);
       setAppState('study_guide');
@@ -344,6 +350,8 @@ const App: React.FC = () => {
         return <ConsonantApp onGoHome={handleGoHome} initialPage={initialPage} />;
       case 'vowel_workbook':
         return <VowelApp onGoHome={handleGoHome} initialPage={initialPage} />;
+      case 'initial_consonant_workbook':
+        return <InitialConsonantApp onGoHome={handleGoHome} initialPage={initialPage} />;
       case 'study_guide':
         return (
           <StudyGuideWorkbook
@@ -380,10 +388,15 @@ const App: React.FC = () => {
     }
   };
 
-  const isInfantInteractive = appState === 'consonant_workbook' || appState === 'vowel_workbook';
+  const isInfantInteractive =
+    appState === 'consonant_workbook' ||
+    appState === 'vowel_workbook' ||
+    appState === 'initial_consonant_workbook';
   const activeWorkbookTitle =
     appState === 'vowel_workbook'
       ? '나래와 산이의 글자 찾기 모험_ 모음편'
+      : appState === 'initial_consonant_workbook'
+      ? '나래와 산이의 글자 찾기 모험_자음편'
       : appState === 'consonant_workbook'
       ? '나래와 산이의 글자 찾기 모험_받침편'
       : workbooks.find((w) => w.code === selectedGuideCode)?.title || '독서맵으로 하는 독서활동';

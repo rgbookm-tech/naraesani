@@ -168,7 +168,7 @@ export interface WorkbookItem {
   keywords: string[];
   cover_emoji: string;
   badge_color: string;
-  template_mode?: 'BUILTIN_VOWEL' | 'BUILTIN_CONSONANT' | 'INTERACTIVE_WORKBOOK' | 'STANDARD_GUIDE' | string;
+  template_mode?: 'BUILTIN_VOWEL' | 'BUILTIN_INITIAL' | 'BUILTIN_CONSONANT' | 'INTERACTIVE_WORKBOOK' | 'STANDARD_GUIDE' | string;
   is_builtin_interactive: number;
   is_free_content: number;
   ai_question_mileage?: number;
@@ -448,6 +448,65 @@ export const INITIAL_WORKBOOKS: WorkbookItem[] = [
         educational_goal:
           '일상생활에서 말소리와 글자의 관계를 이해하고, 한글 모음·자음·받침의 원리를 놀이와 신체 활동으로 즐겁게 익힌다.',
         linkage_note: '한글 기본 모음 10자의 소리와 모양을 그림·미로 활동으로 익히는 누리과정·한국어(KSL) 기초 문해 연계',
+      },
+    ],
+  },
+  {
+    id: 5,
+    code: 'naraesani_initial',
+    bookno: 79546,
+    title: '나래와 산이의 글자 찾기 모험_자음편',
+    subtitle: '14명의 도깨비 소리구슬 모험과 동시·미로·퍼즐로 깨치는 기초 한글 자음 워크북',
+    author: '김이은 글 · 어린이한글교육연구회 활동',
+    publisher: '리더스가이드',
+    target_group: 'INFANT',
+    grade_group: 'INFANT',
+    target_label: '영유아·초등저학년',
+    subject_category: '국어',
+    basic_skill_category: '한국어',
+    theme_category: '한글·기초문해',
+    theme_tags: ['한글·기초문해', '자음 소리구슬', '도깨비 동시', '낱말 놀이'],
+    roadmap_theme_id: 64,
+    roadmap_name: '글쓰기 & 문장력 수업 로드맵',
+    roadmap_desc: '일기와 에세이 쓰기 첫걸음부터 작가들의 문장론과 스토리텔링 작법까지',
+    duration_minutes: 50,
+    keywords: ['한글 자음', '소리구슬 모험', '획순 쓰기', '숨은그림찾기', '동시 읽기'],
+    cover_emoji: '🔮',
+    badge_color: 'sky',
+    template_mode: 'BUILTIN_INITIAL',
+    is_builtin_interactive: 1,
+    is_free_content: 1,
+    ai_question_mileage: 30,
+    ai_essay_mileage: 100,
+    book_price: 12000,
+    purchase_url: 'https://www.readersguide.co.kr/book/79546',
+    curriculum_links: [
+      {
+        curriculum_id: 1,
+        is_primary: 1,
+        curriculum_code: '2022-INFANT-KOR-HANGUL',
+        grade_group: 'INFANT',
+        grade_label: '영유아',
+        subject_category: '국어',
+        detail_subject: '누리과정 의사소통 / 한국어(KSL)',
+        domain_name: '듣기·말하기와 한글 깨치기',
+        achievement_code: '[누리-의사03 / 2국01-01]',
+        educational_goal:
+          '한글 기본 자음 14자(ㄱ~ㅎ)의 소리값과 쓰는 순서를 익히고, 모음과 결합한 글자와 기초 낱말·동시를 소리 내어 읽는다.',
+        linkage_note: '도깨비 소리구슬 모험 서사와 획순 쓰기·미로·숨은그림·동시 낭독을 결합한 영유아·초1 한글 자음 완성 과정',
+      },
+      {
+        curriculum_id: 3,
+        is_primary: 0,
+        curriculum_code: '2022-ELEM12-KOR-READ',
+        grade_group: 'ELEM_LOW',
+        grade_label: '초등저학년',
+        subject_category: '국어',
+        detail_subject: '국어 (초1~2)',
+        domain_name: '글자·낱말 읽기와 그림책 공감',
+        achievement_code: '[2국02-01 / 2국05-01]',
+        educational_goal: '글자와 낱말을 바르게 소리 내어 읽고 말놀이와 동시에 흥미를 가진다.',
+        linkage_note: '흉내 내는 말과 자음 리듬 동시를 소리 내어 읽으며 말소리의 재미를 느끼는 초등 입문 국어 연계',
       },
     ],
   },

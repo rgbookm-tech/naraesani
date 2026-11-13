@@ -321,20 +321,35 @@ function mergeLocalCustomWorkbooks(baseList: WorkbookItem[]): WorkbookItem[] {
     if (wb.code === 'naraesani_vowel') {
       return { ...wb, title: '나래와 산이의 글자 찾기 모험_ 모음편' };
     }
+    if (wb.code === 'naraesani_initial') {
+      return { ...wb, title: '나래와 산이의 글자 찾기 모험_자음편' };
+    }
     if (wb.code === 'naraesani_consonant') {
       return { ...wb, title: '나래와 산이의 글자 찾기 모험_받침편' };
     }
     return wb;
   });
+
+  // Ensure built-in Narae & Sani workbooks (모음편, 자음편, 받침편) are always available even if remote DB hasn't seeded yet
+  const builtinCodes = ['naraesani_vowel', 'naraesani_initial', 'naraesani_consonant'];
+  const existingCodes = new Set(normalizedBase.map((w) => w.code));
+  const missingBuiltins = INITIAL_WORKBOOKS.filter(
+    (w) => builtinCodes.includes(w.code) && !existingCodes.has(w.code)
+  );
+  const withBuiltins =
+    missingBuiltins.length > 0 ? [...missingBuiltins, ...normalizedBase] : normalizedBase;
+
   const raw = localStorage.getItem(LOCAL_CUSTOM_WORKBOOKS_KEY);
-  if (!raw) return normalizedBase;
+  if (!raw) return withBuiltins;
   try {
     const customs: WorkbookItem[] = JSON.parse(raw);
     const map = new Map<string, WorkbookItem>();
-    for (const item of normalizedBase) map.set(item.code, item);
+    for (const item of withBuiltins) map.set(item.code, item);
     for (const c of customs) {
       if (c.code === 'naraesani_vowel') {
         map.set(c.code, { ...c, title: '나래와 산이의 글자 찾기 모험_ 모음편' });
+      } else if (c.code === 'naraesani_initial') {
+        map.set(c.code, { ...c, title: '나래와 산이의 글자 찾기 모험_자음편' });
       } else if (c.code === 'naraesani_consonant') {
         map.set(c.code, { ...c, title: '나래와 산이의 글자 찾기 모험_받침편' });
       } else {
@@ -343,7 +358,7 @@ function mergeLocalCustomWorkbooks(baseList: WorkbookItem[]): WorkbookItem[] {
     }
     return Array.from(map.values());
   } catch {
-    return normalizedBase;
+    return withBuiltins;
   }
 }
 
