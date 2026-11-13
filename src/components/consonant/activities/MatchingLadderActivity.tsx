@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { MatchingLadderActivity } from '../../types';
 import { playSound, SoundType } from '../../../utils/sound';
+import { speakKorean } from '../../../utils/hangulSpeech';
 
 interface MatchingLadderActivityProps {
   activity: MatchingLadderActivity;
@@ -57,11 +58,13 @@ const MatchingLadderActivityComponent: React.FC<MatchingLadderActivityProps> = (
   }, [completedPairs, drawLines]);
 
   const handleTopClick = (word: string) => {
+    speakKorean(word);
     playSound(SoundType.CLICK);
     if (!completedPairs.has(word)) setSelectedTop(word);
   };
 
   const handleBottomClick = (word: string) => {
+    speakKorean(word);
     playSound(SoundType.CLICK);
     if (
       !Object.values(activity.matches).includes(word) ||

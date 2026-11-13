@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { GridPathActivity } from '../../types';
 import { playSound, SoundType } from '../../../utils/sound';
+import { speakKorean } from '../../../utils/hangulSpeech';
 
 interface GridPathActivityProps {
   activity: GridPathActivity;
@@ -19,6 +20,8 @@ const GridPathActivityComponent: React.FC<GridPathActivityProps> = ({ activity }
   const handleCellClick = (row: number, col: number) => {
     if (isComplete) return;
 
+    const word = activity.grid[row]?.[col];
+    if (word) speakKorean(word);
     playSound(SoundType.CLICK);
 
     const currentPathIndex = path.length -1;

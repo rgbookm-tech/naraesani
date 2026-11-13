@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { WordSearchWord } from '../types';
+import { speakKorean } from '../../utils/hangulSpeech';
 
 interface WordHighlightQuizProps {
   words: WordSearchWord[];
@@ -84,12 +85,13 @@ const WordHighlightQuiz: React.FC<WordHighlightQuizProps> = ({ words, vowel, typ
   };
 
   const handleWordClick = (word: string) => {
+    speakKorean(word);
     const correct = isCorrect(word);
     const selected = selectedWords.includes(word);
 
-    // 정답이면서 이미 선택되어 있으면 아무 동작도 하지 않음 (토글 불가)
+    // 정답이면서 이미 선택되어 있으면 발음만 들려줌 (토글 불가)
     if (correct && selected) {
-        return;
+      return;
     }
     
     if (selected) {

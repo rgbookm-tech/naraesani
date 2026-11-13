@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import type { ConnectPairsActivity } from '../../types';
 import { playSound, SoundType } from '../../../utils/sound';
+import { speakKorean } from '../../../utils/hangulSpeech';
 
 interface ConnectPairsActivityProps {
   activity: ConnectPairsActivity;
@@ -57,7 +58,14 @@ const ConnectPairsActivityComponent: React.FC<ConnectPairsActivityProps> = ({ ac
     }
   }, [selectedWord, selectedImage]);
 
+  const allPairsFlat = useMemo(
+    () => (activity.groups ? activity.groups.flat() : activity.pairs || []),
+    [activity]
+  );
+
   const handleWordClick = (id: number) => {
+    const found = allPairsFlat.find((p) => p.id === id);
+    if (found) speakKorean(found.word);
     playSound(SoundType.CLICK);
     if (!completedPairs.has(id)) {
       setSelectedWord(id);
@@ -66,9 +74,12 @@ const ConnectPairsActivityComponent: React.FC<ConnectPairsActivityProps> = ({ ac
 
   const handleImageClick = (id: number) => {
     playSound(SoundType.CLICK);
-    if (!completedPairs.has(id)) {
-      setSelectedImage(id);
+    if (completedPairs.has(id)) {
+      const found = allPairsFlat.find((p) => p.id === id);
+      if (found) speakKorean(found.word);
+      return;
     }
+    setSelectedImage(id);
   };
 
   const getElementPosition = useCallback((elementId: string) => {

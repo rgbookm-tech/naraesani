@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { WordCloudSearchActivity } from '../../types';
 import { playSound, SoundType } from '../../../utils/sound';
+import { speakKorean } from '../../../utils/hangulSpeech';
 
 interface WordCloudSearchActivityProps {
   activity: WordCloudSearchActivity;
@@ -10,6 +11,7 @@ const WordCloudSearchActivityComponent: React.FC<WordCloudSearchActivityProps> =
     const [selectedWords, setSelectedWords] = useState<Set<string>>(new Set());
 
     const handleWordClick = (word: { text: string; isTarget: boolean }) => {
+        speakKorean(word.text);
         playSound(SoundType.CLICK);
         const isSelected = selectedWords.has(word.text);
 

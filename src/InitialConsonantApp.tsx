@@ -182,13 +182,20 @@ const InitialConsonantApp: React.FC<InitialConsonantAppProps> = ({ onGoHome, ini
               {unit.consonant}
             </button>
             <div className="text-left">
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-black text-xs">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 font-black text-xs">
                   도깨비 모험 {unit.adventureOrder}장
                 </span>
                 <span className="text-lg sm:text-xl font-black text-gray-900">
                   {unit.consonant} ({unit.name}) · 소리구슬 활동
                 </span>
+                <button
+                  type="button"
+                  onClick={() => speakKorean(`${unit.name}. ${unit.goblinTitle}`)}
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 text-xs font-extrabold transition-colors"
+                >
+                  🔊 {t('소리 듣기')}
+                </button>
               </div>
               <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-0.5">
                 {unit.goblinStorySummary}

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { ConnectTextPairsActivity } from '../../types';
 import { playSound, SoundType } from '../../../utils/sound';
+import { speakKorean } from '../../../utils/hangulSpeech';
 
 interface ConnectTextPairsActivityProps {
   activity: ConnectTextPairsActivity;
@@ -58,16 +59,18 @@ const ConnectTextPairsActivityComponent: React.FC<ConnectTextPairsActivityProps>
     drawLines();
   }, [completedPairs, drawLines]);
 
-  const handleLeftClick = (id: number) => {
+  const handleLeftClick = (id: number, text: string) => {
     playSound(SoundType.CLICK);
+    speakKorean(text);
     if (!completedPairs.has(id)) setSelectedLeft(id);
   };
 
-  const handleRightClick = (id: number) => {
+  const handleRightClick = (id: number, text: string) => {
     playSound(SoundType.CLICK);
+    speakKorean(text);
     if (!completedPairs.has(id)) setSelectedRight(id);
   };
-  
+
   const getCoords = (id: string) => {
     const el = itemRefs.current[id];
     const container = containerRef.current;
@@ -85,10 +88,10 @@ const ConnectTextPairsActivityComponent: React.FC<ConnectTextPairsActivityProps>
     return { x1: start.x, y1: start.y, x2: end.x, y2: end.y };
   });
 
-  // Create a shuffled version of the right-side pairs for display
-  const shuffledRightPairs = React.useMemo(() => 
-    [...activity.pairs].sort(() => Math.random() - 0.5), 
-  [activity.pairs]);
+  const shuffledRightPairs = React.useMemo(
+    () => [...activity.pairs].sort(() => Math.random() - 0.5),
+    [activity.pairs]
+  );
 
   return (
     <div>
@@ -98,13 +101,12 @@ const ConnectTextPairsActivityComponent: React.FC<ConnectTextPairsActivityProps>
       </h3>
       <div className="relative" ref={containerRef}>
         <div className="flex justify-between items-center">
-          {/* Left Column */}
           <div className="w-2/5 space-y-4">
             {activity.pairs.map(pair => (
               <button
                 key={`left-${pair.id}`}
                 ref={el => { itemRefs.current[`left-${pair.id}`] = el; }}
-                onClick={() => handleLeftClick(pair.id)}
+                onClick={() => handleLeftClick(pair.id, pair.left)}
                 className={`w-full p-4 text-xl font-bold rounded-lg border-2 transition-all ${
                   completedPairs.has(pair.id) ? 'bg-green-200 border-green-400' :
                   selectedLeft === pair.id ? 'bg-orange-200 border-orange-400 scale-105' :
@@ -115,14 +117,13 @@ const ConnectTextPairsActivityComponent: React.FC<ConnectTextPairsActivityProps>
               </button>
             ))}
           </div>
-          
-          {/* Right Column */}
+
           <div className="w-2/5 space-y-4">
             {shuffledRightPairs.map(pair => (
               <button
                 key={`right-${pair.id}`}
                 ref={el => { itemRefs.current[`right-${pair.id}`] = el; }}
-                onClick={() => handleRightClick(pair.id)}
+                onClick={() => handleRightClick(pair.id, pair.right)}
                 className={`w-full p-4 text-xl font-bold rounded-lg border-2 transition-all ${
                   completedPairs.has(pair.id) ? 'bg-green-200 border-green-400' :
                   selectedRight === pair.id ? 'bg-orange-200 border-orange-400 scale-105' :

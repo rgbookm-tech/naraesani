@@ -410,7 +410,7 @@ export const INITIAL_WORKBOOKS: WorkbookItem[] = [
     id: 1,
     code: 'naraesani_vowel',
     bookno: 79546,
-    title: '나래와 산이의 글자 찾기 모험_ 모음편',
+    title: '나래와 산이의 글자 찾기 모험_모음편',
     subtitle: '몸으로 표현하고 미로와 게임으로 깨치는 기초 모음 워크북',
     author: '어린이한글교육연구회',
     publisher: '리더스가이드',

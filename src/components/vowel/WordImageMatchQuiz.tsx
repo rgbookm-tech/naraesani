@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { WordImagePair } from '../types';
+import { speakKorean } from '../../utils/hangulSpeech';
 
 interface WordImageMatchQuizProps {
   pairs: WordImagePair[];
@@ -31,12 +32,19 @@ const WordImageMatchQuiz: React.FC<WordImageMatchQuizProps> = ({ pairs }) => {
   const words = useMemo(() => pairs.sort((a,b) => a.id - b.id), [pairs]);
 
   const handleWordSelect = (id: number) => {
+    const item = pairs.find((p) => p.id === id);
+    if (item) speakKorean(item.word);
     if (matchedPairs.includes(id) || selectedWord === id || incorrectPair) return;
     setSelectedWord(id);
   };
 
   const handleImageSelect = (id: number) => {
-    if (matchedPairs.includes(id) || selectedImage === id || incorrectPair) return;
+    if (matchedPairs.includes(id)) {
+      const item = pairs.find((p) => p.id === id);
+      if (item) speakKorean(item.word);
+      return;
+    }
+    if (selectedImage === id || incorrectPair) return;
     setSelectedImage(id);
   };
 
@@ -44,6 +52,8 @@ const WordImageMatchQuiz: React.FC<WordImageMatchQuizProps> = ({ pairs }) => {
     if (selectedWord !== null && selectedImage !== null) {
       if (selectedWord === selectedImage) {
         // Correct match
+        const matchedItem = pairs.find((p) => p.id === selectedWord);
+        if (matchedItem) speakKorean(`${matchedItem.word}! 정답!`);
         setMatchedPairs(prev => [...prev, selectedWord]);
         setSelectedWord(null);
         setSelectedImage(null);
@@ -57,7 +67,7 @@ const WordImageMatchQuiz: React.FC<WordImageMatchQuizProps> = ({ pairs }) => {
         }, 1000);
       }
     }
-  }, [selectedWord, selectedImage]);
+  }, [selectedWord, selectedImage, pairs]);
 
   const calculateLines = useCallback(() => {
     if (!containerRef.current) return;
@@ -184,7 +194,7 @@ const WordImageMatchQuiz: React.FC<WordImageMatchQuizProps> = ({ pairs }) => {
         </svg>
       </div>
       <button onClick={reset} className="mt-8 px-6 py-2 bg-gray-500 text-white font-bold rounded-lg hover:bg-gray-600 transition-colors">
-        다시하기
+        다시 하기
       </button>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MultipleChoiceImageActivity as ActivityProps } from '../../types';
 import { playSound, SoundType } from '../../../utils/sound';
+import { speakKorean } from '../../../utils/hangulSpeech';
 
 // 정답/오답 시각적 피드백을 위한 아이콘 컴포넌트
 const CorrectIcon = () => (
@@ -35,10 +36,14 @@ const MultipleChoiceImageActivityComponent: React.FC<MultipleChoiceImageActivity
     setUserAnswers(newAnswers);
 
     // 선택한 답이 정답 배열에 포함되어 있는지 확인합니다.
-    if (activity.items[itemIndex].correctAnswer.includes(choice)) {
+    const item = activity.items[itemIndex];
+    if (item.correctAnswer.includes(choice)) {
       playSound(SoundType.CORRECT);
+      const fullPhrase = `${item.leftText ? item.leftText + ' ' : ''}${choice}${item.rightText || ''}`;
+      speakKorean(fullPhrase);
     } else {
       playSound(SoundType.INCORRECT);
+      speakKorean(choice);
     }
   };
 

@@ -64,11 +64,65 @@ export function charHasTargetConsonant(
   return false;
 }
 
+const JAMO_SPEECH_MAP: Record<string, string> = {
+  ㄱ: '기역',
+  ㄲ: '쌍기역',
+  ㄴ: '니은',
+  ㄷ: '디귿',
+  ㄸ: '쌍디귿',
+  ㄹ: '리을',
+  ㅁ: '미음',
+  ㅂ: '비읍',
+  ㅃ: '쌍비읍',
+  ㅅ: '시옷',
+  ㅆ: '쌍시옷',
+  ㅇ: '이응',
+  ㅈ: '지읒',
+  ㅉ: '쌍지읒',
+  ㅊ: '치읓',
+  ㅋ: '키읔',
+  ㅌ: '티읕',
+  ㅍ: '피읖',
+  ㅎ: '히읗',
+  ㅏ: '아',
+  ㅐ: '애',
+  ㅑ: '야',
+  ㅒ: '얘',
+  ㅓ: '어',
+  ㅔ: '에',
+  ㅕ: '여',
+  ㅖ: '예',
+  ㅗ: '오',
+  ㅘ: '와',
+  ㅙ: '왜',
+  ㅚ: '외',
+  ㅛ: '요',
+  ㅜ: '우',
+  ㅝ: '워',
+  ㅞ: '웨',
+  ㅟ: '위',
+  ㅠ: '유',
+  ㅡ: '으',
+  ㅢ: '의',
+  ㅣ: '이',
+};
+
+export function normalizeKoreanForSpeech(raw: string): string {
+  if (!raw) return '';
+  return raw
+    .replace(/_{2,}|\(\s*\)/g, ' 빈칸 ')
+    .replace(/[ㄱ-ㅎㅏ-ㅣ]/g, (jamo) => JAMO_SPEECH_MAP[jamo] || jamo)
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function speakKorean(text: string, rate = 0.88): void {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+  const normalized = normalizeKoreanForSpeech(text);
+  if (!normalized) return;
   try {
     window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
+    const utter = new SpeechSynthesisUtterance(normalized);
     utter.lang = 'ko-KR';
     utter.rate = rate;
     utter.pitch = 1.05;

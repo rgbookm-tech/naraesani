@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { MultipleChoiceSentenceActivity } from '../../types';
 import { playSound, SoundType } from '../../../utils/sound';
+import { speakKorean } from '../../../utils/hangulSpeech';
 
 interface MultipleChoiceSentenceActivityProps {
   activity: MultipleChoiceSentenceActivity;
@@ -33,6 +34,7 @@ const MultipleChoiceSentenceActivityComponent: React.FC<MultipleChoiceSentenceAc
     }    
     
     playSound(SoundType.CLICK);
+    speakKorean(choice);
     
     const item = activity.items[itemIndex];
     const numBlanks = getBlanks(item.sentence).length;
@@ -52,6 +54,7 @@ const MultipleChoiceSentenceActivityComponent: React.FC<MultipleChoiceSentenceAc
 
       if (isAnswerCorrect) {
         playSound(SoundType.SUCCESS);
+        speakKorean(item.sentence.replace(/___|\( \)/g, choice));
       } else {
         playSound(SoundType.INCORRECT);
         setTimeout(() => {
@@ -89,6 +92,13 @@ const MultipleChoiceSentenceActivityComponent: React.FC<MultipleChoiceSentenceAc
 
         if (isAnswerCorrect) {
           playSound(SoundType.SUCCESS);
+          let idxCounter = 0;
+          const completedText = item.sentence.replace(/___|\( \)/g, () => {
+            const val = newUserAnswers[itemIndex][idxCounter] || '';
+            idxCounter += 1;
+            return val;
+          });
+          speakKorean(completedText);
         } else {
           playSound(SoundType.INCORRECT);
           setTimeout(() => {

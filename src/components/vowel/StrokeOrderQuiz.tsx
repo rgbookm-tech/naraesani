@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { speakKorean } from '../../utils/hangulSpeech';
 
 type Piece = {
   id: string;
@@ -26,7 +27,7 @@ const VOWEL_CONFIGS: Record<string, VowelConfig> = {
       { id: 'h1', dims: { width: H_W, height: H_H }, initialPos: { x: 210, y: 90 }, dropZonePos: { top: `calc(50% - ${H_H / 2}px)`, left: `calc(50% + ${V_W / 2 - 2}px)` } },
     ],
     sequence: ['v1', 'h1'],
-    message: '세로 막대를 먼저 옮겨보세요.',
+    message: '세로 막대를 먼저 옮겨 보세요.',
     fontSize: '160px',
   },
   'ㅑ': {
@@ -36,7 +37,7 @@ const VOWEL_CONFIGS: Record<string, VowelConfig> = {
       { id: 'h2', dims: { width: H_W, height: H_H }, initialPos: { x: 210, y: 125 }, dropZonePos: { top: `calc(50% - ${H_H / 2}px + 20px)`, left: `calc(50% + ${V_W / 2 - 2}px)` } },
     ],
     sequence: ['v1', 'h1', 'h2'],
-    message: '세로 막대를 먼저 옮겨보세요.',
+    message: '세로 막대를 먼저 옮겨 보세요.',
     fontSize: '160px',
   },
   'ㅓ': {
@@ -45,7 +46,7 @@ const VOWEL_CONFIGS: Record<string, VowelConfig> = {
       { id: 'v1', dims: { width: V_W, height: V_H }, initialPos: { x: 24, y: 40 }, dropZonePos: { top: `calc(50% - ${V_H / 2}px)`, left: `calc(50% - ${V_W / 2}px)` } },
     ],
     sequence: ['h1', 'v1'],
-    message: '가로 막대를 먼저 옮겨보세요.',
+    message: '가로 막대를 먼저 옮겨 보세요.',
     fontSize: '160px',
   },
   'ㅕ': {
@@ -55,7 +56,7 @@ const VOWEL_CONFIGS: Record<string, VowelConfig> = {
       { id: 'v1', dims: { width: V_W, height: V_H }, initialPos: { x: 24, y: 40 }, dropZonePos: { top: `calc(50% - ${V_H / 2}px)`, left: `calc(50% - ${V_W / 2}px)` } },
     ],
     sequence: ['h1', 'h2', 'v1'],
-    message: '위쪽 가로 막대를 먼저 옮겨보세요.',
+    message: '위쪽 가로 막대를 먼저 옮겨 보세요.',
     fontSize: '160px',
   },
   'ㅗ': {
@@ -64,7 +65,7 @@ const VOWEL_CONFIGS: Record<string, VowelConfig> = {
       { id: 'h1', dims: { width: V_H, height: H_H }, initialPos: { x: 185, y: 95 }, dropZonePos: { top: '50%', left: `calc(50% - ${V_H / 2}px)` } },
     ],
     sequence: ['v1', 'h1'],
-    message: '짧은 세로 막대를 먼저 옮겨보세요.',
+    message: '짧은 세로 막대를 먼저 옮겨 보세요.',
     fontSize: '160px',
   },
   'ㅛ': {
@@ -74,7 +75,7 @@ const VOWEL_CONFIGS: Record<string, VowelConfig> = {
       { id: 'h1', dims: { width: V_H, height: H_H }, initialPos: { x: 185, y: 95 }, dropZonePos: { top: '50%', left: `calc(50% - ${V_H / 2}px)` } },
     ],
     sequence: ['v1', 'v2', 'h1'],
-    message: '왼쪽 세로 막대를 먼저 옮겨보세요.',
+    message: '왼쪽 세로 막대를 먼저 옮겨 보세요.',
     fontSize: '160px',
   },
   'ㅜ': {
@@ -83,7 +84,7 @@ const VOWEL_CONFIGS: Record<string, VowelConfig> = {
       { id: 'v1', dims: { width: V_W, height: V_H / 2 }, initialPos: { x: 24, y: 55 }, dropZonePos: { top: 'calc(50% + 10px)', left: `calc(50% - ${V_W / 2}px)` } },
     ],
     sequence: ['h1', 'v1'],
-    message: '가로 막대를 먼저 옮겨보세요.',
+    message: '가로 막대를 먼저 옮겨 보세요.',
     fontSize: '160px',
   },
   'ㅠ': {
@@ -93,7 +94,7 @@ const VOWEL_CONFIGS: Record<string, VowelConfig> = {
       { id: 'v2', dims: { width: V_W, height: V_H / 2 }, initialPos: { x: 64, y: 55 }, dropZonePos: { top: 'calc(50% + 10px)', left: `calc(50% - ${V_W / 2}px + 20px)` } },
     ],
     sequence: ['h1', 'v1', 'v2'],
-    message: '가로 막대를 먼저 옮겨보세요.',
+    message: '가로 막대를 먼저 옮겨 보세요.',
     fontSize: '160px',
   },
   'ㅡ': {
@@ -101,7 +102,7 @@ const VOWEL_CONFIGS: Record<string, VowelConfig> = {
       { id: 'h1', dims: { width: V_H, height: H_H }, initialPos: { x: 95, y: 35 }, dropZonePos: { top: `calc(50% - ${H_H / 2}px)`, left: `calc(50% - ${V_H / 2}px)` } },
     ],
     sequence: ['h1'],
-    message: '가로 막대를 옮겨보세요.',
+    message: '가로 막대를 옮겨 보세요.',
     fontSize: '160px',
   },
   'ㅣ': {
@@ -109,7 +110,7 @@ const VOWEL_CONFIGS: Record<string, VowelConfig> = {
       { id: 'v1', dims: { width: V_W, height: V_H }, initialPos: { x: 35, y: 40 }, dropZonePos: { top: `calc(50% - ${V_H / 2}px)`, left: `calc(50% - ${V_W / 2}px)` } },
     ],
     sequence: ['v1'],
-    message: '세로 막대를 옮겨보세요.',
+    message: '세로 막대를 옮겨 보세요.',
     fontSize: '160px',
   },
 };
@@ -176,7 +177,7 @@ const StrokeOrderQuiz: React.FC<StrokeOrderQuizProps> = ({ vowel }) => {
       } else {
         const nextPieceIsVertical =
           expectedPiece && expectedPiece.dims.height > expectedPiece.dims.width;
-        setMessage(`순서가 틀렸어요! ${nextPieceIsVertical ? '세로' : '가로'} 막대를 먼저 옮겨주세요.`);
+        setMessage(`순서가 틀렸어요! ${nextPieceIsVertical ? '세로' : '가로'} 막대를 먼저 옮겨 주세요.`);
         return;
       }
     }
@@ -227,15 +228,16 @@ const StrokeOrderQuiz: React.FC<StrokeOrderQuizProps> = ({ vowel }) => {
       const newPlacedCount = currentPieces.filter((p) => p.isPlaced).length + 1;
       if (newPlacedCount === config.pieces.length) {
         setMessage('완성! 참 잘했어요!');
+        speakKorean(`${vowel}! 참 잘했어요!`);
       } else {
-        setMessage('좋아요! 다음 획을 옮겨보세요.');
+        setMessage('좋아요! 다음 획을 옮겨 보세요.');
       }
     } else {
       setPositions((prev) => ({ ...prev, [currentDragging.id]: pieceConfig.initialPos }));
     }
 
     setDragging(null);
-  }, [config]);
+  }, [config, vowel]);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     const { dragging: currentDragging } = stateRef.current;
@@ -386,7 +388,7 @@ const StrokeOrderQuiz: React.FC<StrokeOrderQuizProps> = ({ vowel }) => {
           onClick={reset}
           className="text-base font-bold px-6 py-2.5 bg-yellow-400 text-yellow-900 rounded-lg hover:bg-yellow-500 transition-colors shadow-md"
         >
-          다시하기
+          다시 하기
         </button>
       </div>
     </div>

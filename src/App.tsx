@@ -3,8 +3,9 @@ import { useLanguage, LanguageSelector } from './i18n/LanguageContext';
 
 // 받침편 관련 import
 import { workbookActivities as consonantWorkbookActivities } from './data/consonantData';
-import { WorkbookActivity as ConsonantActivity, InfoData } from './types/constantTypes';
+import { WorkbookActivity as ConsonantActivity, InfoData, TableOfContentsActivity } from './types/constantTypes';
 import ConsonantActivityHost from './components/consonant/ActivityHost';
+import TableOfContentsActivityComponent from './components/consonant/activities/TableOfContentsActivity';
 
 // 모음편 관련 import
 import VowelApp from './VowelApp';
@@ -154,6 +155,7 @@ const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome, initialPage }) =>
       ? (consonantWorkbookActivities[currentPageIndex] as ConsonantActivity)
       : null;
 
+  const { t } = useLanguage();
   const totalActivitiesCount = consonantWorkbookActivities.length - 1; // 목차(index 0) 제외한 전체 활동 쪽수
   const currentActivityOrder = currentPageIndex !== null && currentPageIndex > 0 ? currentPageIndex : 0;
 
@@ -168,45 +170,41 @@ const ConsonantApp: React.FC<ConsonantAppProps> = ({ onGoHome, initialPage }) =>
           setCurrentPageIndex(tocIndex > -1 ? tocIndex : 0);
           return null;
         }
+        if (currentConsonantActivity.page === 0) {
+          return (
+            <TableOfContentsActivityComponent
+              activity={currentConsonantActivity as TableOfContentsActivity}
+              onNavigateToPage={handleNavigateToPage}
+              onGoHome={onGoHome}
+            />
+          );
+        }
         return (
-          <div className="min-h-[600px] flex flex-col items-center justify-center p-2 sm:p-4 bg-lime-50/70 rounded-2xl text-gray-800">
-            <div className="w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-xl p-4 sm:p-8 border-4 border-lime-200 relative">
-              {currentConsonantActivity.page === 0 ? (
-                <div className="mb-4 flex justify-between items-center">
-                  <button
-                    onClick={onGoHome}
-                    className="flex items-center px-4 py-2 bg-emerald-600 text-white font-bold rounded-xl shadow hover:bg-emerald-700 transition-colors"
-                  >
-                    <span role="img" aria-label="home icon" className="mr-2">🏠</span>
-                    메인화면으로 가기
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <button
-                    onClick={handleGoToTOC}
-                    className="absolute top-4 left-4 flex items-center px-3 py-1 bg-gray-200 text-gray-700 font-bold rounded-lg shadow-sm hover:bg-gray-300 transition-colors z-10"
-                  >
-                    <span role="img" aria-label="home icon" className="mr-2">🏠</span>
-                    처음으로
-                  </button>
-                  <div className="absolute top-4 right-4 text-sm font-bold text-amber-600 bg-amber-100 px-3.5 py-1 rounded-full">
-                    {currentActivityOrder} / {totalActivitiesCount}
-                  </div>
-                </>
-              )}
-              <div className={currentConsonantActivity.page === 0 ? '' : 'pt-8'}>
-                <ConsonantActivityHost
-                  activity={currentConsonantActivity}
-                  onNextPage={handleNextPage}
-                  onPrevPage={handlePrevPage}
-                  onGoToTOC={handleGoToTOC}
-                  onNavigateToPage={handleNavigateToPage}
-                  isFirstPage={currentPageIndex === 0}
-                  isLastPage={currentPageIndex === consonantWorkbookActivities.length - 1}
-                  onComplete={handleComplete}
-                />
+          <div className="min-h-[600px] flex flex-col items-center justify-center p-2 sm:p-4 bg-emerald-50/70 rounded-2xl text-gray-800">
+            <div className="w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-xl p-4 sm:p-8 border-4 border-emerald-200 relative">
+              <button
+                type="button"
+                onClick={handleGoToTOC}
+                className="absolute top-4 left-4 flex items-center px-3 py-1 bg-gray-200 text-gray-700 font-bold rounded-lg shadow-sm hover:bg-gray-300 transition-colors z-10"
+              >
+                <span role="img" aria-label="home icon" className="mr-2">
+                  🏠
+                </span>
+                {t('처음으로')}
+              </button>
+              <div className="absolute top-4 right-4 text-sm font-bold text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full">
+                {currentActivityOrder} / {totalActivitiesCount}
               </div>
+              <ConsonantActivityHost
+                activity={currentConsonantActivity}
+                onNextPage={handleNextPage}
+                onPrevPage={handlePrevPage}
+                onGoToTOC={handleGoToTOC}
+                onNavigateToPage={handleNavigateToPage}
+                isFirstPage={currentPageIndex === 0}
+                isLastPage={currentPageIndex === consonantWorkbookActivities.length - 1}
+                onComplete={handleComplete}
+              />
             </div>
           </div>
         );
@@ -394,7 +392,7 @@ const App: React.FC = () => {
     appState === 'initial_consonant_workbook';
   const activeWorkbookTitle =
     appState === 'vowel_workbook'
-      ? '나래와 산이의 글자 찾기 모험_ 모음편'
+      ? '나래와 산이의 글자 찾기 모험_모음편'
       : appState === 'initial_consonant_workbook'
       ? '나래와 산이의 글자 찾기 모험_자음편'
       : appState === 'consonant_workbook'

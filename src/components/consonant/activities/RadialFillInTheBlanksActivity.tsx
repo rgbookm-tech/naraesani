@@ -1,6 +1,7 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { RadialFillInTheBlanksActivity } from '../../types';
 import { playSound, SoundType } from '../../../utils/sound';
+import { speakKorean } from '../../../utils/hangulSpeech';
 
 interface RadialFillInTheBlanksActivityProps {
   activity: RadialFillInTheBlanksActivity;
@@ -15,11 +16,12 @@ const RadialFillInTheBlanksActivityComponent: React.FC<RadialFillInTheBlanksActi
     if (hasMounted.current) {
       if (isCorrect) {
         playSound(SoundType.SUCCESS);
+        speakKorean(`${activity.correctAnswer}! 참 잘했어요!`);
       }
     } else {
       hasMounted.current = true;
     }
-  }, [isCorrect]);
+  }, [isCorrect, activity.correctAnswer]);
 
   const words = activity.words;
   const angleStep = 360 / words.length;
@@ -67,11 +69,23 @@ const RadialFillInTheBlanksActivityComponent: React.FC<RadialFillInTheBlanksActi
                 transform: `translate(${x}px, ${y}px)`,
               }}
             >
-              <div className="flex items-center gap-1 p-2 bg-lime-100 rounded-md shadow-sm">
+              <button
+                type="button"
+                onClick={() => {
+                  const filled = answer || '빈칸';
+                  const spoken =
+                    wordInfo.blankPosition === 'before'
+                      ? `${filled}${wordInfo.text}`
+                      : `${wordInfo.text}${filled}`;
+                  speakKorean(spoken);
+                }}
+                className="flex items-center gap-1 p-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg shadow-sm transition-transform active:scale-95"
+                title="클릭하여 소리 듣기"
+              >
                 {wordInfo.blankPosition === 'before' && <BlankBox />}
                 <span className="text-2xl font-bold">{wordInfo.text}</span>
                 {wordInfo.blankPosition === 'after' && <BlankBox />}
-              </div>
+              </button>
             </div>
           );
         })}
