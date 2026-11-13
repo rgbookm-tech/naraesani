@@ -191,15 +191,18 @@ export const WordSearchPuzzleGame: React.FC<{
 }> = ({ data }) => {
   const [selectedCells, setSelectedCells] = useState<Array<[number, number]>>([]);
   const [foundWords, setFoundWords] = useState<string[]>([]);
+  const [foundCellKeys, setFoundCellKeys] = useState<Record<string, boolean>>({});
   const [hintCoord, setHintCoord] = useState<string | null>(null);
 
   useEffect(() => {
     setSelectedCells([]);
     setFoundWords([]);
+    setFoundCellKeys({});
     setHintCoord(null);
   }, [data]);
 
   const isCellInFoundWord = (r: number, c: number) => {
+    if (foundCellKeys[`${r}-${c}`]) return true;
     return data.solutions.some(
       (sol) =>
         foundWords.includes(sol.word) &&
@@ -210,6 +213,16 @@ export const WordSearchPuzzleGame: React.FC<{
   const isCellSelected = (r: number, c: number) =>
     selectedCells.some(([sr, sc]) => sr === r && sc === c);
 
+  const isCharSubMultiset = (pickedChars: string[], word: string) => {
+    const pool = Array.from(word);
+    for (const ch of pickedChars) {
+      const idx = pool.indexOf(ch);
+      if (idx === -1) return false;
+      pool.splice(idx, 1);
+    }
+    return true;
+  };
+
   const handleTapCell = (r: number, c: number) => {
     const alreadyIdx = selectedCells.findIndex(([sr, sc]) => sr === r && sc === c);
     let nextSelection: Array<[number, number]>;
@@ -219,33 +232,45 @@ export const WordSearchPuzzleGame: React.FC<{
       nextSelection = [...selectedCells, [r, c]];
     }
 
-    // Check if nextSelection exactly matches any unfound solution (order-independent or in-order)
+    const pickedChars = nextSelection.map(([nr, nc]) => data.grid[nr][nc]);
+
+    // Check if nextSelection matches any unfound solution (by exact coords OR matching syllables)
     const matchedSol = data.solutions.find((sol) => {
       if (foundWords.includes(sol.word)) return false;
-      if (sol.coords.length !== nextSelection.length) return false;
-      return sol.coords.every(([sr, sc]) =>
-        nextSelection.some(([nr, nc]) => nr === sr && nc === sc)
-      );
+      if (sol.word.length !== nextSelection.length) return false;
+      const coordMatch =
+        sol.coords.length === nextSelection.length &&
+        sol.coords.every(([sr, sc]) => nextSelection.some(([nr, nc]) => nr === sr && nc === sc));
+      if (coordMatch) return true;
+      return isCharSubMultiset(pickedChars, sol.word);
     });
 
     if (matchedSol) {
       setFoundWords((prev) => [...prev, matchedSol.word]);
+      setFoundCellKeys((prev) => {
+        const next = { ...prev };
+        nextSelection.forEach(([nr, nc]) => {
+          next[`${nr}-${nc}`] = true;
+        });
+        return next;
+      });
       setSelectedCells([]);
       setHintCoord(null);
       speakKorean(matchedSol.word);
       return;
     }
 
-    // If selection is longer than max remaining word or not a subset of any unfound word, reset to current tap
+    // Keep selection if its syllables can still form at least one unfound word; otherwise start fresh from current tap
     const isPrefixSubset = data.solutions.some((sol) => {
       if (foundWords.includes(sol.word)) return false;
-      return nextSelection.every(([nr, nc]) =>
-        sol.coords.some(([sr, sc]) => sr === nr && sc === nc)
-      );
+      return isCharSubMultiset(pickedChars, sol.word);
     });
 
     if (!isPrefixSubset) {
-      setSelectedCells([[r, c]]);
+      const singleCharValid = data.solutions.some(
+        (sol) => !foundWords.includes(sol.word) && sol.word.includes(data.grid[r][c])
+      );
+      setSelectedCells(singleCharValid ? [[r, c]] : []);
       speakKorean(data.grid[r][c]);
     } else {
       setSelectedCells(nextSelection);
@@ -328,7 +353,7 @@ export const WordSearchPuzzleGame: React.FC<{
 
       <div className="mt-4 flex items-center gap-3">
         <span className="text-xs sm:text-sm text-gray-600 font-bold">
-          낱말을 이루는 글자 칸을 차례대로 눌러보세요! ({foundWords.length} / {data.solutions.length})
+          낱말을 이루는 글자 칸을 차례대로 클릭해 주세요! ({foundWords.length} / {data.solutions.length})
         </span>
         {!allFound && (
           <button
@@ -407,7 +432,7 @@ export const WalledMazeHGame: React.FC<{
   return (
     <div className="w-full flex flex-col items-center">
       <p className="text-xs sm:text-sm text-gray-600 font-bold mb-3">
-        초록 화살표(하마)에서 출발해 벽이 열려 있는 ‘ㅎ’ 낱말 칸을 차례대로 눌러 탈출해 보세요!
+        초록 화살표(하마)에서 출발해 벽이 열려 있는 ‘ㅎ’ 낱말 칸을 차례대로 클릭해 주세요!
       </p>
 
       <div className="relative bg-white p-4 rounded-2xl shadow-md border-2 border-gray-200">

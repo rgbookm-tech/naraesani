@@ -87,7 +87,7 @@ const Step3WordActivity: React.FC<Step3WordActivityProps> = ({ consonant, data }
         {/* Token Picker Bar */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-5 bg-amber-50 border-2 border-amber-200 px-4 py-2.5 rounded-2xl">
           <span className="text-xs sm:text-sm font-bold text-amber-900 mr-1">
-            글자 도장 선택 후 빈칸을 콕! 눌러보세요:
+            글자 도장을 선택한 뒤 빈칸을 클릭해 주세요:
           </span>
           {data.choicesPool.map((tok) => {
             const active = selectedToken === tok;
@@ -374,7 +374,7 @@ const Step3WordActivity: React.FC<Step3WordActivityProps> = ({ consonant, data }
       </div>
 
       <p className="text-sm text-gray-500 mb-5">
-        위쪽 그림을 누른 뒤 아래쪽에서 어울리는 낱말을 꾹 눌러 짝지어 보세요!
+        위쪽 그림과 아래쪽의 어울리는 낱말을 차례대로 클릭해 주세요!
       </p>
 
       {/* Top Row: Images */}
@@ -445,7 +445,7 @@ const Step3WordActivity: React.FC<Step3WordActivityProps> = ({ consonant, data }
 
       {allMatched && (
         <div className="mt-6 px-5 py-2 rounded-xl bg-emerald-500 text-white font-black text-sm shadow animate-bounce">
-          🎉 호로록 · 후다닥 · 훨훨! 모두 알맞게 연결했어요!
+          🎉 호로록 · 후다닥 · 훨훨! 모두 알맞게 찾았어요!
         </div>
       )}
     </div>

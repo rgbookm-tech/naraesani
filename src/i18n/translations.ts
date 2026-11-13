@@ -185,11 +185,11 @@ export const translations: Record<string, Partial<Record<Language, string>>> = {
     zh: "将单词与图片配对",
     es: "Une la palabra con el dibujo",
   },
-  "낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.": {
-    en: "Find and press the picture that matches each word.",
-    ja: "単語に合う絵を見つけて押してみましょう。",
-    zh: "找出与单词匹配的图片并按一下。",
-    es: "Encuentra y presiona el dibujo que corresponde a cada palabra.",
+  "낱말과 어울리는 그림을 찾아 클릭해 주세요.": {
+    en: "Find and click the picture that matches each word.",
+    ja: "単語に合う絵を見つけてクリックしてください。",
+    zh: "找出与单词匹配的图片并点击。",
+    es: "Encuentra y haz clic en el dibujo que corresponde a cada palabra.",
   },
   "다음 낱말 중 하나를 사용하여 한 문장으로 말하거나 써 보세요.": {
     en: "Use one of the words below to say or write a sentence.",
@@ -427,17 +427,23 @@ export const translations: Record<string, Partial<Record<Language, string>>> = {
     zh: "看图补全正确的单词。",
     es: "Completa la palabra adecuada para cada imagen.",
   },
-  "그림에 알맞은 낱말에 동그라미표 해 보세요.": {
-    en: "Circle the word that matches each picture.",
-    ja: "絵に合う単語に丸をつけましょう。",
-    zh: "圈出与图片相符的单词。",
-    es: "Haz un círculo en la palabra correcta según la imagen.",
+  "그림에 알맞은 낱말을 클릭해 주세요.": {
+    en: "Click the word that matches each picture.",
+    ja: "絵に合う単語をクリックしてください。",
+    zh: "请点击与图片相符的单词。",
+    es: "Haz clic en la palabra correcta según la imagen.",
   },
-  "그림에 맞는 낱말에 동그라미 하세요.": {
-    en: "Circle the word that matches each picture.",
-    ja: "絵に合う単語に丸をつけましょう。",
-    zh: "圈出与图片相符的单词。",
-    es: "Haz un círculo en la palabra correcta.",
+  "그림과 어울리는 말을 차례대로 클릭해 주세요.": {
+    en: "Click the matching picture and word in order.",
+    ja: "絵と合う言葉を順番にクリックしてください。",
+    zh: "请依次点击相符的图片和词语。",
+    es: "Haz clic en orden en el dibujo y la palabra correspondientes.",
+  },
+  "보기 글에서 ‘ㅊ’이 들어간 표현을 찾아 풍선에 써 보세요.": {
+    en: "Find expressions with 'ㅊ' in the example text and write them in the balloons.",
+    ja: "例文から「ㅊ」が入った表現を見つけて風船に書いてみましょう。",
+    zh: "从例文中找出含‘ㅊ’的词语写在气球上吧。",
+    es: "Encuentra expresiones con 'ㅊ' en el texto y escríbelas en los globos.",
   },
   "ㄱ을 순서에 따라 써 보세요.": { en: "Trace ㄱ following the stroke order.", ja: "書き順に従って「ㄱ」を書きましょう。", zh: "按笔顺书写 ㄱ。", es: "Escribe ㄱ siguiendo el orden de trazos." },
   "ㅋ을 순서에 따라 써 보세요.": { en: "Trace ㅋ following the stroke order.", ja: "書き順に従って「ㅋ」を書きましょう。", zh: "按笔顺书写 ㅋ。", es: "Escribe ㅋ siguiendo el orden de trazos." },

@@ -143,7 +143,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㅁ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
+    question: '빈칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)로 직접 써 보세요.',
     sentences: [
       '___집이 크니 ___무게가 많이 나간다.',
       '___살이 났다. 온 ___이 아프다.',
@@ -183,7 +183,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㅂ 받침 활동',
     activityNumber: 2,
     type: ActivityType.ConnectPairs,
-    question: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
+    question: '낱말과 어울리는 그림을 찾아 클릭해 주세요.',
     wordColumns: 2,
     imageOrder: [6, 5, 4, 3, 2, 1],
     pairs: [
@@ -256,7 +256,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㅇ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
+    question: '빈칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)로 직접 써 보세요.',
     sentences: [
       '나는 친구들이 놀릴까 봐 학교에선 ___을 싸기 싫다.',
       '그런데 오늘 아침에 아무리 ___을 누려고 해도 ___이 나오지 않았다.',
@@ -316,7 +316,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㄱ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
+    question: '빈칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)로 직접 써 보세요.',
     sentences: [
       '도서실에서는 작은 ___소리로 말하기',
       '나는 ___청이 크다.',
@@ -377,7 +377,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㄴ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
+    question: '빈칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)로 직접 써 보세요.',
     sentences: [
       '___물이 흐르다             ___짓을 하다',
       '___을 뜨다 속              ___썹이 길다',
@@ -451,7 +451,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㄹ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
+    question: '빈칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)로 직접 써 보세요.',
     sentences: [
       '손___                     ___바닥',
       '___가락                                마당___',
@@ -511,7 +511,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㄷ 받침 활동',
     activityNumber: 2,
     type: ActivityType.ConnectPairs,
-    question: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
+    question: '낱말과 어울리는 그림을 찾아 클릭해 주세요.',
     wordColumns: 2,
     pairs: [
       { word: '시다', image: './images/d_sida.png', id: 1 },
@@ -525,7 +525,7 @@ export const workbookActivities: Activity[] = [
    title: 'ㄷ 받침 활동',
     activityNumber: 3,
     type: ActivityType.FillInTheBlanks,
-    question: '빈 칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)으로 직접 써보세요.',
+    question: '빈칸에 공통으로 들어갈 글자를 쓰고, 마우스(손)로 직접 써 보세요.',
     sentences: [
       '친구와 편지를 주고 ___다.',
       '위인을 본___다.',
@@ -572,7 +572,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㅂ받침 가족(ㅂ,ㅍ) 활동',
     activityNumber: 2,
     type: ActivityType.ConnectPairs,
-    question: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
+    question: '낱말과 어울리는 그림을 찾아 클릭해 주세요.',
     groups: [
       [
         { word: '이', image: './images/bf_yi.png', id: 1 },
@@ -623,7 +623,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㅂ받침 가족(ㅂ,ㅍ) 활동',
     activityNumber: 4,
     type: ActivityType.MultipleChoiceSentence,
-    question: '맞는 표현을 선택 하세요.',
+    question: '알맞은 표현을 클릭해 주세요.',
     items: [
         { sentence: '구덩이에서 빠져나갈 ( )을 찾았다.', choices: ['방법을', '방범을'], correctAnswer: ['방법을'] },
         { sentence: '내 ( )의 친구들은 나보다 키가 작다.', choices: ['앞', '압'], correctAnswer: ['앞'] },
@@ -683,7 +683,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㄱ받침 가족(ㄱ,ㄲ,ㅋ) 활동',
     activityNumber: 3,
     type: ActivityType.MultipleChoiceSentence,
-    question: '알맞은 글자에 O 표 하세요.',
+    question: '알맞은 글자를 클릭해 주세요.',
     items: [
       { sentence: '( )에는 어떤 물건이 있을까?', choices: ['부얶', '부억', '부엌'], correctAnswer: ['부엌'] },
       { sentence: '( )도 보이고', choices: ['식탁', '식탂', '식탘'], correctAnswer: ['식탁'] },
@@ -701,7 +701,7 @@ export const workbookActivities: Activity[] = [
     words: [
       { 
         word: '볶음 / 해 질 녘 / 낚싯대', 
-        example: '떡뽂이: 나는 떡볶이를 좋아한다.',
+        example: '떡볶이: 나는 떡볶이를 좋아한다.',
         placeholder: '볶음: 나는 어제 멸치볶음을 먹었다. \n 해 질 녘 : 해 질 녘에 산책을 나갔다. \n 낚싯대: 아빠는 낚싯대를 챙겨 낚시를 갔다.'
       }
     ],
@@ -730,7 +730,7 @@ export const workbookActivities: Activity[] = [
     title: 'ㄷ받침 가족(ㄷ,ㅌ,ㅅ) 활동',
     activityNumber: 2,
     type: ActivityType.MatchingLadder,
-    question: '같은 소리가 나는 낱말을 함게 클릭해 보세요.',
+    question: '같은 소리가 나는 낱말을 함께 클릭해 주세요.',
     topRow: ['갔다', '빛', '밭', '잊다', '낮', '젖'],
     bottomRow: ['낫', '받', '빗', '같다', '젓', '있다'],
     matches: {

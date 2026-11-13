@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Step4Data } from '../../types/initialConsonantTypes';
+import type { MazeJunction } from '../types';
+import MazeQuiz from '../vowel/MazeQuiz';
 import { speakKorean } from '../../utils/hangulSpeech';
 
 // ─── 5. ㅋ Mimicry Match & Fill ──────────────────────────────────────────────
@@ -32,7 +34,7 @@ export const MimicMatchFillGame: React.FC<{
   return (
     <div className="w-full flex flex-col items-center">
       <p className="text-sm text-gray-600 mb-4 font-bold">
-        왼쪽 그림을 누른 뒤 오른쪽에서 알맞은 ‘ㅋ’ 흉내 내는 말을 눌러 빈칸을 완성해 보세요!
+        왼쪽 그림과 오른쪽의 알맞은 ‘ㅋ’ 흉내 내는 말을 차례대로 클릭해 주세요!
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl items-center">
@@ -211,102 +213,39 @@ export const ImageMazeNGame: React.FC<{
   );
 };
 
-// ─── 7. ㅁ Corridor Maze ─────────────────────────────────────────────────────
+// ─── 7. ㅁ Car Road Maze (모음편 MazeQuiz 동일 자동차 모듈) ───────────────────
 export const CorridorMazeMGame: React.FC<{
   data: Extract<Step4Data, { playType: 'corridor-maze-m' }>;
 }> = ({ data }) => {
-  const [cleared, setCleared] = useState<number[]>([]);
-  const [wrongWord, setWrongWord] = useState<string | null>(null);
-
-  useEffect(() => {
-    setCleared([]);
-    setWrongWord(null);
-  }, [data]);
-
-  const currentStep = cleared.length;
-  const allDone = cleared.length === data.checkpoints.length;
-
-  const handlePick = (stepIdx: number, word: string, isCorrect: boolean) => {
-    speakKorean(word);
-    if (cleared.includes(stepIdx)) return;
-    if (stepIdx > currentStep) {
-      speakKorean('출발 깃발부터 차례대로 길을 찾아가 보세요!');
-      return;
-    }
-    if (isCorrect) {
-      setCleared((prev) => [...prev, stepIdx]);
-      setWrongWord(null);
-    } else {
-      setWrongWord(word);
-      setTimeout(() => setWrongWord(null), 700);
-    }
-  };
+  const junctions = useMemo<MazeJunction[]>(() => {
+    const list: MazeJunction[] = [
+      {
+        id: 0,
+        choices: [{ word: '출발', leadsTo: 1 }],
+      },
+    ];
+    data.checkpoints.forEach((cp, idx) => {
+      const jId = idx + 1;
+      const nextLead = idx === data.checkpoints.length - 1 ? 'finish' : jId + 1;
+      const deadLead = `deadend-${jId}`;
+      const choices =
+        idx % 2 === 0
+          ? [
+              { word: cp.wrong.word, leadsTo: deadLead },
+              { word: cp.correct.word, leadsTo: nextLead },
+            ]
+          : [
+              { word: cp.correct.word, leadsTo: nextLead },
+              { word: cp.wrong.word, leadsTo: deadLead },
+            ];
+      list.push({ id: jId, choices });
+    });
+    return list;
+  }, [data.checkpoints]);
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="relative w-full max-w-2xl rounded-2xl overflow-hidden border-4 border-emerald-300 shadow-md bg-white">
-        <img src={data.mazeImage} alt="ㅁ 미로" className="w-full h-auto block select-none" />
-
-        {data.checkpoints.map((cp) => {
-          const isStepDone = cleared.includes(cp.stepIndex);
-          const isActive = cp.stepIndex === currentStep;
-          return (
-            <React.Fragment key={cp.stepIndex}>
-              {/* Correct Bubble */}
-              <button
-                type="button"
-                onClick={() => handlePick(cp.stepIndex, cp.correct.word, true)}
-                style={{ left: `${cp.correct.xPct}%`, top: `${cp.correct.yPct}%` }}
-                className={`absolute -translate-x-1/2 -translate-y-1/2 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[11px] sm:text-xs font-black border-2 transition-all ${
-                  isStepDone
-                    ? 'bg-emerald-500 text-white border-white ring-4 ring-emerald-300 scale-110'
-                    : isActive
-                    ? 'bg-yellow-300/95 text-gray-900 border-amber-600 animate-pulse shadow'
-                    : 'bg-white/80 hover:bg-yellow-100 text-gray-800 border-gray-400'
-                }`}
-              >
-                {isStepDone ? `✓ ${cp.correct.word}` : cp.correct.word}
-              </button>
-
-              {/* Wrong Bubble */}
-              <button
-                type="button"
-                onClick={() => handlePick(cp.stepIndex, cp.wrong.word, false)}
-                style={{ left: `${cp.wrong.xPct}%`, top: `${cp.wrong.yPct}%` }}
-                className={`absolute -translate-x-1/2 -translate-y-1/2 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[11px] sm:text-xs font-black border-2 transition-all ${
-                  wrongWord === cp.wrong.word
-                    ? 'bg-rose-500 text-white border-white animate-bounce'
-                    : isActive
-                    ? 'bg-yellow-300/95 text-gray-900 border-amber-600 animate-pulse shadow'
-                    : 'bg-white/80 hover:bg-rose-50 text-gray-800 border-gray-400'
-                }`}
-              >
-                {cp.wrong.word}
-              </button>
-            </React.Fragment>
-          );
-        })}
-      </div>
-
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-1.5 text-xs sm:text-sm font-extrabold">
-        <span className="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900">🚩 출발</span>
-        {data.checkpoints.map((cp) => (
-          <React.Fragment key={cp.stepIndex}>
-            <span className="text-gray-400">→</span>
-            <span
-              className={`px-2.5 py-1 rounded-full ${
-                cleared.includes(cp.stepIndex) ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-400'
-              }`}
-            >
-              {cleared.includes(cp.stepIndex) ? cp.correct.word : '?'}
-            </span>
-          </React.Fragment>
-        ))}
-        <span className="text-gray-400">→</span>
-        <span className={`px-2.5 py-1 rounded-full ${allDone ? 'bg-sky-600 text-white animate-bounce' : 'bg-gray-100 text-gray-400'}`}>
-          🏁 도착!
-        </span>
-      </div>
+      <MazeQuiz junctions={junctions} />
     </div>
   );
 };
@@ -777,68 +716,74 @@ const BALLOON_BOX_POSITIONS = [
 export const BalloonStoryChGame: React.FC<{
   data: Extract<Step4Data, { playType: 'balloon-story-ch' }>;
 }> = ({ data }) => {
-  const [filledBalloons, setFilledBalloons] = useState<string[]>([]);
+  const [inputs, setInputs] = useState<string[]>(['', '', '', '', '']);
   const [wrongChip, setWrongChip] = useState<string | null>(null);
 
   useEffect(() => {
-    setFilledBalloons([]);
+    setInputs(['', '', '', '', '']);
     setWrongChip(null);
   }, [data]);
 
-  const allDone = filledBalloons.length === data.correctExpressions.length;
+  const normalizeExpr = (raw: string) => {
+    const cleaned = raw.trim().replace(/[“”"'.,!?]/g, '');
+    if (cleaned === '챘어') return '낚아챘어';
+    return cleaned;
+  };
+
+  const isSlotValid = (idx: number) => {
+    const canonical = normalizeExpr(inputs[idx] || '');
+    if (!canonical || !data.correctExpressions.includes(canonical)) return false;
+    // Check not duplicated in an earlier slot
+    for (let i = 0; i < idx; i++) {
+      if (normalizeExpr(inputs[i] || '') === canonical) return false;
+    }
+    return true;
+  };
+
+  const validCanonicalSet = new Set(
+    inputs.map((v, i) => (isSlotValid(i) ? normalizeExpr(v) : '')).filter(Boolean)
+  );
+  const allDone = validCanonicalSet.size === data.correctExpressions.length;
+
+  const handleInputChange = (idx: number, val: string) => {
+    const next = [...inputs];
+    next[idx] = val;
+    setInputs(next);
+    const canonical = normalizeExpr(val);
+    if (
+      data.correctExpressions.includes(canonical) &&
+      !inputs.some((other, oIdx) => oIdx !== idx && normalizeExpr(other) === canonical)
+    ) {
+      speakKorean(canonical);
+    }
+  };
 
   const handleSelectWord = (word: string) => {
     speakKorean(word);
-    if (filledBalloons.includes(word)) return;
+    if (validCanonicalSet.has(word)) return;
     if (data.correctExpressions.includes(word)) {
-      setFilledBalloons((prev) => [...prev, word]);
+      const emptyIdx = inputs.findIndex((_, i) => !isSlotValid(i));
+      if (emptyIdx > -1) {
+        const next = [...inputs];
+        next[emptyIdx] = word;
+        setInputs(next);
+      }
     } else {
       setWrongChip(word);
-      speakKorean('그 낱말에는 ㅊ이 들어 있지 않아요!');
+      speakKorean('그 낱말에는 치읓이 들어 있지 않아요!');
       setTimeout(() => setWrongChip(null), 650);
     }
   };
 
   return (
     <div className="w-full flex flex-col items-center">
-      {/* 5 Hot-Air Balloons Scene */}
-      <div className="relative w-full max-w-2xl rounded-2xl overflow-hidden border-4 border-sky-300 shadow-lg bg-sky-100">
-        <img
-          src={data.balloonImage}
-          alt="열기구 풍선 5개"
-          className={`w-full h-auto block select-none transition-transform duration-700 ${
-            allDone ? '-translate-y-1 scale-[1.01]' : ''
-          }`}
-        />
-
-        {BALLOON_BOX_POSITIONS.map((pos, idx) => {
-          const text = filledBalloons[idx];
-          return (
-            <div
-              key={idx}
-              style={{
-                left: pos.left,
-                top: pos.top,
-                transform: `translate(-50%, -50%) rotate(${pos.rotate})`,
-              }}
-              className="absolute w-[17%] h-[16%] flex items-center justify-center pointer-events-none"
-            >
-              {text ? (
-                <span className="text-xs sm:text-lg md:text-xl font-black text-blue-700 drop-shadow-sm whitespace-nowrap">
-                  {text}
-                </span>
-              ) : (
-                <span className="text-[11px] sm:text-xs font-bold text-gray-300">#{idx + 1}</span>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Story Excerpt Lines from Worksheet Page 12 */}
-      <div className="mt-4 w-full max-w-2xl bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-4 text-left space-y-1.5">
-        <div className="text-xs font-extrabold text-amber-800 mb-1">
-          📖 앞의 이야기 문장에서 ‘ㅊ’이 들어간 표현 5개를 찾아 아래 버튼으로 눌러보세요!
+      {/* 보기 글 Box */}
+      <div className="mb-4 w-full max-w-2xl bg-amber-50/90 border-2 border-amber-300 rounded-2xl p-4 text-left space-y-1.5 shadow-sm">
+        <div className="text-xs sm:text-sm font-black text-amber-900 mb-1 flex items-center justify-between">
+          <span>📖 &lt;보기 글&gt;</span>
+          <span className="text-[11px] font-bold text-amber-700">
+            풍선 칸에 직접 써 보거나 아래 낱말을 클릭해 주세요!
+          </span>
         </div>
         {data.storyLines.map((line, i) => (
           <div key={i} className="text-sm sm:text-base font-bold text-gray-800 flex items-center justify-between gap-2">
@@ -854,17 +799,57 @@ export const BalloonStoryChGame: React.FC<{
         ))}
       </div>
 
-      {/* Clickable Word Chips */}
-      <div className="mt-3 flex flex-wrap justify-center gap-2 max-w-2xl">
+      {/* 5 Hot-Air Balloons Scene with Direct Writable Inputs */}
+      <div className="relative w-full max-w-2xl rounded-2xl overflow-hidden border-4 border-sky-300 shadow-lg bg-sky-100">
+        <img
+          src={data.balloonImage}
+          alt="열기구 풍선 5개"
+          className={`w-full h-auto block select-none transition-transform duration-700 ${
+            allDone ? '-translate-y-1 scale-[1.01]' : ''
+          }`}
+        />
+
+        {BALLOON_BOX_POSITIONS.map((pos, idx) => {
+          const valid = isSlotValid(idx);
+          return (
+            <div
+              key={idx}
+              style={{
+                left: pos.left,
+                top: pos.top,
+                transform: `translate(-50%, -50%) rotate(${pos.rotate})`,
+              }}
+              className="absolute w-[18%] h-[15%] flex items-center justify-center"
+            >
+              <input
+                type="text"
+                value={inputs[idx]}
+                onChange={(e) => handleInputChange(idx, e.target.value)}
+                placeholder={`풍선 ${idx + 1}`}
+                aria-label={`풍선 ${idx + 1} 입력`}
+                className={`w-full h-full text-center rounded-lg px-1 font-black text-xs sm:text-base md:text-lg outline-none transition-all ${
+                  valid
+                    ? 'bg-emerald-50/90 text-emerald-800 ring-2 ring-emerald-500'
+                    : 'bg-white/85 hover:bg-white focus:bg-white text-blue-800 focus:ring-2 focus:ring-sky-500 placeholder:text-gray-300 placeholder:text-[10px] sm:placeholder:text-xs'
+                }`}
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Optional Quick-Click Helper Chips for Touch / Tablet */}
+      <div className="mt-3 flex flex-wrap items-center justify-center gap-2 max-w-2xl">
+        <span className="text-xs font-extrabold text-gray-500 mr-1">낱말 도우미:</span>
         {data.choicesPool.map((word) => {
-          const isUsed = filledBalloons.includes(word);
+          const isUsed = validCanonicalSet.has(word);
           const isWrong = wrongChip === word;
           return (
             <button
               key={word}
               type="button"
               onClick={() => handleSelectWord(word)}
-              className={`px-4 py-2 rounded-full font-black text-sm sm:text-base border-2 transition-all ${
+              className={`px-3.5 py-1.5 rounded-full font-black text-xs sm:text-sm border-2 transition-all ${
                 isUsed
                   ? 'bg-emerald-500 text-white border-emerald-600'
                   : isWrong
@@ -880,7 +865,7 @@ export const BalloonStoryChGame: React.FC<{
 
       {allDone && (
         <div className="mt-4 px-5 py-2.5 rounded-2xl bg-emerald-500 text-white font-black text-sm shadow-lg animate-bounce">
-          🍬🍭 와아! 풍선 5개를 모두 채워서 맛있는 간식 바구니가 두둥실 날아왔어요!
+          🍬🍭 와아! 풍선 5개에 ‘ㅊ’ 표현을 모두 멋지게 썼어요!
         </div>
       )}
     </div>

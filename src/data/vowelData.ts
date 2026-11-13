@@ -82,7 +82,7 @@ export const worksheetData: WorksheetData[] = [
       {
         type: 'word-image-match',
         title: '낱말과 그림 잇기',
-        instruction: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
+        instruction: '낱말과 어울리는 그림을 찾아 클릭해 주세요.',
         data: {
           pairs: [
             { id: 1, word: '야구', image: './images/yagu.png' },
@@ -193,7 +193,7 @@ export const worksheetData: WorksheetData[] = [
        {
         type: 'word-image-match',
         title: '낱말과 그림 잇기',
-        instruction: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
+        instruction: '낱말과 어울리는 그림을 찾아 클릭해 주세요.',
         data: {
           pairs: [
             { id: 1, word: '여자', image: 'https://via.placeholder.com/100/E91E63/FFFFFF?text=여자' },
@@ -250,7 +250,7 @@ export const worksheetData: WorksheetData[] = [
        /*{
         type: 'word-image-match',
         title: '낱말과 그림 잇기',
-        instruction: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
+        instruction: '낱말과 어울리는 그림을 찾아 클릭해 주세요.',
         data: {
           pairs: [
             { id: 1, word: '오이', image: 'https://via.placeholder.com/100/4CAF50/FFFFFF?text=오이' },
@@ -392,7 +392,7 @@ export const worksheetData: WorksheetData[] = [
       {
         type: 'word-image-match',
         title: '낱말과 그림 잇기',
-        instruction: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
+        instruction: '낱말과 어울리는 그림을 찾아 클릭해 주세요.',
         data: {
           pairs: [
             { id: 1, word: '우유', image: 'https://via.placeholder.com/100/FFFFFF/000000?text=우유' },
@@ -468,7 +468,7 @@ export const worksheetData: WorksheetData[] = [
       /* {
         type: 'word-image-match',
         title: '낱말과 그림 잇기',
-        instruction: '낱말과 어울리는 그림을 찾아서 꾹 눌러보세요.',
+        instruction: '낱말과 어울리는 그림을 찾아 클릭해 주세요.',
         data: {
           pairs: [
             { id: 1, word: '그릇', image: 'https://via.placeholder.com/100/BDBDBD/000000?text=그릇' },

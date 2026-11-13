@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import type { MazeJunction, MazeChoice } from '../types';
+import { speakKorean } from '../../utils/hangulSpeech';
 
 interface MazeQuizProps {
   junctions: MazeJunction[];
@@ -71,6 +72,7 @@ const MazeQuiz: React.FC<MazeQuizProps> = ({ junctions }) => {
 
   const handleChoice = (choice: MazeChoice) => {
     if (isMoving) return;
+    speakKorean(choice.word);
     setIsMoving(true);
     const targetPos = positionMap[choice.leadsTo];
     setCharacterTarget(targetPos);
@@ -98,8 +100,8 @@ const MazeQuiz: React.FC<MazeQuizProps> = ({ junctions }) => {
 
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center p-2">
-      <div className="relative w-full h-[350px] bg-green-50 rounded-lg border-2 border-green-200 overflow-hidden">
-        <svg width="100%" height="100%" viewBox="0 0 700 400" className="absolute inset-0">
+      <div className="relative w-full aspect-[7/4] max-h-[380px] bg-green-50 rounded-lg border-2 border-green-200 overflow-hidden">
+        <svg width="100%" height="100%" viewBox="0 0 700 400" preserveAspectRatio="none" className="absolute inset-0">
           <path d="M 50 250 H 650" stroke="#a3a3a3" strokeWidth="15" strokeLinecap="round" fill="none" strokeDasharray="20 10"/>
           <path d="M 150 250 V 350" stroke="#a3a3a3" strokeWidth="15" strokeLinecap="round" fill="none" strokeDasharray="20 10"/>
           <path d="M 250 250 V 150" stroke="#a3a3a3" strokeWidth="15" strokeLinecap="round" fill="none" strokeDasharray="20 10"/>
@@ -122,8 +124,8 @@ const MazeQuiz: React.FC<MazeQuizProps> = ({ junctions }) => {
         <div
           className="absolute transform -translate-x-1/2 -translate-y-1/2"
           style={{
-            top: `${characterTarget.y}px`,
-            left: `${characterTarget.x}px`,
+            top: `${(characterTarget.y / 400) * 100}%`,
+            left: `${(characterTarget.x / 700) * 100}%`,
             transition: 'all 0.5s ease-in-out',
           }}
         >
